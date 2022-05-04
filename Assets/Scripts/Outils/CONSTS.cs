@@ -1,6 +1,24 @@
 public class CONSTS
 {
     public const string SCENE_KEY = "SCENE_KEY";
+
+    #region LAYER ID
+    public const string LAYER_PLANE = "Plane";
+    public const string LAYER_DICE = "Dice";
+    #endregion
+
+    #region DICE CONST
+    public const float DICE_ANIM_TIME_MAX = 6;
+    public const int DICE_VALUE_MIN = 1;
+    public const int DICE_VALUE_MAX = 6;
+    public const int DICE_ANIM_TYPE_MIN = 0;
+    public const int DICE_ANIM_TYPE_MAX = 2;
+
+    public const string DICE_ANIM_PARAM_DICE_VALUE = "Dice_Value";
+    public const string DICE_ANIM_PARAM_DICE_BLEND = "Dice_Blend";
+    public const string DICE_ANIM_PARAM_DICE_TRIGGER_STATE_CHANGE = "ToTriggerStateChange";
+
+    #endregion
 }
 
 public enum SCENE_NAME
@@ -38,57 +56,4 @@ public class TEXT_UI
     public const string ENGLISH = "English";
     public const string JAPANESE = "Japanese";
     
-}
-
-public enum PROPERTY_ID: int
-{
-    STREET_0 = 0,
-    STREET_1 = 1,
-    STREET_2 = 2,
-    STREET_3 = 3,
-    STREET_4 = 4,
-    STREET_5 = 5,
-    STREET_6 = 6,
-    STREET_7 = 7,
-    STREET_8 = 8,
-    STREET_9 = 9,
-    STREET_10 = 10,
-    STREET_11 = 11,
-    STREET_12 = 12,
-    STREET_13 = 13,
-    STREET_14 = 14,
-    STREET_15 = 15,
-    STREET_16 = 16,
-    STREET_17 = 17,
-    STREET_18 = 18,
-    STREET_19 = 19,
-    STREET_20 = 20,
-    STREET_21 = 21,
-
-    ELECTRIC_0 = 22,
-    ELECTRIC_1 = 23,
-
-    TRANSPORT_0 = 24,
-    TRANSPORT_1 = 25,
-    TRANSPORT_2 = 26,
-    TRANSPORT_3 = 27,
-    
-    START = -1,
-
-    CHANCE_0 = -2,
-    CHANCE_1 = -3,
-    CHANCE_2 = -4,
-
-    LUCKY_0 = -5,
-    LUCKY_1 = -6,
-    LUCKY_2 = -7,
-
-    TAX_0 = -8,
-    TAX_1 = -9,
-
-    PARK = -10,
-
-    PRISON = -11,
-    IMPRISON = -12,
-
 }

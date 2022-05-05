@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GlobalManager : Singleton<GlobalManager>
+public class GlobalManager : GlobalSingleton<GlobalManager>
 {
-    public LoadingManager loadingManager { get; private set; }
-    public LanguageManager languageManager { get; private set; }
+    public LoadingManager LoadingManager { get; private set; }
+    public LanguageManager LanguageManager { get; private set; }
 
 
 
 
     void Start()
     {
-        loadingManager = GetComponentInChildren<LoadingManager>();
-        if(loadingManager != null)
+        LoadingManager = GetComponentInChildren<LoadingManager>();
+        if(LoadingManager != null)
         {
-            loadingManager.LoadWithLoadingScene(SCENE_NAME.Menu_Scene);
+            LoadingManager.LoadWithLoadingScene(SCENE_NAME.Menu_Scene);
         }
         else
         {
             Debug.LogError("Loading Manager cannot be found...");
         }
-        languageManager = GetComponentInChildren<LanguageManager>();
-        if (languageManager != null)
+        LanguageManager = GetComponentInChildren<LanguageManager>();
+        if (LanguageManager != null)
         {
-            languageManager.languageView.SetCanvasStatus(false);
+            LanguageManager.languageView.SetCanvasStatus(false);
         }
         else
         {

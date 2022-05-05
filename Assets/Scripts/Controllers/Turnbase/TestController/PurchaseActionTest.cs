@@ -28,7 +28,13 @@ public class PurchaseActionTest : Action
     private IEnumerator OnPurchase()
     {
         Debug.Log("[OnPurchase] Waiting for Data | id: " + userId);
-        yield return new WaitForSeconds(5);
+        float cd = 3f;
+        while (cd > 0)
+        {
+            yield return new WaitForSeconds(1);
+            Debug.Log("[OnPurchase] Processing Data | id: " + userId);
+            cd--;
+        }        
         Debug.Log("[OnPurchase] Get data success | id: " + userId);
         turnBaseController.EndAction();
     }

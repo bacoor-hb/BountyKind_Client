@@ -48,7 +48,7 @@ public class MenuView : MonoBehaviour
     {
         //show language view
 
-        GlobalManager.Instance.languageManager.languageView.SetCanvasStatus(true);
+        GlobalManager.Instance.LanguageManager.languageView.SetCanvasStatus(true);
     }
 
     IEnumerator OnStartGameDelay()

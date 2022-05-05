@@ -48,9 +48,9 @@ private Button BtnEnglish;
         }
     }
     public void UpdateUI(){
-        LanguageText.text = GlobalManager.Instance.languageManager.GetSentence(TEXT_UI.LANGUAGE);
-        BtnEnglish.GetComponentInChildren<TextMeshProUGUI>().text=GlobalManager.Instance.languageManager.GetSentence(TEXT_UI.ENGLISH);
-        BtnJapanese.GetComponentInChildren<TextMeshProUGUI>().text = GlobalManager.Instance.languageManager.GetSentence(TEXT_UI.JAPANESE);
+        LanguageText.text = GlobalManager.Instance.LanguageManager.GetSentence(TEXT_UI.LANGUAGE);
+        BtnEnglish.GetComponentInChildren<TextMeshProUGUI>().text=GlobalManager.Instance.LanguageManager.GetSentence(TEXT_UI.ENGLISH);
+        BtnJapanese.GetComponentInChildren<TextMeshProUGUI>().text = GlobalManager.Instance.LanguageManager.GetSentence(TEXT_UI.JAPANESE);
 
 
     }
@@ -64,11 +64,11 @@ private Button BtnEnglish;
        
     }
     void OnEnglish(){
-        GlobalManager.Instance.languageManager.SetLanguage(Language.English);
+        GlobalManager.Instance.LanguageManager.SetLanguage(Language.English);
         UpdateUI();
     }
     void OnJapanese(){
-        GlobalManager.Instance.languageManager.SetLanguage(Language.Japanese);
+        GlobalManager.Instance.LanguageManager.SetLanguage(Language.Japanese);
         UpdateUI();
     }
     void OnClose()

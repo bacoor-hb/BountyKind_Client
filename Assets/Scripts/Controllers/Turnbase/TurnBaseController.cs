@@ -11,26 +11,29 @@ public class TurnBaseController : MonoBehaviour
     public Event<int> OnEndTurn;
     public Event<int> OnChangePlayer;
 
-    public bool isStarting = false;
-    public int currentPlayer { get; private set; }
-    public List<IPlayer> playerList = new List<IPlayer>();
+    public bool IsStarting { get; private set; }
+    public int CurrentPlayer { get; private set; }
+    public List<IPlayer> playerList;
 
     private Action currentAction;
     private Queue<Action> queueActionList;
 
-    private CYCLE_TURN status = CYCLE_TURN.START_TURN;
-    private bool isWaiting = false;
+    private CYCLE_TURN status;
+    private bool isWaiting;
 
     #region Unity Event
-    private void Start()
+    public void Init()
     {
-        isStarting = false;
+        IsStarting = false;
+        playerList = new List<IPlayer>();
+        status = CYCLE_TURN.START_TURN;
+        isWaiting = false;
     }
 
     private void Update()
     {
         // check game start, and status waiting
-        if (isStarting && !isWaiting)
+        if (IsStarting && !isWaiting)
         {
             switch (status)
             {
@@ -60,9 +63,9 @@ public class TurnBaseController : MonoBehaviour
     /// </summary>
     public void AddAction(IPlayer player, Action action)
     {
-        if (isStarting)
+        if (IsStarting)
         {
-            if (queueActionList != null && player == playerList[currentPlayer])
+            if (queueActionList != null && player == playerList[CurrentPlayer])
             {
                 queueActionList.Enqueue(action);
             }
@@ -90,7 +93,8 @@ public class TurnBaseController : MonoBehaviour
         {
             currentAction = queueActionList.Dequeue();
 
-            Debug.Log("[TurnbaseController][CheckActionInQueue] Start Action: " + status.ToString());
+            Debug.Log("[TurnbaseController][CheckActionInQueue] Start Action: " + currentAction.GetAction().ToString());
+            
             currentAction.OnStartAction();
 
             NextStep();
@@ -149,11 +153,11 @@ public class TurnBaseController : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
-        if (!isStarting)
+        if (!IsStarting)
         {
-            isStarting = true;
-            currentPlayer = 0;
-            OnStartGame?.Invoke(currentPlayer);
+            IsStarting = true;
+            CurrentPlayer = 0;
+            OnStartGame?.Invoke(CurrentPlayer);
 
             status = CYCLE_TURN.START_TURN;
             isWaiting = false;
@@ -165,11 +169,11 @@ public class TurnBaseController : MonoBehaviour
     /// </summary>
     public void EndGame()
     {
-        if (isStarting)
+        if (IsStarting)
         {
-            isStarting = false;
+            IsStarting = false;
 
-            OnEndGame?.Invoke(currentPlayer);
+            OnEndGame?.Invoke(CurrentPlayer);
         }
     }
 
@@ -182,8 +186,8 @@ public class TurnBaseController : MonoBehaviour
         queueActionList = new Queue<Action>();
 
         //Trigger the Start turn function of the current player
-        playerList[currentPlayer].StartTurn();
-        OnStartTurn?.Invoke(currentPlayer);
+        playerList[CurrentPlayer].StartTurn();
+        OnStartTurn?.Invoke(CurrentPlayer);
 
         NextStep();
     }
@@ -194,8 +198,8 @@ public class TurnBaseController : MonoBehaviour
     private void EndTurn()
     {
         //Trigger the End turn function of the current player
-        playerList[currentPlayer].EndTurn();
-        OnEndTurn?.Invoke(currentPlayer);
+        playerList[CurrentPlayer].EndTurn();
+        OnEndTurn?.Invoke(CurrentPlayer);
 
         // handle change player
         if (CheckChangePlayer())
@@ -210,10 +214,10 @@ public class TurnBaseController : MonoBehaviour
     /// </summary>
     private void ChangePlayer()
     {
-        currentPlayer = GetNextPlayerId();
+        CurrentPlayer = GetNextPlayerId();
 
         //Invoke 1 time OnChangePlayer event and then reset it.
-        OnChangePlayer?.Invoke(currentPlayer);
+        OnChangePlayer?.Invoke(CurrentPlayer);
         OnChangePlayer = null;
     }
 
@@ -223,7 +227,7 @@ public class TurnBaseController : MonoBehaviour
     /// <returns></returns>
     private int GetNextPlayerId()
     {
-        return (currentPlayer + 1) % playerList.Count;
+        return (CurrentPlayer + 1) % playerList.Count;
     }
 
     /// <summary>
@@ -240,7 +244,7 @@ public class TurnBaseController : MonoBehaviour
     /// </summary>
     public void Register(IPlayer player)
     {
-        if (isStarting)
+        if (IsStarting)
         {
             Debug.LogError("[Register]: ERROR: Game is start.");
         }
@@ -250,4 +254,5 @@ public class TurnBaseController : MonoBehaviour
         }
     }
     #endregion
+
 }

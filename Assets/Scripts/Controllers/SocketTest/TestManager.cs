@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class TestManager : Singleton<TestManager>   
+public class TestManager : LocalSingleton<TestManager>   
 {
     [SerializeField]
     private Transform content;
@@ -20,14 +20,12 @@ public class TestManager : Singleton<TestManager>
     // Start is called before the first frame update
     void Start()
     {
-        bountyColyseusManager = this.gameObject.AddComponent<BountyColyseusManager>();
-        bountyColyseusManager.Connect();
         AddListeners();
     }   
 
     void AddListeners()
-    {   
-        JoinLobbyBTN.onClick.AddListener(() => { HandleJoinLobby(); });
+    {
+        JoinRoomBTN.onClick.AddListener(() => { HandleJoinRoom(); });
     }
     void HandleJoinLobby()
     {
@@ -36,7 +34,8 @@ public class TestManager : Singleton<TestManager>
     }
     void HandleJoinRoom()
     {
-        bountyColyseusManager.JoinRoom(ROOM_TYPE.GAME_ROOM);
+        Debug.Log("join room");
+        GlobalManager.Instance.NetworkManager.JoinRoom(ROOM_TYPE.GAME_ROOM);
     }
 
     void HandleRoll()

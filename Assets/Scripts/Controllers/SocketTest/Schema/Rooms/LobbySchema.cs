@@ -8,7 +8,7 @@
 using Colyseus.Schema;
 
 public partial class LobbySchema : Schema {
-	[Type(0, "map", typeof(MapSchema<PlayerSchema>))]
-	public MapSchema<PlayerSchema> players = new MapSchema<PlayerSchema>();
+	[Type(0, "map", typeof(MapSchema<UserSchema>))]
+	public MapSchema<UserSchema> players = new MapSchema<UserSchema>();
 }
 

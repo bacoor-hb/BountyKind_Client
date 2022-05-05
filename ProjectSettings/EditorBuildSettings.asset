@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestScene/Test_Turnbase.unity
     guid: 84066f42f9a34f842b765ae5103d69a7
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Socket.unity
+    guid: 2e2ec23d46179544484656022b0df7de
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Socket_Lobby.unity
+    guid: 9cc20b5d5ed1a5f4198b12513d297cbd
   m_configObjects: {}

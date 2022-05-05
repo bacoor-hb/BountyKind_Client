@@ -7,17 +7,17 @@
 
 using Colyseus.Schema;
 
-public partial class NetworkedUser : Schema {
+public partial class UserSchema : Schema {
 	[Type(0, "string")]
+	public string address = default(string);
+
+	[Type(1, "string")]
 	public string sessionId = default(string);
 
-	[Type(1, "boolean")]
+	[Type(2, "boolean")]
 	public bool connected = default(bool);
 
-	[Type(2, "number")]
+	[Type(3, "number")]
 	public float timestamp = default(float);
-
-	[Type(3, "ref", typeof(UserInfo))]
-	public UserInfo userInfo = new UserInfo();
 }
 

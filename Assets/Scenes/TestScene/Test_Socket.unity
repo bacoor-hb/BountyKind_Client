@@ -227,6 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 911969286}
   - component: {fileID: 911969287}
+  - component: {fileID: 911969288}
   m_Layer: 0
   m_Name: LocalManager
   m_TagString: Untagged
@@ -258,14 +259,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 911969285}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e37be377fdadc5346867dfa637337d85, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e426f463f4ca46a89af390d11ffde7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  content: {fileID: 0}
-  JoinLobbyBTN: {fileID: 1172099742}
-  JoinRoomBTN: {fileID: 0}
-  RollButton: {fileID: 0}
-  prefabItem: {fileID: 0}
+  JoinLobbyBTN: {fileID: 1172099740}
+--- !u!114 &911969288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911969285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6720fc43f6e1f7c4cbe0d7cf6ec0649f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colyseusSettings: {fileID: 0}
 --- !u!1 &991197679
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1172099741
 RectTransform:
   m_ObjectHideFlags: 0

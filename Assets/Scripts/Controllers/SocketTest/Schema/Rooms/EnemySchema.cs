@@ -7,17 +7,17 @@
 
 using Colyseus.Schema;
 
-public partial class PlayerSchema : Schema {
+public partial class EnemySchema : Schema {
 	[Type(0, "string")]
-	public string address = default(string);
+	public string name = default(string);
 
-	[Type(1, "string")]
-	public string sessionId = default(string);
+	[Type(1, "number")]
+	public float atk = default(float);
 
 	[Type(2, "number")]
-	public float currentNode = default(float);
+	public float def = default(float);
 
 	[Type(3, "number")]
-	public float totalStep = default(float);
+	public float hp = default(float);
 }
 

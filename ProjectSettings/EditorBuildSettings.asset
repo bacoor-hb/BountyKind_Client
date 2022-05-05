@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/TestSocket.unity
-    guid: 00ea0d727759084439e578d0b0833698
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Socket.unity
+    guid: 2e2ec23d46179544484656022b0df7de
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Socket_Lobby.unity
+    guid: 9cc20b5d5ed1a5f4198b12513d297cbd
   m_configObjects: {}

@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class TestManager : MonoBehaviour
+public class TestManager : Singleton<TestManager>   
 {
     [SerializeField]
     private Transform content;
+    [SerializeField]
+    private Button JoinLobbyBTN;
     [SerializeField]
     private Button JoinRoomBTN;
     [SerializeField]
@@ -19,16 +22,18 @@ public class TestManager : MonoBehaviour
     {
         bountyColyseusManager = this.gameObject.AddComponent<BountyColyseusManager>();
         bountyColyseusManager.Connect();
-        bountyColyseusManager.JoinLobby();
         AddListeners();
     }   
 
     void AddListeners()
-    {
-        JoinRoomBTN.onClick.AddListener(() => { HandleJoinRoom(); });
-        RollButton.onClick.AddListener(() => { HandleRoll(); });
+    {   
+        JoinLobbyBTN.onClick.AddListener(() => { HandleJoinLobby(); });
     }
-
+    void HandleJoinLobby()
+    {
+        bountyColyseusManager.JoinLobby();
+        SceneManager.LoadScene("Test_Socket_Lobby");
+    }
     void HandleJoinRoom()
     {
         bountyColyseusManager.JoinRoom(ROOM_TYPE.GAME_ROOM);

@@ -36,6 +36,7 @@ public class TestManager : LocalSingleton<TestManager>
     {
         Debug.Log("join room");
         GlobalManager.Instance.NetworkManager.JoinRoom(ROOM_TYPE.GAME_ROOM);
+        SceneManager.LoadScene("Test_Socket_GameRoom");
     }
 
     void HandleRoll()

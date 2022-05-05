@@ -92,3 +92,14 @@ public enum PROPERTY_ID: int
     IMPRISON = -12,
 
 }
+
+public class ROOM_TYPE
+{
+    public const string GAME_ROOM = "my_room";
+}
+
+public class MESSAGE_TYPE
+{
+    public const string ROLL_RESULT = "roll_result";
+}
+

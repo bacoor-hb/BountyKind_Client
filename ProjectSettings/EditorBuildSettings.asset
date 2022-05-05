@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Turnbase.unity
+    guid: 84066f42f9a34f842b765ae5103d69a7
   m_configObjects: {}

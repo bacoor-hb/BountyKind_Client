@@ -9,7 +9,7 @@ public class LocalLoading : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        manager = GlobalManager.Instance.loadingManager;
+        manager = GlobalManager.Instance.LoadingManager;
         SCENE_NAME sceneToLoad = (SCENE_NAME)Enum.Parse(typeof(SCENE_NAME), PlayerPrefs.GetString(CONSTS.SCENE_KEY));
         StartCoroutine(manager.LoadScene_Async(sceneToLoad));
     }

@@ -13,6 +13,7 @@ public class LocalTestGameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        turnBaseController.Init();
         //Set Player id ~ The turn order
         for (int i = 0; i < players.Count; i++)
         {
@@ -24,7 +25,7 @@ public class LocalTestGameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var currentPlayer = players[turnBaseController.currentPlayer];
+        var currentPlayer = players[turnBaseController.CurrentPlayer];
         if (Input.GetKeyDown(KeyCode.A))
         {            
             turnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.PURCHASE));
@@ -40,7 +41,7 @@ public class LocalTestGameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (turnBaseController.isStarting)
+            if (turnBaseController.IsStarting)
             {
                 turnBaseController.EndGame();
             }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Singleton<T> : MonoBehaviour where T : Component
+public abstract class LocalSingleton<T> : MonoBehaviour where T : Component
 {
 
 	#region Fields
@@ -10,8 +10,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
 	/// <summary>
 	/// The instance.
 	/// </summary>
-	private static T instance;
-
+	protected static T instance;
 	#endregion
 
 	#region Properties
@@ -50,7 +49,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
 		if (instance == null)
 		{
 			instance = this as T;
-			DontDestroyOnLoad(gameObject);
 		}
 		else
 		{

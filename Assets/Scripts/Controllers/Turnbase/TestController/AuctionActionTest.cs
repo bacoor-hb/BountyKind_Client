@@ -22,35 +22,48 @@ public class AuctionActionTest : Action
     public override void OnStartAction()
     {
         base.OnStartAction();
+        OnAuctionAction();
     }
 
     int auctionActionFlag = 0;
     public void OnAuctionAction()
     {
         auctionActionFlag = 0;
-        StartCoroutine(OnAunction1());
-        StartCoroutine(OnAunction2());
+        StartCoroutine(OnAuction1());
+        StartCoroutine(OnAuction2());
     }
 
-    public IEnumerator OnAunction1()
+    public IEnumerator OnAuction1()
     {
-        Debug.Log("[OnAunction1] Start:10s: " + userId);
         Debug.Log("[OnAunction1] Action:OnAunction | id: " + userId);
-        yield return new WaitForSeconds(10);
-        Debug.Log("[OnAunction1] 10s: " + userId);
+        float cd = 5f;
+        while (cd > 0)
+        {
+            yield return new WaitForSeconds(1);
+            Debug.Log("[OnAunction1] Processing Data | id: " + userId);
+            cd--;
+        }
+        Debug.Log("[OnAunction1] 5s: " + userId);
         auctionActionFlag++;
     }
-    public IEnumerator OnAunction2()
+    public IEnumerator OnAuction2()
     {
-        Debug.Log("[OnAunction2] Start:15s: " + userId);
         Debug.Log("[OnAunction2] Action:OnAunction | id: " + userId);
-        yield return new WaitForSeconds(15);
-        Debug.Log("[OnAunction2] 15s: " + userId);
+        float cd = 3f;
+        while (cd > 0)
+        {
+            yield return new WaitForSeconds(1);
+            Debug.Log("[OnAunction2] Processing Data | id: " + userId);
+            cd--;
+        }
+        Debug.Log("[OnAunction2] 3s: " + userId);
 
         while (auctionActionFlag <= 0)
         {
             yield return new WaitForEndOfFrame();
         }
+
+        Debug.Log("[OnAunction2] DONE: " + userId);
         turnBaseController.EndAction();
     }
 }

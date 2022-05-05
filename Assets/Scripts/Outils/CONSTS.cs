@@ -1,6 +1,24 @@
 public class CONSTS
 {
     public const string SCENE_KEY = "SCENE_KEY";
+
+    #region LAYER ID
+    public const string LAYER_PLANE = "Plane";
+    public const string LAYER_DICE = "Dice";
+    #endregion
+
+    #region DICE CONST
+    public const float DICE_ANIM_TIME_MAX = 6;
+    public const int DICE_VALUE_MIN = 1;
+    public const int DICE_VALUE_MAX = 6;
+    public const int DICE_ANIM_TYPE_MIN = 0;
+    public const int DICE_ANIM_TYPE_MAX = 2;
+
+    public const string DICE_ANIM_PARAM_DICE_VALUE = "Dice_Value";
+    public const string DICE_ANIM_PARAM_DICE_BLEND = "Dice_Blend";
+    public const string DICE_ANIM_PARAM_DICE_TRIGGER_STATE_CHANGE = "ToTriggerStateChange";
+
+    #endregion
 }
 
 public enum SCENE_NAME

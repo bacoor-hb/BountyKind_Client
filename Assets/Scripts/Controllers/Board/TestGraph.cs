@@ -114,19 +114,4 @@ public class TestGraph : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
         }
     }
-
-    private void CheckEvent(GraphNode node, string address, GameObject player)
-    {
-        if (node.NodeID == startNode.NodeID)
-        {
-            graphEvent.RaiseOnEnterStartNode(address);
-        }
-        else if (node.NodeID == imprisonNode.NodeID)
-        {
-            var prisonNode = board.GetNode((int)PROPERTY_ID.PRISON);
-            var nodePosition = prisonNode.transform.position;
-            player.transform.position = new Vector3(nodePosition.x, 1.5f, nodePosition.z);
-
-        }
-    }
 }

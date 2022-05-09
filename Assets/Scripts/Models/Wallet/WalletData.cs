@@ -4,56 +4,52 @@ using UnityEngine;
 
 public class WalletData  
 {
-    private string _idUser;
-    private string _addressWallet;
-    private long _money;
+    private User owner;
+    private long yu2;
+    private int totalDice;
 
-    public WalletData (string idUser, string addressWallet, long money)
+    public WalletData (User _user, long _yu2 = 0, int _totalDice = 0)
     {
-        IDUser = idUser;
-        AddressWallet = addressWallet;
-        Money = money;
-        
+        owner = _user;
+        Yu2 = _yu2;
+        totalDice = _totalDice;
     }
     public WalletData()
     { 
 
     }
-    public string IDUser
+    public User Owner
     {
         get
         {
-            return _idUser;
+            return owner;
         }
-        set
+        private set
         {
-            _idUser = value;
+           
         }
     }
-   
-    public string AddressWallet
+    public long Yu2
     {
         get
         {
-            return _addressWallet;
+            return yu2;
         }
         set
         {
-            _addressWallet = value;
+            yu2 = value;
         }
     }
 
-    public long Money
+    public int TotalDice
     {
         get
         {
-            return _money;
+            return totalDice;
         }
         set
         {
-            _money = value;
+            totalDice = value;
         }
     }
-
-
 }

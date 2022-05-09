@@ -8,12 +8,11 @@ public class LoadingManager : MonoBehaviour
 {
     [SerializeField]
     private LoadingView LoadingView;
+    public SCENE_NAME targetScene;
 
-    SCENE_NAME targetScene;
-
-    void Start()
+    public void Init()
     {
-        
+        targetScene = SCENE_NAME.Menu_Scene;
     }
 
     /// <summary>
@@ -53,6 +52,7 @@ public class LoadingManager : MonoBehaviour
     /// <param name="sceneName"></param>
     public void LoadWithLoadingScene(SCENE_NAME sceneName)
     {
+        targetScene = sceneName;
         PlayerPrefs.SetString(CONSTS.SCENE_KEY, sceneName.ToString());
 
         StartCoroutine(LoadScene_Async(SCENE_NAME.Loading_Scene));

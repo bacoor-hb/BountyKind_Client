@@ -10,7 +10,7 @@ public class LocalLoading : MonoBehaviour
     void Start()
     {
         manager = GlobalManager.Instance.LoadingManager;
-        SCENE_NAME sceneToLoad = (SCENE_NAME)Enum.Parse(typeof(SCENE_NAME), PlayerPrefs.GetString(CONSTS.SCENE_KEY));
+        SCENE_NAME sceneToLoad = manager.targetScene;
         StartCoroutine(manager.LoadScene_Async(sceneToLoad));
     }
 

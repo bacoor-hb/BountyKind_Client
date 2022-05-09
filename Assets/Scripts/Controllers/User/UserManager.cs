@@ -2,110 +2,70 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserManager : MonoBehaviour
+public class UserManager : IPlayer
 {
-    public delegate void EventHaveProp<T>(T data);
-    public string id;
-    public User userData;
-    public WalletManager walletManager = new WalletManager(); 
-    
-    
-    // Start is called before the first frame update
-    private void Awake()
-    { 
-        walletManager.setWalletUer(id, userData.Address, userData.Money);
-    }
-    void Start()
+    public delegate void OnEventTriggered<T>(T data);
+
+    public string userToken;
+    public User UserData { get; private set; }
+    [SerializeField]
+    private WalletManager WalletManager;
+
+    private TurnBaseController TurnBaseController;
+    Material myMaterial;
+    #region Initialize
+    /// <summary>
+    /// Initializing the User data and Wallet
+    /// </summary>
+    /// <param name="user"></param>
+    public void Init(User user, TurnBaseController _controller)
     {
-        
-    }
+        UserData = user;
+        TurnBaseController = _controller;
+        WalletManager.Init(UserData);
 
-    // Update is called once per frame
-    void Update()
+        WalletManager.OnUpdateMoney += OnYu2_UpdateEvent;
+
+        myMaterial = GetComponent<Renderer>().material;
+    }
+    #endregion
+
+    #region Wallet Value
+    /// <summary>
+    /// Check the current dice number
+    /// </summary>
+    /// <param name="diceTime"></param>
+    /// <returns></returns>
+    public bool AllowRollDice(int diceTime)
     {
-         
+        long total = WalletManager.walletData.TotalDice + diceTime;
+        Debug.Log("[UserManager] [AllowRollDice] total dice Time : " + total);
+        return total > 0;
     }
 
-    public void setUserManager(User user)
+    /// <summary>
+    /// Update the Yu2 value
+    /// </summary>
+    /// <param name="amount"></param>
+    public void Yu2_UpdateValue(long amount)
     {
-        userData = user;
-        walletManager.setWalletUer(id, user.Address, user.Money);
-
+        WalletManager.OnYu2_Update(amount);
     }
-    public bool isCheckEnoughtMoney(long money)
+    private void OnYu2_UpdateEvent(long money)
     {
-
-        long total = userData.Money + money;
-        Debug.Log("total : " + total);
-        if (total >= 0)
-        {
-            OnChangeMoney(money);
-            return true;
-        }
-        return false;
+        Debug.Log("[UserManager] [OnChangeMoneyEvent] Money = " + money);
     }
-    public void OnChangeMoney(long money)
+
+    public override void StartTurn()
+    {        
+        myMaterial.color = Color.red;
+        Debug.Log("StartTurn: id: " + id);
+    }
+
+    public override void EndTurn()
     {
-        walletManager.OnChangeMoney = OnCangeMoneyEnevt;
-        walletManager.OnChangeMoneyWeb3 = OnCangeMoneyWeb3Event;
-        walletManager.OnChangeMoneyEvent(money);
-
+        myMaterial.color = Color.white;
+        Debug.Log("EndTurn: id: " + id);
     }
-    public void OnCangeMoneyEnevt(long money)
-    {
-        
-        userData.Money += money;
-    }
-
-    public void OnCangeMoneyWeb3Event(long money)
-    {
-
-         
-    }
-    IEnumerable OnChangeMoneyWeb3(long money)
-    {
-        yield return null;
-    }
-
-    //public bool isCheckBuildHouse(Property _property)
-    //{
-    //    int count = 0;
-    //    if (userData.GetProperties().Count < 2) return false;
-
-    //    for (int i = 0; i < userData.GetProperties().Count; i++)
-    //    {
-    //        Property property = userData.GetProperties()[i];
-    //        if (_property.data.typeId == property.data.typeId)
-    //        {
-    //            count++;
-    //        }
-    //    }
-
-
-    //    // get count colors in board
-    //    //int countColor = graph.GetType();
-    //    int countColor = 2;
-    //    if (countColor == count) return true;
-    //    return false;
-    //}
-
-    //public Property GetPropertyUser(Property _property)
-    //{
-    //    foreach(Property temp in user.GetProperties())
-    //    {
-    //        if(temp.data.id == _property.data.id)
-    //        {
-    //            return temp;
-    //        }
-    //    }
-    //    return null;
-    //}  
-    //public bool checkIsMyProperty(Property property)
-    //{
-    //    return user.GetProperties().Contains(property);
-    //}
-
-
-
-
+    #endregion
 }

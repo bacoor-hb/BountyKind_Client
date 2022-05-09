@@ -41,12 +41,8 @@ public enum CYCLE_TURN
 
 public enum ACTION_TYPE
 {
-    RELEASE_CARD,
+    MOVE,
     ROLL_DICE,
-    RUN_THE_CELL,
-    PURCHASE,
-    BUILDING,
-    AUCTION,
     END_TURN,
 }
 

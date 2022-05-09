@@ -28,11 +28,11 @@ public class LocalTestGameController : MonoBehaviour
         var currentPlayer = players[turnBaseController.CurrentPlayer];
         if (Input.GetKeyDown(KeyCode.A))
         {            
-            turnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.PURCHASE));
+            turnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.MOVE));
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            turnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.AUCTION));
+            turnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.ROLL_DICE));
         }
         if (Input.GetKeyDown(KeyCode.D))
         {

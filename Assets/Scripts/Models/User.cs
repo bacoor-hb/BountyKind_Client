@@ -6,20 +6,19 @@ public class User
 {
     protected string address;
     protected string name;
-    protected long money;
-
+    protected int avatar;
     public User()
     {
-        address = "";
-        name = "";
-        money = 0;
+        address = "NULL";
+        name = "NULL";
+        avatar = -1;
     }
 
-    public User(string _address, string _name, long _money)
+    public User(string _address, string _name, int _avatarId)
     {
         address = _address;
         name = _name;
-        money = _money;
+        avatar = _avatarId;
     }
 
     public string Address
@@ -46,15 +45,15 @@ public class User
         }
     }
 
-    public long Money
+    public int AvatarID
     {
         get
         {
-            return money;
+            return avatar;
         }
         set
         {
-            money = value;
+            avatar = value;
         }
     }
 }

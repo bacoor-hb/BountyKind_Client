@@ -47,12 +47,8 @@ public class PlayerTestController : IPlayer
     {
         return actionType switch
         {
-            ACTION_TYPE.RELEASE_CARD => null,
-            ACTION_TYPE.ROLL_DICE => null,
-            ACTION_TYPE.RUN_THE_CELL => null,
-            ACTION_TYPE.PURCHASE => PurchaseAction,
-            ACTION_TYPE.BUILDING => null,
-            ACTION_TYPE.AUCTION => AuctionAction,
+            ACTION_TYPE.MOVE => PurchaseAction,
+            ACTION_TYPE.ROLL_DICE => AuctionAction,
             ACTION_TYPE.END_TURN => EndTurnAction,
             _ => null,
         };

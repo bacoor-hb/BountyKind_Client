@@ -6,8 +6,7 @@ public class GraphNode : MonoBehaviour
 {
     public int NodeID
     {
-        get; private set;
-        
+        get; private set;       
     }
 
     [SerializeField]
@@ -31,5 +30,14 @@ public class GraphNode : MonoBehaviour
     public GraphNode Previous()
     {
         return preNode;
+    }
+
+    /// <summary>
+    /// Get the position of this node in the Scene.
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetNodeWorldPosition()
+    {
+        return transform.position;
     }
 }

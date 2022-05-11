@@ -8,7 +8,6 @@ public class Action : MonoBehaviour
     public Event EndAction;
     public Event EventAction;
 
-    [SerializeField]
     protected ACTION_TYPE actionType;
     protected int userId;
 

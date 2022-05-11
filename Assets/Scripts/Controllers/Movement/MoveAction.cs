@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MoveAction : Action
 {
+    [SerializeField]
+    private MovementController MovementController;
     public override void ClearEvent()
     {
         base.ClearEvent();
@@ -12,6 +14,7 @@ public class MoveAction : Action
     public override void InitAction(int _userId, TurnBaseController _controller)
     {
         base.InitAction(_userId, _controller);
+        actionType = ACTION_TYPE.MOVE;
     }
 
     public override void OnEndAction()
@@ -22,6 +25,5 @@ public class MoveAction : Action
     public override void OnStartAction()
     {
         base.OnStartAction();
-        turnBaseController.EndAction();
     }
 }

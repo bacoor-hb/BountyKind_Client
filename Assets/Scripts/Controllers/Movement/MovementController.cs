@@ -17,7 +17,7 @@ public class MovementController : MonoBehaviour
     [SerializeField]
     private float timeToTarget;
     private bool inTarget = true;
-    private bool isMoving = false;
+    private bool isMoving = false;  
 
     private void Update()
     {
@@ -34,6 +34,12 @@ public class MovementController : MonoBehaviour
         }
     }
 
+    #region Initialize
+    public void SetObjectToMove(GameObject _newObjToMove)
+    {
+        ObjectToMove = _newObjToMove;
+    }
+
     /// <summary>
     /// Initialize the Module
     /// </summary>
@@ -47,7 +53,9 @@ public class MovementController : MonoBehaviour
         target = _target;
         inTarget = false;
     }
+    #endregion
 
+    #region Moving Event
     /// <summary>
     /// Trigger the Move event to move the Object
     /// </summary>
@@ -67,4 +75,5 @@ public class MovementController : MonoBehaviour
 
         OnEndMoving?.Invoke();
     }
+    #endregion
 }

@@ -5,14 +5,25 @@ using UnityEngine;
 public class UserManager : IPlayer
 {
     public delegate void OnEventTriggered<T>(T data);
-
-    public string userToken;
+    public OnEventTriggered<int> OnStartRollingDice;
+    public OnEventTriggered<int> OnEndRollingDice;
+    public OnEventTriggered<int> OnStartMoving;
+    public OnEventTriggered<int> OnEndMoving;
     public User UserData { get; private set; }
     [SerializeField]
     private WalletManager WalletManager;
 
+    [Header ("Turn Action")]
+    [SerializeField]
+    private Action EndTurnAction;
+    [SerializeField]
+    private Action RollDiceAction;
+    [SerializeField]
+    private Action MoveAction;
+
     private TurnBaseController TurnBaseController;
     Material myMaterial;
+
     #region Initialize
     /// <summary>
     /// Initializing the User data and Wallet
@@ -22,27 +33,40 @@ public class UserManager : IPlayer
     {
         UserData = user;
         TurnBaseController = _controller;
-        WalletManager.Init(UserData);
 
+        EndTurnAction.InitAction(id, _controller);
+
+        RollDiceAction.InitAction(id, _controller);
+        RollDiceAction.StartAction += StartRollDice;
+        RollDiceAction.EndAction += EndRollDice;
+
+        MoveAction.InitAction(id, _controller);
+        MoveAction.StartAction += StartMoving;
+        MoveAction.EndAction += EndMoving;
+        
+
+
+        WalletManager.Init(UserData);
         WalletManager.OnUpdateMoney += OnYu2_UpdateEvent;
 
         myMaterial = GetComponent<Renderer>().material;
     }
     #endregion
 
-    #region Wallet Value
-    /// <summary>
-    /// Check the current dice number
-    /// </summary>
-    /// <param name="diceTime"></param>
-    /// <returns></returns>
-    public bool AllowRollDice(int diceTime)
+    #region Turn Management
+    public Action GetAction(ACTION_TYPE actionType)
     {
-        long total = WalletManager.walletData.TotalDice + diceTime;
-        Debug.Log("[UserManager] [AllowRollDice] total dice Time : " + total);
-        return total > 0;
+        return actionType switch
+        {
+            ACTION_TYPE.MOVE => MoveAction,
+            ACTION_TYPE.ROLL_DICE => RollDiceAction,
+            ACTION_TYPE.END_TURN => EndTurnAction,
+            _ => null,
+        };
     }
+    #endregion
 
+    #region Wallet Value
     /// <summary>
     /// Update the Yu2 value
     /// </summary>
@@ -66,6 +90,33 @@ public class UserManager : IPlayer
     {
         myMaterial.color = Color.white;
         Debug.Log("EndTurn: id: " + id);
+    }
+
+    public WalletData GetWalletData()
+    {
+        return WalletManager.walletData;
+    }
+    #endregion
+
+    #region Event Action
+    private void StartRollDice()
+    {
+        OnStartRollingDice?.Invoke(id);
+    }
+
+    private void EndRollDice()
+    {
+        OnEndRollingDice?.Invoke(id);
+    }
+
+    private void StartMoving()
+    {
+        OnStartMoving?.Invoke(id);
+    }
+
+    private void EndMoving()
+    {
+        OnEndMoving?.Invoke(id);
     }
     #endregion
 }

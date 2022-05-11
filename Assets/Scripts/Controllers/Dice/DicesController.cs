@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DicesController : MonoBehaviour
 {
+    public delegate void OnEventTriggered<T>(T data);
+    public OnEventTriggered<int> OnAllDiceFinishAnim;
+
     [SerializeField]
     Transform[] SpawnPos;
     [SerializeField]
@@ -33,6 +36,7 @@ public class DicesController : MonoBehaviour
                 Dices[i].OnFinishAnim = null;
                 Dices[i].OnFinishAnim += SetDiceReady;
             }
+
             ResetDicesPosition();
         }       
     }
@@ -41,6 +45,11 @@ public class DicesController : MonoBehaviour
     {
         Debug.Log("Dice " + index + " is ready.");
         diceReady++;
+
+        if(diceReady == Dices.Length)
+        {
+            OnAllDiceFinishAnim?.Invoke(diceReady);
+        }
     }
 
     /// <summary>

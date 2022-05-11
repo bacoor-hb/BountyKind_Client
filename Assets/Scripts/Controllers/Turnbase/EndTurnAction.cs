@@ -12,6 +12,7 @@ public class EndTurnAction : Action
     public override void InitAction(int _userId, TurnBaseController _controller)
     {
         base.InitAction(_userId, _controller);
+        actionType = ACTION_TYPE.END_TURN;
     }
 
     public override void OnEndAction()

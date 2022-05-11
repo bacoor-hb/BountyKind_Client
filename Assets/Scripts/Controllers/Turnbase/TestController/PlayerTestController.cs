@@ -11,7 +11,7 @@ public class PlayerTestController : IPlayer
     [SerializeField]
     private Action EndTurnAction;
 
-    private TurnBaseController turnBaseController;
+    private TurnBaseController TurnBaseController;
 
     /// <summary>
     /// Initialize the Player and all of his Actions
@@ -28,7 +28,7 @@ public class PlayerTestController : IPlayer
     /// </summary>
     private void InitPlayerAction(TurnBaseController _controller)
     {
-        turnBaseController = _controller;
+        TurnBaseController = _controller;
 
         PurchaseAction.InitAction(id, _controller);
         PurchaseAction.StartAction += OnPurchaseStart;
@@ -39,7 +39,6 @@ public class PlayerTestController : IPlayer
         AuctionAction.EndAction += OnAuctionEnd;
 
         EndTurnAction.InitAction(id, _controller);
-
     }
 
     #region Turn Management

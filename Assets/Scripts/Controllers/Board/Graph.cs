@@ -6,18 +6,21 @@ using UnityEngine;
 
 public class Graph : MonoBehaviour
 {
-    protected Dictionary<int, GraphNode> nodes = new Dictionary<int, GraphNode>();
+    protected Dictionary<int, GraphNode> nodes;
     
-    protected Dictionary<string, GraphNode> currentNodes = new Dictionary<string, GraphNode>();
+    protected Dictionary<string, GraphNode> currentNodes;
 
-    [SerializeField]
     private GraphEventManager eventManager;
 
-    void Start()
+    #region Initialize
+    public void Init()
     {
+        nodes = new Dictionary<int, GraphNode>();
+        currentNodes = new Dictionary<string, GraphNode>();
+
+        eventManager = new GraphEventManager();
         eventManager.onEnterNode += OnEnterNode;
         eventManager.onEnterStart += OnEnterStart;
-        eventManager.onEnterImprison += OnEnterImprison;
     }
 
     /// <summary>
@@ -32,6 +35,59 @@ public class Graph : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initialize the current Node list
+    /// </summary>
+    /// <param name="usersAddess"></param>
+    /// <param name="startNodes"></param>
+    /// <returns>
+    /// false if the Length of these 2 inputs are differents
+    /// or the userAddress List has some same element.
+    /// </returns>
+    public bool InitUserNodeList(string[] usersAddess, GraphNode[] startNodes)
+    {
+        currentNodes = new Dictionary<string, GraphNode>();
+        if (usersAddess.Length != startNodes.Length)
+        {
+            return false;
+        }
+        else
+        {
+            for (int i = 0; i < usersAddess.Length; i++)
+            {
+                if (currentNodes.ContainsKey(usersAddess[i]))
+                {
+                    currentNodes = new Dictionary<string, GraphNode>();
+                    return false;
+                }
+
+                currentNodes.Add(usersAddess[i], startNodes[i]);
+            }
+            return true;
+        }
+    }
+    
+    /// <summary>
+    /// Update the position of the current Node base on it's Address
+    /// </summary>
+    /// <param name="_node"></param>
+    /// <param name="_address"></param>
+    /// <returns>false if this address does not exists</returns>
+    public bool SetCurrentNodeByAddress(GraphNode _node, string _address)
+    {
+        if (currentNodes.ContainsKey(_address))
+        {
+            currentNodes[_address] = _node;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    #endregion
+
+    #region Get Node/Nodes
     /// <summary>
     /// Get a node of this graph base on its ID
     /// </summary>
@@ -127,7 +183,9 @@ public class Graph : MonoBehaviour
     {
         return currentNodes[address];
     }
+    #endregion
 
+    #region Node Event
     /// <summary>
     /// Trigger this Event while enter a node
     /// </summary>
@@ -146,7 +204,7 @@ public class Graph : MonoBehaviour
 
             if (node != null)
             {
-                currentNodes[address] = node;
+                SetCurrentNodeByAddress(node, address);
             }
         }
         catch (Exception ex)
@@ -172,22 +230,5 @@ public class Graph : MonoBehaviour
             Debug.LogError("[GetOnEnterNodeERROR] " + ex.Message);
         }
     }
-
-    private void OnEnterImprison(params object[] args)
-    {
-        if (args.Length != 1)
-        {
-            Debug.LogError("[GetOnEnterNode] Invalid Args...");
-        }
-        try
-        {
-            //Convert Params
-            string address = args[0].ToString();
-            Debug.Log("OnEnterImprison");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("[GetOnEnterNodeERROR] " + ex.Message);
-        }
-    }  
+    #endregion
 }

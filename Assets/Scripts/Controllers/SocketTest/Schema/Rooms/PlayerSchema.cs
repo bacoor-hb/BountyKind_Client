@@ -9,15 +9,21 @@ using Colyseus.Schema;
 
 public partial class PlayerSchema : Schema {
 	[Type(0, "string")]
-	public string address = default(string);
+	public string username = default(string);
 
 	[Type(1, "string")]
+	public string address = default(string);
+
+	[Type(2, "string")]
 	public string sessionId = default(string);
 
-	[Type(2, "number")]
+	[Type(3, "number")]
 	public float currentNode = default(float);
 
-	[Type(3, "number")]
+	[Type(4, "number")]
 	public float totalStep = default(float);
+
+	[Type(5, "number")]
+	public float totalRoll = default(float);
 }
 

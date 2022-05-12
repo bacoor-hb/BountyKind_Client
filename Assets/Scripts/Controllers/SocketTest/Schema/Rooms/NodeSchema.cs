@@ -17,8 +17,8 @@ public partial class NodeSchema : Schema {
 	[Type(2, "string")]
 	public string type = default(string);
 
-	[Type(3, "array", typeof(ArraySchema<EnemySchema>))]
-	public ArraySchema<EnemySchema> enemy = new ArraySchema<EnemySchema>();
+	[Type(3, "array", typeof(ArraySchema<CharacterSchema>))]
+	public ArraySchema<CharacterSchema> monster = new ArraySchema<CharacterSchema>();
 
 	[Type(4, "string")]
 	public string image = default(string);

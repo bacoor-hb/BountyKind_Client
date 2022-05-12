@@ -8,26 +8,33 @@ using Colyseus;
 using Colyseus.Schema;
 using GameDevWare.Serialization;
 
-public class Message : Schema
+public class Message<T>
 {
-    [Colyseus.Schema.Type(0, "int")]
-    public int index = 0;
+  
+}
 
-    [Colyseus.Schema.Type(1, "long")]
-    public long timestamp = 0;
+public class NodeMap
+{
+    public int nodeIndex;
 }
 
 public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
 {
+    public delegate void OnRoomMessage(string messageType, object message);
+    public static event OnRoomMessage onRoomMessage;
+
     protected ColyseusClient client;
-    protected ColyseusRoom<LobbySchema> lobbyRoom;
-    protected ColyseusRoom<GameRoomSchema> gameRoom;
+    public ColyseusRoom<LobbySchema> lobbyRoom;
+    public ColyseusRoom<GameRoomSchema> gameRoom;
 
     // Start is called before the first frame update
+    private void Start()
+    {
+        base.InitializeClient();
+    }
     public void Connect()
     {
-        string endpoint = "ws://localhost:2567";
-        //string endpoint = "ws://vps735892.ovh.net:2567";
+        string endpoint = "wss://dev-game-api.w3w.app";
         client = BountyColyseusManager.Instance.CreateClient(endpoint);
         Debug.Log("Connecting to " + endpoint);
     }
@@ -37,28 +44,42 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         await lobbyRoom.Leave();
     }
 
-    public async void JoinLobby()
+    public async void JoinLobby(string _token)
     {
         var options = new Dictionary<string, object>();
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHgwMTk4NTU1NTc0NzBlNWIwN2Q2ZmNiMWMwN2Y0ZjJiOGE0YWIwNmYzIiwidXNlcm5hbWUiOiIweDAxOTg1NTU1NzQ3MGU1YjA3ZDZmY2IxYzA3ZjRmMmI4YTRhYjA2ZjMiLCJpYXQiOjE2NTEwMzQxMjYsImV4cCI6MTk2NjYxMDEyNn0.Jrma2FYlhcsRCtNLpXRxkQFm714c73F781pIaNLHfEM";
-        options.Add("authorization", new { token = "Bearer " +token });
-        lobbyRoom = await client.JoinOrCreate<LobbySchema>("lobby", options);
+        options.Add("authorization", new { token = "Bearer " + _token });
+        try
+        {
+            lobbyRoom = await client.JoinOrCreate<LobbySchema>("lobby", options);
+        }catch(Exception e)
+        {
+            Debug.Log("error");
+            Debug.Log(e);
+        }
     }
 
-    public async void JoinRoom(string roomType)
+    public async void CreateRoom(string roomType, string _mapKey, string _token)
     {
+        Debug.Log("JOIN ROOM");
         var options = new Dictionary<string, object>();
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHgwMTk4NTU1NTc0NzBlNWIwN2Q2ZmNiMWMwN2Y0ZjJiOGE0YWIwNmYzIiwidXNlcm5hbWUiOiIweDAxOTg1NTU1NzQ3MGU1YjA3ZDZmY2IxYzA3ZjRmMmI4YTRhYjA2ZjMiLCJpYXQiOjE2NTEwMzQxMjYsImV4cCI6MTk2NjYxMDEyNn0.Jrma2FYlhcsRCtNLpXRxkQFm714c73F781pIaNLHfEM";
-        options.Add("authorization", new { token = "Bearer " + token });
+        options.Add("authorization", new { token = "Bearer " + _token });
+        options.Add("others", new { mapKey = _mapKey });
         switch (roomType)
         {
             case ROOM_TYPE.GAME_ROOM:
                 gameRoom = await client.JoinOrCreate<GameRoomSchema>(ROOM_TYPE.GAME_ROOM, options);
-                gameRoom.OnMessage<RollResultMessage>(MESSAGE_TYPE.ROLL_RESULT, (message) => {
-                    Debug.Log(message.currentNode);
+                gameRoom.OnMessage<RollResultMessage>(PLAYER_RECEIVE_EVENTS.ROLL_RESULT, (message) =>
+                {
+                    onRoomMessage(PLAYER_RECEIVE_EVENTS.ROLL_RESULT, message);
                 });
-                gameRoom.OnMessage<RollResultMessage>("join", (message) => {
-                    Debug.Log("joined");
+                gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.FIGHT_RESULT, (message) => {
+                    onRoomMessage(PLAYER_RECEIVE_EVENTS.FIGHT_RESULT, message);
+                });
+                gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.BATTLE_INIT, (message) => {
+                    onRoomMessage(PLAYER_RECEIVE_EVENTS.BATTLE_INIT, message);
+                });
+                gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.ERROR, (message) => {
+                    onRoomMessage(PLAYER_RECEIVE_EVENTS.ERROR, message);
                 });
                 break;
             default:
@@ -66,8 +87,8 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         }
     }
 
-    public async void Roll()
+    public async void Roll  ()
     {
-        await gameRoom.Send("roll");
+        await gameRoom.Send(PLAYER_SENT_EVENTS.ROLL_DICE);
     }
 }

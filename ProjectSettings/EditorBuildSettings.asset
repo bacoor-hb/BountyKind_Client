@@ -8,13 +8,25 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/TestScene/Test_Turnbase.unity
     guid: 84066f42f9a34f842b765ae5103d69a7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestScene/Test_Socket.unity
     guid: 2e2ec23d46179544484656022b0df7de
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestScene/Test_Socket_Lobby.unity
     guid: 9cc20b5d5ed1a5f4198b12513d297cbd
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestScene/Test_Socket_GameRoom.unity
     guid: 2df74e8b0171b734e935364d315d7239
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Login.unity
+    guid: 37275ec388e4f4e478f79ade56082148
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Login_Success.unity
+    guid: bf2802b98144f604c89f78e833087c83
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Create_Room.unity
+    guid: bb88b22ba1c293042bcccd6c844d107b
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test_Game_Scene.unity
+    guid: 3e4425171d8c4fc408dc46bcbbb2ddbe
   m_configObjects: {}

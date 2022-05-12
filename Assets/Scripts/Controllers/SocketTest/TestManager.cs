@@ -29,13 +29,12 @@ public class TestManager : LocalSingleton<TestManager>
     }
     void HandleJoinLobby()
     {
-        bountyColyseusManager.JoinLobby();
+        bountyColyseusManager.JoinLobby("asd");
         SceneManager.LoadScene("Test_Socket_Lobby");
     }
     void HandleJoinRoom()
     {
         Debug.Log("join room");
-        GlobalManager.Instance.NetworkManager.JoinRoom(ROOM_TYPE.GAME_ROOM);
         SceneManager.LoadScene("Test_Socket_GameRoom");
     }
 
@@ -52,6 +51,6 @@ public class TestManager : LocalSingleton<TestManager>
 
     private void OnDestroy()
     {
-        bountyColyseusManager.Disconnect();
+        
     }
 }

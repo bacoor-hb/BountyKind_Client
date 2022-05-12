@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GlobalManager : GlobalSingleton<GlobalManager>
 {
     [SerializeField]
-    private GameObject JoinLobbyBTN;
+    private GameObject JovinLobbyBTN;
     public LoadingManager LoadingManager { get; private set; }
     public LanguageManager LanguageManager { get; private set; }
 
@@ -38,12 +38,7 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
         NetworkManager = GetComponentInChildren<BountyColyseusManager>();
         if (NetworkManager != null)
         {
-            JoinLobbyBTN.SetActive(true);
-            JoinLobbyBTN.GetComponent<Button>().onClick.AddListener(() => {
-                NetworkManager.Connect();
-                NetworkManager.JoinLobby();
-                SceneManager.LoadScene("Test_Socket_Lobby");
-            });
+            Debug.Log(true);
         }
         else
         {

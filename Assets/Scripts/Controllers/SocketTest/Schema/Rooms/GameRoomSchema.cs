@@ -25,5 +25,11 @@ public partial class GameRoomSchema : Schema {
 
 	[Type(5, "number")]
 	public float currentIndexPlayer = default(float);
+
+	[Type(6, "boolean")]
+	public bool inBattle = default(bool);
+
+	[Type(7, "ref", typeof(BattleSchema))]
+	public BattleSchema battleState = new BattleSchema();
 }
 

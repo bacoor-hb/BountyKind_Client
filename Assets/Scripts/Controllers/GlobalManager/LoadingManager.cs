@@ -12,7 +12,7 @@ public class LoadingManager : MonoBehaviour
 
     public void Init()
     {
-        targetScene = SCENE_NAME.Menu_Scene;
+        targetScene = SCENE_NAME.MainMenu;
     }
 
     /// <summary>
@@ -55,6 +55,6 @@ public class LoadingManager : MonoBehaviour
         targetScene = sceneName;
         PlayerPrefs.SetString(CONSTS.SCENE_KEY, sceneName.ToString());
 
-        StartCoroutine(LoadScene_Async(SCENE_NAME.Loading_Scene));
+        StartCoroutine(LoadScene_Async(SCENE_NAME.LoadingScene));
     }
 }

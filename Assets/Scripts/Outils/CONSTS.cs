@@ -23,11 +23,11 @@ public class CONSTS
 
 public enum SCENE_NAME
 {
-    Splash_Scene,
-    Menu_Scene,
-    Game_Scene,
-    Loading_Scene,
-    Credit_Scene
+    SplashScene,
+    MainMenu,
+    GameScene,
+    LoadingScene,
+    CreditScene
 }
 
 public enum CYCLE_TURN 

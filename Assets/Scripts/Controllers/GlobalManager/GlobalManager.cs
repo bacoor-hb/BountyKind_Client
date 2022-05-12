@@ -20,7 +20,7 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
         LoadingManager = GetComponentInChildren<LoadingManager>();
         if(LoadingManager != null)
         {
-            LoadingManager.LoadWithLoadingScene(SCENE_NAME.Menu_Scene);
+            LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
         }
         else
         {

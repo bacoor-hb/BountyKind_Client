@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class GraphNode : MonoBehaviour
 {
-    public int NodeID
-    {
-        get; private set;       
-    }
+    public int NodeID;
 
     [SerializeField]
     private GraphNode preNode;

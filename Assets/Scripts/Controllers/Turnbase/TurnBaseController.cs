@@ -13,6 +13,7 @@ public class TurnBaseController : MonoBehaviour
 
     public bool IsStarting { get; private set; }
     public int CurrentPlayer { get; private set; }
+    [HideInInspector]
     public List<IPlayer> playerList;
 
     private Action currentAction;

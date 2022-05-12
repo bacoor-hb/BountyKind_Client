@@ -46,10 +46,21 @@ public class LocalGameController : MonoBehaviour
         //Init the Board
         board.Init();
         board.GenerateBoard(nodeList);
+
+        //Register all users to the Map
         GraphNode startNode = board.GetNode(0);//Set the current Node is the node 0
+        string[] usersAddress = new string[players.Count];
+        GraphNode[] graphNodes = new GraphNode[players.Count];
+        for(int i = 0; i < players.Count; i++)
+        {
+            usersAddress[i] = GetUserAddress(i);
+            graphNodes[i] = startNode;
+        }
+        board.InitUserNodeList(usersAddress, graphNodes);
+
 
         //Init Move Controller
-        
+
     }
     #endregion
 
@@ -84,7 +95,8 @@ public class LocalGameController : MonoBehaviour
         //User has 1 roll Number and 1 move number at each turn
         rollNumber = 1;
 
-        //Init Roll Dice Event
+        //Reset Dice
+        DicesController.ResetDicesPosition();
 
         //Init the View + Button Event
         LocalGameView.Init();
@@ -136,7 +148,7 @@ public class LocalGameController : MonoBehaviour
             DicesValue = new int[_diceNB];
             for(int i = 0; i< _diceNB; i++)
             {
-                DicesValue[i] = Random.Range(0, 6);
+                DicesValue[i] = Random.Range(1, 7);
             }
             return DicesValue;
         }
@@ -190,14 +202,14 @@ public class LocalGameController : MonoBehaviour
     void MovePlayer(int _moveValue, int _userToMove)
     {
         GraphNode currentNode = board.GetCurrentNodeByAddress(GetUserAddress(_userToMove));
-        List<GraphNode> targetNodes = board.GetNodesByStep(currentNode, _moveValue);
+        targetNodes = board.GetNodesByStep(currentNode, _moveValue);
 
         if(targetNodes != null && targetNodes.Count > 0)
         {
-            _targetList = new Vector3[targetNodes.Count];
+            _targetsPos = new Vector3[targetNodes.Count];
             for(int i = 0; i < targetNodes.Count; i++)
             {
-                _targetList[i] = targetNodes[i].GetNodeWorldPosition();
+                _targetsPos[i] = targetNodes[i].GetNodeWorldPosition();
             }
 
             currentTarget = 0;
@@ -216,7 +228,8 @@ public class LocalGameController : MonoBehaviour
     }
 
     int currentTarget = 0;
-    Vector3[] _targetList;
+    Vector3[] _targetsPos;
+    List<GraphNode> targetNodes;
     float timeToTarget = 0.5f;
 
     /// <summary>
@@ -224,10 +237,11 @@ public class LocalGameController : MonoBehaviour
     /// </summary>
     void MoveTheObject()
     {
-        if(currentTarget < _targetList.Length)
+        if(currentTarget < _targetsPos.Length)
         {
-            MovementController.SetTarget(_targetList[currentTarget], timeToTarget);
+            MovementController.SetTarget(_targetsPos[currentTarget], timeToTarget);
             currentTarget++;
+            MovementController.StartMoving();
         }
         else
         {
@@ -243,7 +257,7 @@ public class LocalGameController : MonoBehaviour
     private void EndMoving1Math()
     {
         Debug.Log("[EndMoving1Math] On Move End: " + currentTarget);
-
+        board.OnEnterNode(GetUserAddress(currentPlayerId), targetNodes[currentTarget-1]);
         MoveTheObject();
     }
 
@@ -251,12 +265,13 @@ public class LocalGameController : MonoBehaviour
     {
         LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
     }
+
     #endregion
 
     #region User Controller
     public string GetUserAddress(int _userLocalId)
     {
-        if(_userLocalId > 0 
+        if(_userLocalId >= 0 
             && _userLocalId < players.Count
             && players[_userLocalId] != null)
         {

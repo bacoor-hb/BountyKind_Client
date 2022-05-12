@@ -22,7 +22,10 @@ public class UserManager : IPlayer
     private Action MoveAction;
 
     private TurnBaseController TurnBaseController;
-    Material myMaterial;
+
+    [Header ("Only for TEST")]
+    [SerializeField]
+    private Material myMaterial;
 
     #region Initialize
     /// <summary>
@@ -48,8 +51,6 @@ public class UserManager : IPlayer
 
         WalletManager.Init(UserData);
         WalletManager.OnUpdateMoney += OnYu2_UpdateEvent;
-
-        myMaterial = GetComponent<Renderer>().material;
     }
     #endregion
 

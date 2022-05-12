@@ -30,8 +30,6 @@ public class TestGraph : MonoBehaviour
 
     [SerializeField]
     private GraphNode[] nodeList;
-    [SerializeField]
-    private GraphEventManager graphEvent;
 
     private int currentIndex2 = 0;
     private IEnumerator coroutine1;
@@ -97,7 +95,7 @@ public class TestGraph : MonoBehaviour
         {
             var nodePosition = nodes[currentIndex1].transform.position;
             player1.transform.position = new Vector3(nodePosition.x, 1.5f, nodePosition.z);
-            graphEvent.RaiseOnEnterNode("address1", nodes[currentIndex1]);
+            board.OnEnterNode("address1", nodes[currentIndex1]);
             currentIndex1++;
             yield return new WaitForSeconds(waitTime);
         }
@@ -109,7 +107,7 @@ public class TestGraph : MonoBehaviour
         {
             var nodePosition = nodes[currentIndex2].transform.position;
             player2.transform.position = new Vector3(nodePosition.x, 1.5f, nodePosition.z);
-            graphEvent.RaiseOnEnterNode("address2", nodes[currentIndex2]);
+            board.OnEnterNode("address2", nodes[currentIndex2]);
             currentIndex2++;
             yield return new WaitForSeconds(waitTime);
         }

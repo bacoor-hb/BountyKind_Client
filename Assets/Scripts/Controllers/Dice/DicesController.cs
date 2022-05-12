@@ -84,6 +84,7 @@ public class DicesController : MonoBehaviour
             return;
         }
 
+        diceReady = 0;
         for (int i = 0; i < Dices.Length; i++)
         {
             //Debug.Log("[RollDice] Value = " + diceValues[i]);

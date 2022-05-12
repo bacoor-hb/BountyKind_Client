@@ -6,21 +6,18 @@ using UnityEngine;
 
 public class Graph : MonoBehaviour
 {
-    protected Dictionary<int, GraphNode> nodes;
-    
-    protected Dictionary<string, GraphNode> currentNodes;
+//    public delegate void OnEventTrigger(params object[] args);
+//    public OnEventTrigger onEnterNode;
+//    public OnEventTrigger onEnterStart;
 
-    private GraphEventManager eventManager;
+    protected Dictionary<int, GraphNode> nodes;    
+    protected Dictionary<string, GraphNode> currentNodes;
 
     #region Initialize
     public void Init()
     {
         nodes = new Dictionary<int, GraphNode>();
         currentNodes = new Dictionary<string, GraphNode>();
-
-        eventManager = new GraphEventManager();
-        eventManager.onEnterNode += OnEnterNode;
-        eventManager.onEnterStart += OnEnterStart;
     }
 
     /// <summary>
@@ -31,6 +28,7 @@ public class Graph : MonoBehaviour
     {
         for (var i = 0; i < nodeInScene.Length; i++)
         {
+            nodeInScene[i].NodeID = i;
             nodes.Add(nodeInScene[i].NodeID, nodeInScene[i]);            
         }
     }
@@ -190,45 +188,18 @@ public class Graph : MonoBehaviour
     /// Trigger this Event while enter a node
     /// </summary>
     /// <param name="args"></param>
-    private void OnEnterNode(params object[] args)
+    public void OnEnterNode(string address, GraphNode node)
     {
-        if (args.Length != 2)
+        if (node != null)
         {
-            Debug.LogError("[GetOnEnterNode] Invalid Args...");
+            SetCurrentNodeByAddress(node, address);
         }
-        try
-        {
-            //Convert Params
-            string address = args[0].ToString();
-            GraphNode node = (GraphNode)args[1];
-
-            if (node != null)
-            {
-                SetCurrentNodeByAddress(node, address);
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("[GetOnEnterNodeERROR] " + ex.Message);
-        }
+       
     }
 
-    private void OnEnterStart(params object[] args)
+    private void OnEnterStart(string address)
     {
-        if (args.Length != 1)
-        {
-            Debug.LogError("[GetOnEnterNode] Invalid Args...");
-        }
-        try
-        {
-            //Convert Params
-            string address = args[0].ToString();
-            Debug.Log("Bat dau");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("[GetOnEnterNodeERROR] " + ex.Message);
-        }
+        
     }
     #endregion
 }

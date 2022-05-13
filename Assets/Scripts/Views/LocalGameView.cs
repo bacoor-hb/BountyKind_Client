@@ -37,10 +37,10 @@ public class LocalGameView : MonoBehaviour
     /// Update the user Data on the UI
     /// </summary>
     /// <param name="_data"></param>
-    public void SetUserData(WalletData _data)
+    public void SetUserData(UserData _data)
     {
-        UserName_Txt.text = _data.Owner.Address;
-        RollTime_Txt.text = _data.TotalDice.ToString();
+        UserName_Txt.text = _data.address;
+        RollTime_Txt.text = _data.rollNumber.ToString();
     }
 
     public void SetBtn_State(ACTION_TYPE actionType, bool _state)

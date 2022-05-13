@@ -16,17 +16,14 @@ public class LanguageManager : MonoBehaviour
     //path of the file that the game is reading from
     string langFilePath = "Resources/menuSentences.xml";
 
-    protected void Awake()
+    public void Init()
     {
         //Initialize and set a default language
         langReader =
             new LanguageReader(Path.Combine(Application.dataPath, langFilePath),
                 lang.Value,
                 false);
-    }
 
-    void Start()
-    {
         languageView.Init();
         langReader.OnStartLoadingLanguageFile += OnStartLoadingLanguageFile;
         langReader.OnEndLoadingLanguageFile += OnEndLoadingLanguageFile;

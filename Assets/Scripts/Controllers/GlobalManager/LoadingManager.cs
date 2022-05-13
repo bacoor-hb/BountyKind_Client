@@ -8,6 +8,7 @@ public class LoadingManager : MonoBehaviour
 {
     [SerializeField]
     private LoadingView LoadingView;
+    [HideInInspector]
     public SCENE_NAME targetScene;
 
     public void Init()

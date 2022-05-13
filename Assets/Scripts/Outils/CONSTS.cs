@@ -19,6 +19,11 @@ public class CONSTS
     public const string DICE_ANIM_PARAM_DICE_TRIGGER_STATE_CHANGE = "ToTriggerStateChange";
 
     #endregion
+
+    #region HOST DATA
+    public const string HOST_ENDPOINT_DEFAULT = "dev-game-api.w3w.app";
+
+    #endregion
 }
 
 public enum SCENE_NAME
@@ -27,7 +32,12 @@ public enum SCENE_NAME
     MainMenu,
     GameScene,
     LoadingScene,
-    CreditScene
+    CreditScene,
+
+    Test_Login_Success,
+    Test_Create_Room,
+    Test_Login,
+    Test_Game_Scene
 }
 
 public enum CYCLE_TURN 
@@ -53,3 +63,29 @@ public class TEXT_UI
     public const string JAPANESE = "Japanese";
     
 }
+
+public class ROOM_TYPE
+{
+    public const string GAME_ROOM = "my_room";
+}
+
+public class PLAYER_RECEIVE_EVENTS
+{
+    public const string ROLL_RESULT = "roll_result";
+    public const string FIGHT_RESULT = "fight_result";
+    public const string BATTLE_INIT = "battle_init";
+    public const string ERROR = "error";
+}
+
+public class PLAYER_SENT_EVENTS
+{
+    public const string ROLL_DICE = "roll";
+    public const string FIGHT = "fight";
+    public const string GAME_EXIT = "exit";
+}
+public class PLAYER_ERRORS
+{
+    public const string NOT_YOUR_TURN = "NOT_YOUR_TURN";
+}
+
+

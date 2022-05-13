@@ -5,7 +5,7 @@ using UnityEngine;
 public class LocalGameController : MonoBehaviour
 {
     [SerializeField]
-    private List<UserManager> players;
+    private List<UserActionLocalManager> players;
 
     [Header ("Controller Modules")]
     [SerializeField]
@@ -25,11 +25,14 @@ public class LocalGameController : MonoBehaviour
     [SerializeField]
     private LocalGameView LocalGameView;
 
+    private UserDataManager UserDataManager;
     //-------------------------------------------------------------------------------------------
     #region Initialize
     // Start is called before the first frame update
     void Start()
     {
+        UserDataManager = GlobalManager.Instance.UserDataManager;
+
         //Init Turnbase Controller
         TurnBaseController.Init();
 
@@ -64,27 +67,9 @@ public class LocalGameController : MonoBehaviour
     }
     #endregion
 
-    #region Get Data
-    /// <summary>
-    /// Get the User Data from the Server/Blockchain
-    /// </summary>
-    /// <returns></returns>
-    User GetUser(int userID)
-    {
-        //Test Data, must be replace by data from Server
-        User tmp = new User()
-        {
-            Address = "Default " + userID,
-            AvatarID = 1,
-            Name = "Default" + userID
-        };
-        return tmp;
-    }
-    #endregion
-
     #region Turn Base Controller
     int rollNumber = 0;
-    UserManager currentPlayer;
+    UserActionLocalManager currentPlayer;
     int currentPlayerId;
     void OnStartTurn(int userID)
     {
@@ -98,9 +83,9 @@ public class LocalGameController : MonoBehaviour
         //Reset Dice
         DicesController.ResetDicesPosition();
 
-        //Init the View + Button Event
+        //Init the View + Button Event, Only for local player.
         LocalGameView.Init();
-        LocalGameView.SetUserData(currentPlayer.GetWalletData());
+        LocalGameView.SetUserData(UserDataManager.GetUserData(currentPlayerId));
 
         LocalGameView.RollDice_Btn.onClick.AddListener(RollDice_Action);
         LocalGameView.Move_Btn.onClick.AddListener(Move_Action);
@@ -275,7 +260,7 @@ public class LocalGameController : MonoBehaviour
             && _userLocalId < players.Count
             && players[_userLocalId] != null)
         {
-            return players[_userLocalId].UserData.Address;
+            return UserDataManager.GetUserData(_userLocalId).address;
         }
         else
         {
@@ -291,8 +276,7 @@ public class LocalGameController : MonoBehaviour
         //Set Player id (The turn order) + Set the user Action
         for (int i = 0; i < players.Count; i++)
         {
-            User currentUserData = GetUser(i);
-            players[i].Init(currentUserData, TurnBaseController);
+            players[i].Init(TurnBaseController);
             TurnBaseController.Register(players[i]);
 
             players[i].OnStartRollingDice = null;

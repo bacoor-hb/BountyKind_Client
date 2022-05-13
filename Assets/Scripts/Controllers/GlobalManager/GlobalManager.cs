@@ -10,14 +10,18 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
     [SerializeField]
     public LanguageManager LanguageManager { get; private set; }
     [SerializeField]
-    public WalletManager WalletManager { get; private set; }
+    public UserDataManager UserDataManager { get; private set; }
+    [SerializeField]
+    public NetworkManager NetworkManager { get; private set; }
 
 
 
 
     void Start()
     {
-        LoadingManager = GetComponentInChildren<LoadingManager>();
+        Init();
+
+        
         if(LoadingManager != null)
         {
             LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
@@ -26,22 +30,30 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
         {
             Debug.LogError("Loading Manager cannot be found...");
         }
-        LanguageManager = GetComponentInChildren<LanguageManager>();
-        if (LanguageManager != null)
-        {
-            LanguageManager.languageView.SetCanvasStatus(false);
-        }
-        else
-        {
-            Debug.LogError("Language Manager cannot be found...");
-        }
-
-        Init();
+        
+        //if (LanguageManager != null)
+        //{
+        //    LanguageManager.languageView.SetCanvasStatus(false);
+        //}
+        //else
+        //{
+        //    Debug.LogError("Language Manager cannot be found...");
+        //}        
     }
 
     private void Init()
     {
-        
+        //Get all Manager... 
+        LoadingManager = GetComponentInChildren<LoadingManager>();
+        LanguageManager = GetComponentInChildren<LanguageManager>();
+        UserDataManager = GetComponentInChildren<UserDataManager>();
+        NetworkManager = GetComponentInChildren<NetworkManager>();
+
+        //Init all Manager...
+        LoadingManager.Init();
+        UserDataManager.Init();
+        NetworkManager.Init();
+        LanguageManager.Init();
     }
 
     void Update()

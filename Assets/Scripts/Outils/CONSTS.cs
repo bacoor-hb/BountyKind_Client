@@ -44,6 +44,7 @@ public enum ACTION_TYPE
     MOVE,
     ROLL_DICE,
     END_TURN,
+    FIGHT,
 }
 
 public class TEXT_UI

@@ -16,10 +16,14 @@ public class TestManager : LocalSingleton<TestManager>
     private Button RollButton;
     [SerializeField]
     private GameObject prefabItem;
+
     private BountyColyseusManager bountyColyseusManager;
+    private NetworkManager NetworkManager;
+
     // Start is called before the first frame update
     void Start()
     {
+        NetworkManager = GlobalManager.Instance.NetworkManager;
         AddListeners();
     }   
 
@@ -40,7 +44,7 @@ public class TestManager : LocalSingleton<TestManager>
 
     void HandleRoll()
     {
-        bountyColyseusManager.Roll();
+        NetworkManager.Send(PLAYER_SENT_EVENTS.ROLL_DICE);
     }
 
     // Update is called once per frame

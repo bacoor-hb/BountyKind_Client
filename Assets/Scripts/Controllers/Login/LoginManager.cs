@@ -17,11 +17,12 @@ public class LoginManager : MonoBehaviour
 
     private LoadingManager LoadingManager;
     private NetworkManager NetworkManager;
-
+    private UserDataManager UserDataManager;
     void Start()
     {
         LoadingManager = GlobalManager.Instance.LoadingManager;
         NetworkManager = GlobalManager.Instance.NetworkManager;
+        UserDataManager = GlobalManager.Instance.UserDataManager;
 
         LoginBTN.onClick.AddListener(() => { HandleLogin(); });   
     }
@@ -38,9 +39,7 @@ public class LoginManager : MonoBehaviour
     public void HandleLogout()  
     {
         Logout(); 
-    }
-
-    
+    }    
 
     /// <summary>
     /// Called by Web Client when Login Success
@@ -55,7 +54,7 @@ public class LoginManager : MonoBehaviour
 
     private void SetLoginData(UserData _dataReceived)
     {
-        NetworkManager.SetUser(_dataReceived);
+        UserDataManager.SetUserData(_dataReceived);
         LoadingManager.LoadWithLoadingScene(SCENE_NAME.Test_Login_Success);
     }
 
@@ -66,6 +65,6 @@ public class LoginManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log("Destroy login manager");
+        Debug.Log("[LoginManager] Destroyed...");
     }
 }

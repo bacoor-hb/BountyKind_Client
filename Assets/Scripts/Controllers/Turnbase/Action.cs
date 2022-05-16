@@ -25,6 +25,14 @@ public class Action : MonoBehaviour
     }
 
     /// <summary>
+    /// Set Action data to process
+    /// </summary>
+    public virtual void SetActionData(object args)
+    {
+
+    }
+
+    /// <summary>
     /// Clear all event of this action
     /// </summary>
     public virtual void ClearEvent()

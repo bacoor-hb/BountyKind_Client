@@ -7,6 +7,10 @@ public class LocalGameController : MonoBehaviour
     [SerializeField]
     private List<UserActionLocalManager> players;
 
+    [Header ("Event Controller")]
+    [SerializeField]
+    private GameEventController GameEventController;
+
     [Header ("Controller Modules")]
     [SerializeField]
     private MovementController MovementController;
@@ -62,7 +66,8 @@ public class LocalGameController : MonoBehaviour
         board.InitUserNodeList(usersAddress, graphNodes);
 
 
-        //Init Move Controller
+        //Init Game Event Controller
+        GameEventController.Init();
 
     }
     #endregion
@@ -85,7 +90,6 @@ public class LocalGameController : MonoBehaviour
 
         //Init the View + Button Event, Only for local player.
         LocalGameView.Init();
-        LocalGameView.SetUserData(UserDataManager.GetUserData(currentPlayerId));
 
         LocalGameView.RollDice_Btn.onClick.AddListener(RollDice_Action);
         LocalGameView.Move_Btn.onClick.AddListener(Move_Action);

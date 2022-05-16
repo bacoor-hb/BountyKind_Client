@@ -6,38 +6,7 @@ using System;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-[Serializable]
-public class Enemy
-{
-    public string name { get; set; }
-    public int atk { get; set; }
-    public int def { get; set; }
-    public int hp { get; set; }
-    public int position { get; set; }
-}
-[Serializable]
-public class MapNode
-{
-    public string name;
-    public int position;
-    public string type;
-    public List<Enemy> emeny;
-}
-[Serializable]
-public class BountyMap
-{
-    public string _id;
-    public string key;
-    public string name;
-    public int totalNode;
-    public List<MapNode> nodes;
-}
-[Serializable]
-public class GetMapsResponse
-{
-    public List<BountyMap> data;
-}
-public class CreateRoomController : MonoBehaviour
+public class RoomEventController : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
@@ -53,7 +22,7 @@ public class CreateRoomController : MonoBehaviour
         NetworkManager = GlobalManager.Instance.NetworkManager;
 
         CreateMapBTN.onClick.AddListener(() => { CreateRoom(); });
-        StartCoroutine(GetAllRoomTypes("https://dev-game-api.w3w.app/api/maps"));
+        StartCoroutine(GetAllRoomTypes(CONSTS.HOST_GET_MAP_API));
     }
 
     // Update is called once per frame
@@ -112,4 +81,16 @@ public class CreateRoomController : MonoBehaviour
     {
         Debug.Log("Destroy create room controller");
     }
+
+    #region Handle Room Event
+    void SetRoomTypeList(GetMapsResponse mapResponse)
+    {
+
+    }
+
+    void HandleRoomError(UnityWebRequest.Result result, string _page = "", string _errorMsg = "")
+    {
+
+    }
+    #endregion
 }

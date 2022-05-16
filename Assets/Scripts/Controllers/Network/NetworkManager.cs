@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -25,54 +24,46 @@ public class NetworkManager : MonoBehaviour
         host_EndPoint = CONSTS.HOST_ENDPOINT_DEFAULT;
     }
 
-    /// <summary>
-    /// Update User Data
-    /// </summary>
-    /// <param name="_user"></param>
-    public void SetUser(UserData _user)
-    {
-        UserDataManager.SetUserData(_user);
-    }
-
-    public void SetRollNumber(int _rollNumber)
-    {
-        UserDataManager.UserData.rollNumber = _rollNumber;
-    }
-
     public BountyColyseusManager GetSocketManager()
     {
         return socketManager;
     }
 
-    
-
+    #region NETWORK FLOW
+    /// <summary>
+    /// Join the Game Lobby after connect to socket success.
+    /// </summary>
     public void JoinLobby()
     {
-        if(socketManager.lobbyRoom == null)
-            socketManager.JoinLobby(this.UserDataManager.UserData.token);
+        if(!socketManager.LobbyStatus())
+            StartCoroutine(socketManager.JoinLobby(UserDataManager.UserData.token));
     }
-
+    /// <summary>
+    /// Create the room with map key and room type.
+    /// </summary>
+    /// <param name="roomType"></param>
+    /// <param name="mapKey"></param>
     public void CreateRoom(string roomType, string mapKey)
     {
-        socketManager.CreateRoom(roomType, mapKey, this.UserDataManager.UserData.token);
-    }
-    public async void Roll()
-    {
-        if (this.UserDataManager.UserData.rollNumber > 0)
+        if(socketManager != null)
         {
-            await socketManager.gameRoom.Send(PLAYER_SENT_EVENTS.ROLL_DICE);
-            UserDataManager.UserData.rollNumber--;
+            StartCoroutine(socketManager.CreateRoom(roomType, mapKey, UserDataManager.UserData.token));
         }
         else
         {
-            Refill();
+            Debug.LogError("[NetworkManager] Socket is null, cannot create room.");
         }
+        
     }
-
+    /// <summary>
+    /// Disconnect the socket and reload the Login Scene
+    /// </summary>
     public void ExitGame()
     {
+        StartCoroutine(socketManager.Disconnect());
         LoadingManager.LoadWithLoadingScene(SCENE_NAME.Test_Login_Success);
     }
+
     public void Connect()
     {
         socketManager.Connect(host_EndPoint);
@@ -82,4 +73,26 @@ public class NetworkManager : MonoBehaviour
     {
         socketManager.Disconnect();
     }
+    #endregion
+
+    #region ROOM EVENT
+    public void Refill_External()
+    {
+        //Call external Refill feature.
+        Refill();
+    }
+
+    /// <summary>
+    /// Send data to the Game room in the Server
+    /// </summary>
+    /// <param name="_data"></param>
+    public void Send(string _data)
+    {
+        if (socketManager != null)
+            StartCoroutine(socketManager.Send(_data));
+        else
+            Debug.LogError("[NetworkManager] Send Error: Socket Manager == null");
+    }
+
+    #endregion
 }

@@ -2,91 +2,118 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Colyseus;
 using Colyseus.Schema;
 using GameDevWare.Serialization;
-
-public class Message<T>
-{
-  
-}
-
-public class NodeMap
-{
-    public int nodeIndex;
-}
+using System.Collections;
 
 public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
 {
     public delegate void OnRoomMessage(string messageType, object message);
-    public static event OnRoomMessage onRoomMessage;
+    public static event OnRoomMessage onReceiveMessage;
 
-    public ColyseusRoom<LobbySchema> lobbyRoom;
-    public ColyseusRoom<GameRoomSchema> gameRoom;
+    private ColyseusRoom<LobbySchema> lobbyRoom;
+    private ColyseusRoom<GameRoomSchema> gameRoom;
 
-    // Start is called before the first frame update
-    protected override void Start()
-    {
-        base.InitializeClient();
-    }
+    /// <summary>
+    /// Start connecting to Socket
+    /// </summary>
+    /// <param name="endpoint"></param>
     public void Connect(string endpoint)
     {
         client = CreateClient(endpoint);
         Debug.Log("[BountyColyseusManager] Connecting to " + endpoint);
     }
 
-    public async void Disconnect()
+    /// <summary>
+    /// Disconnect the socket.
+    /// </summary>
+    public IEnumerator Disconnect()
     {
-        await lobbyRoom.Leave();
+        Task task = lobbyRoom.Leave();
+        yield return new WaitUntil(() => task.IsCompleted);
+        Debug.Log("[BountyColyseusManager] Disconnect...");
     }
 
-    public async void JoinLobby(string _token)
+    /// <summary>
+    /// Create or join a Lobby
+    /// </summary>
+    /// <param name="_token"></param>
+    public IEnumerator JoinLobby(string _token)
     {
         var options = new Dictionary<string, object>();
         options.Add("authorization", new { token = "Bearer " + _token });
-        try
-        {
-            lobbyRoom = await client.JoinOrCreate<LobbySchema>("lobby", options);
-        }catch(Exception e)
-        {
-            Debug.Log("error");
-            Debug.Log(e);
-        }
+        
+        Task<ColyseusRoom<LobbySchema>> task = client.JoinOrCreate<LobbySchema>(ROOM_TYPE.LOBBY_ROOM, options);
+        yield return new WaitUntil(() => task.IsCompleted);
+        Debug.Log("[BountyColyseusManager] JoinLobby success.");
+        lobbyRoom = task.Result;
+        AssignLobbyEvent();        
     }
 
-    public async void CreateRoom(string roomType, string _mapKey, string _token)
+    /// <summary>
+    /// Check the user has been connected to Lobby or not
+    /// </summary>
+    /// <returns>true = Connected to a lobby</returns>
+    public bool LobbyStatus()
     {
-        Debug.Log("JOIN ROOM");
+        return lobbyRoom != null;
+    }
+    public IEnumerator CreateRoom(string roomType, string _mapKey, string _token)
+    {
+        Debug.Log("[BountyColyseusManager] Create and join room.");
         var options = new Dictionary<string, object>();
         options.Add("authorization", new { token = "Bearer " + _token });
         options.Add("others", new { mapKey = _mapKey });
         switch (roomType)
         {
             case ROOM_TYPE.GAME_ROOM:
-                gameRoom = await client.JoinOrCreate<GameRoomSchema>(ROOM_TYPE.GAME_ROOM, options);
-                gameRoom.OnMessage<RollResultMessage>(PLAYER_RECEIVE_EVENTS.ROLL_RESULT, (message) =>
-                {
-                    onRoomMessage(PLAYER_RECEIVE_EVENTS.ROLL_RESULT, message);
-                });
-                gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.FIGHT_RESULT, (message) => {
-                    onRoomMessage(PLAYER_RECEIVE_EVENTS.FIGHT_RESULT, message);
-                });
-                gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.BATTLE_INIT, (message) => {
-                    onRoomMessage(PLAYER_RECEIVE_EVENTS.BATTLE_INIT, message);
-                });
-                gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.ERROR, (message) => {
-                    onRoomMessage(PLAYER_RECEIVE_EVENTS.ERROR, message);
-                });
+                Task<ColyseusRoom<GameRoomSchema>> task = client.JoinOrCreate<GameRoomSchema>(ROOM_TYPE.GAME_ROOM, options);
+                yield return new WaitUntil(() => task.IsCompleted);
+                Debug.Log("[BountyColyseusManager] CreateRoom success.");
+                gameRoom = task.Result;
+                //Attach all Multiplayer Event 
+                AssignRoomEvent();
                 break;
             default:
-                return;
+                break;
         }
     }
 
-    public async void Roll  ()
+    /// <summary>
+    /// Assign all Lobby event to gameRoom
+    /// </summary>
+    private void AssignLobbyEvent()
     {
-        await gameRoom.Send(PLAYER_SENT_EVENTS.ROLL_DICE);
+
+    }
+
+    /// <summary>
+    /// Assign all room event to gameRoom.
+    /// </summary>
+    private void AssignRoomEvent()
+    {
+        gameRoom.OnMessage<RollResultMessage>(PLAYER_RECEIVE_EVENTS.ROLL_RESULT, (message) =>
+        {
+            onReceiveMessage(PLAYER_RECEIVE_EVENTS.ROLL_RESULT, message);
+        });
+        gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.FIGHT_RESULT, (message) => {
+            onReceiveMessage(PLAYER_RECEIVE_EVENTS.FIGHT_RESULT, message);
+        });
+        gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.BATTLE_INIT, (message) => {
+            onReceiveMessage(PLAYER_RECEIVE_EVENTS.BATTLE_INIT, message);
+        });
+        gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.ERROR, (message) => {
+            onReceiveMessage(PLAYER_RECEIVE_EVENTS.ERROR, message);
+        });
+    }
+
+
+    public IEnumerator Send(string _data)
+    {
+        Task task = gameRoom.Send(_data);
+        yield return new WaitUntil(() => task.IsCompleted);
+        Debug.Log("[BountyColyseusManager] Send success.");
     }
 }

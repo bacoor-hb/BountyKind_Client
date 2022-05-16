@@ -50,7 +50,7 @@ public class UserActionLocalManager : IPlayer
     #endregion
 
     #region Turn Management
-    public Action GetAction(ACTION_TYPE actionType)
+    public Action GetAction(ACTION_TYPE actionType, object[] args = null)
     {
         return actionType switch
         {

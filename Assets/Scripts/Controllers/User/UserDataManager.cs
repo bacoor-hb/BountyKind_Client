@@ -6,12 +6,15 @@ public class UserDataManager : MonoBehaviour
 {
     public UserData UserData { get; private set; }
 
-    // Start is called before the first frame update
     public void Init()
     {
         UserData = new UserData();
     }
 
+    /// <summary>
+    /// Set the User Data directly.
+    /// </summary>
+    /// <param name="_data"></param>
     public void SetUserData(UserData _data)
     {
         UserData = _data;
@@ -26,5 +29,17 @@ public class UserDataManager : MonoBehaviour
     {
         //Only for TEST. Should return the exact player data by its local ID.
         return UserData;
+    }
+
+    /// <summary>
+    /// Updte the Roll Number
+    /// </summary>
+    /// <param name="rollNB"></param>
+    public void SetRollNumber(int rollNB)
+    {
+        if(UserData != null)
+        {
+            UserData.rollNumber = rollNB;
+        }
     }
 }

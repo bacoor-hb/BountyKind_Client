@@ -1,38 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class GameRoomController : MonoBehaviour
+public class GameEventController : MonoBehaviour
 {
-    [SerializeField]
-    private Button RollBTN;
-    [SerializeField]
-    private Button ExitBTN;
     [SerializeField]
     private InputField RollNumberInput;
 
+    [SerializeField]
+    private LocalGameView LocalGameView;
+    [SerializeField]
+    private LocalGameController LocalGameController;
+
     private UserDataManager UserDataManager;
     private NetworkManager NetworkManager;
+
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
         NetworkManager = GlobalManager.Instance.NetworkManager;
 
-        BountyColyseusManager.onRoomMessage += HandleOnMessage;
-        RollBTN.onClick.AddListener(() => { HandleRoll(); });
-        ExitBTN.onClick.AddListener(() => { HandleExitGame(); });
+        BountyColyseusManager.onReceiveMessage += HandleOnMessage;
+        LocalGameView.RollDice_Btn.onClick.AddListener(() => { HandleRoll(); });
+        LocalGameView.Exit_Btn.onClick.AddListener(() => { HandleExitGame(); });
         RollNumberInput.text = UserDataManager.UserData.rollNumber.ToString();
-    }
-
-    void HandleRoll()
-    {
-        NetworkManager.Roll();
-    }
-
-    void HandleExitGame() {
-        NetworkManager.ExitGame();
     }
 
     void HandleOnMessage(string messageType, object message)
@@ -57,16 +51,33 @@ public class GameRoomController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+   
+
+    #region Handle Game Event
+    void HandleRoll()
     {
-        RollNumberInput.text = UserDataManager.UserData.rollNumber.ToString();
+        if (UserDataManager.UserData.rollNumber > 0)
+        {
+            NetworkManager.Send(PLAYER_SENT_EVENTS.ROLL_DICE);
+            //UserDataManager.UserData.rollNumber--;
+        }
+        else
+        {
+            //Call external Refill feature.
+            NetworkManager.Refill_External();
+        }
     }
+
+    void HandleExitGame()
+    {
+        NetworkManager.ExitGame();
+    }
+    #endregion
 
     public void RefillSuccess(string _rollNumber)
     {
         int rollNumber = int.Parse(_rollNumber);
-        NetworkManager.SetRollNumber(rollNumber);
+        UserDataManager.SetRollNumber(rollNumber);
         Debug.Log("Refilled");
     }
 }

@@ -76,7 +76,7 @@ public class UserController : MonoBehaviour
     }
     public void HandleLogoutEvent()
     {
-        NetworkManager.SetUser(null);        
+        UserDataManager.SetUserData(null);        
         NetworkManager.Disconnect();
 
         LoadingManager.LoadWithLoadingScene(SCENE_NAME.Test_Login);

@@ -20,9 +20,9 @@ public class CONSTS
 
     #endregion
 
-    #region HOST DATA
+    #region NETWORK SETTING
     public const string HOST_ENDPOINT_DEFAULT = "dev-game-api.w3w.app";
-
+    public const string HOST_GET_MAP_API = "https://dev-game-api.w3w.app/api/maps";
     #endregion
 }
 
@@ -67,6 +67,7 @@ public class TEXT_UI
 public class ROOM_TYPE
 {
     public const string GAME_ROOM = "my_room";
+    public const string LOBBY_ROOM = "lobby";
 }
 
 public class PLAYER_RECEIVE_EVENTS

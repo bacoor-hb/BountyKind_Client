@@ -4,39 +4,38 @@ using UnityEngine;
 
 public class FightProcess : MonoBehaviour
 {
+    public delegate void OnEndFightAnimation();
+
     [SerializeField]
     private LocalTestFightController localTestFightController;
-    private Vector3 rootPos;
-    public int currentAction;
     void Start()
     {
-        FightActionTest.inFight1 += AnimateFight1;
-        FightActionTest.inFight2 += AnimateFight2;
+        FightActionTest.inFight += AnimateFight;
     }
 
     void Update()
     {
         
     }
-    public void AnimateFight1(List<BattleData> battleDatas)
+    public void AnimateFight(BattleData battleData, int userId)
     {
-        rootPos = localTestFightController.players[battleDatas[currentAction].currentUnit.id].GetComponent<Transform>().position;
-        Vector3 targetPos = localTestFightController.players[battleDatas[currentAction].targetUnit.id].GetComponent<Transform>().position;
-        if (currentAction < 3)
+        GameObject currentGameObj;
+        GameObject targetGameObj;
+        if (battleData.type == "YOUR_PET")
         {
-            localTestFightController.players[battleDatas[currentAction].currentUnit.id].GetComponent<Transform>().position = new Vector3(targetPos.x, targetPos.y, targetPos.z - 1);
+            currentGameObj = localTestFightController.players[userId].yourPets[battleData.currentUnit.id];
+            targetGameObj = localTestFightController.players[userId].opponentPets[battleData.targetUnit.id];
         }
         else
         {
-            localTestFightController.players[battleDatas[currentAction].currentUnit.id].GetComponent<Transform>().position = new Vector3(targetPos.x, targetPos.y, targetPos.z + 1);
+            currentGameObj = localTestFightController.players[userId].opponentPets[battleData.currentUnit.id];
+            targetGameObj = localTestFightController.players[userId].yourPets[battleData.targetUnit.id];
         }
-    }
 
-    public void AnimateFight2(List<BattleData> battleDatas)
-    {
-        Debug.Log("AnimateFight2");
-        localTestFightController.players[battleDatas[currentAction].currentUnit.id].GetComponent<Transform>().position = rootPos;
-        currentAction++;
+        UnitController prefabController = currentGameObj.GetComponent<UnitController>();
+        Vector3 targetPos = targetGameObj.GetComponent<Transform>().position;
+        prefabController.HandleMove(targetPos, "Crouch_b");
+
     }
 }
 

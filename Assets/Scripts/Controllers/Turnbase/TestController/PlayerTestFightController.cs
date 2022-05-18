@@ -8,13 +8,34 @@ public class PlayerTestFightController : IPlayer
     private FightActionTest FightAction;
     [SerializeField]
     private Action EndTurnAction;
+    [SerializeField]
+    public Dictionary<int, GameObject> yourPets = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> opponentPets = new Dictionary<int, GameObject>();
 
     private TurnBaseController TurnBaseController;
 
     /// <summary>
-    /// Initialize the Player and all of his Actions
+    /// Initialize the Player and all of his 
     /// </summary>
     /// <param name="_id"></param>
+    /// 
+    public void AddUnit(GameObject unit, string type)
+    {
+        if(type == "YOUR_PET")
+        {
+            yourPets.Add(yourPets.Count, unit);
+        }
+        else
+        {
+            opponentPets.Add(opponentPets.Count, unit);
+        }
+
+    }
+
+    public GameObject RenderUnit(GameObject prefab, Vector3 pos, Transform parent)
+    {
+       return Instantiate(prefab, pos, Quaternion.identity, parent);
+    }
     public void InitPlayer(int _id, TurnBaseController _controller)
     {
         id = _id;
@@ -48,21 +69,18 @@ public class PlayerTestFightController : IPlayer
 
     public override void StartTurn()
     {
-        Material myMaterial = GetComponent<Renderer>().material;
-        myMaterial.color = Color.red;
-        Debug.Log("StartTurn: id: " + id);
+        
+ 
     }
 
     public override void EndTurn()
     {
-        Material myMaterial = GetComponent<Renderer>().material;
-        myMaterial.color = Color.white;
         Debug.Log("EndTurn: id: " + id);
     }
     #endregion      
     public void OnFightStart()
     {
-        Debug.Log("[OnFightStart] OnFightStart on PLayer: OnFightStart | id: " + id);
+      
     }
     public void OnFightEnd()
     {

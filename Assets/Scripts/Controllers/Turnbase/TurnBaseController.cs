@@ -5,9 +5,9 @@ using UnityEngine;
 public class TurnBaseController : MonoBehaviour
 {
     public delegate void Event<T>(T data);
-    public Event<int> OnStartGame;
+    public static Event<int> OnStartGame;
     public Event<int> OnEndGame;
-    public Event<int> OnStartTurn;
+    public static Event<int> OnStartTurn;
     public Event<int> OnEndTurn;
     public Event<int> OnChangePlayer;
 
@@ -17,7 +17,7 @@ public class TurnBaseController : MonoBehaviour
     public List<IPlayer> playerList;
 
     private Action currentAction;
-    private Queue<Action> queueActionList;
+    public Queue<Action> queueActionList;
 
     private CYCLE_TURN status;
     private bool isWaiting;
@@ -120,7 +120,7 @@ public class TurnBaseController : MonoBehaviour
     private void NextStep()
     {
         isWaiting = false;
-        Debug.Log("[NextStep] current step: " + status.ToString());
+       
         switch (status)
         {
             case CYCLE_TURN.START_TURN:
@@ -146,7 +146,7 @@ public class TurnBaseController : MonoBehaviour
                 status = CYCLE_TURN.START_TURN;
                 break;
         }
-        Debug.Log("[NextStep] next step: " + status.ToString());
+  
     }
 
     /// <summary>
@@ -196,7 +196,7 @@ public class TurnBaseController : MonoBehaviour
     /// <summary>
     ///  Script run after end turn
     /// </summary>
-    private void EndTurn()
+    public void EndTurn()
     {
         //Trigger the End turn function of the current player
         playerList[CurrentPlayer].EndTurn();
@@ -237,7 +237,7 @@ public class TurnBaseController : MonoBehaviour
     /// <returns></returns>
     private bool CheckChangePlayer()
     {
-        return true;
+       return true;
     }
 
     /// <summary>

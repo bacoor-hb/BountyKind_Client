@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,6 +11,11 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
 {
     public delegate void OnRoomMessage(string messageType, object message);
     public static event OnRoomMessage onReceiveMessage;
+
+    public delegate void OnEventTrigger();
+    public OnEventTrigger OnJoinLobbySuccess;
+    public OnEventTrigger OnJoinRoomSuccess;
+    public OnEventTrigger OnDisconected;
 
     private ColyseusRoom<LobbySchema> lobbyRoom;
     private ColyseusRoom<GameRoomSchema> gameRoom;
@@ -34,6 +38,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         Task task = lobbyRoom.Leave();
         yield return new WaitUntil(() => task.IsCompleted);
         Debug.Log("[BountyColyseusManager] Disconnect...");
+        OnDisconected?.Invoke();
     }
 
     /// <summary>
@@ -42,9 +47,11 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// <param name="_token"></param>
     public IEnumerator JoinLobby(string _token)
     {
-        var options = new Dictionary<string, object>();
-        options.Add("authorization", new { token = "Bearer " + _token });
-        
+        var options = new Dictionary<string, object>
+        {
+            { "authorization", new { token = "Bearer " + _token } }
+        };
+
         Task<ColyseusRoom<LobbySchema>> task = client.JoinOrCreate<LobbySchema>(ROOM_TYPE.LOBBY_ROOM, options);
         yield return new WaitUntil(() => task.IsCompleted);
         Debug.Log("[BountyColyseusManager] JoinLobby success.");
@@ -60,12 +67,22 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     {
         return lobbyRoom != null;
     }
+    
+    /// <summary>
+    /// Create a room with room Type, Map Key and User Token
+    /// </summary>
+    /// <param name="roomType"></param>
+    /// <param name="_mapKey"></param>
+    /// <param name="_token">Get this Token from the Login in the Web Client</param>
+    /// <returns></returns>
     public IEnumerator CreateRoom(string roomType, string _mapKey, string _token)
     {
         Debug.Log("[BountyColyseusManager] Create and join room.");
-        var options = new Dictionary<string, object>();
-        options.Add("authorization", new { token = "Bearer " + _token });
-        options.Add("others", new { mapKey = _mapKey });
+        var options = new Dictionary<string, object>
+        {
+            { "authorization", new { token = "Bearer " + _token } },
+            { "others", new { mapKey = _mapKey } }
+        };
         switch (roomType)
         {
             case ROOM_TYPE.GAME_ROOM:
@@ -86,7 +103,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// </summary>
     private void AssignLobbyEvent()
     {
-
+        OnJoinLobbySuccess?.Invoke();
     }
 
     /// <summary>
@@ -107,13 +124,26 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.ERROR, (message) => {
             onReceiveMessage(PLAYER_RECEIVE_EVENTS.ERROR, message);
         });
+
+        OnJoinRoomSuccess?.Invoke();
     }
 
-
+    /// <summary>
+    /// Trigger the Send data event of the room
+    /// </summary>
+    /// <param name="_data"></param>
+    /// <returns></returns>
     public IEnumerator Send(string _data)
     {
-        Task task = gameRoom.Send(_data);
-        yield return new WaitUntil(() => task.IsCompleted);
-        Debug.Log("[BountyColyseusManager] Send success.");
+        if(gameRoom.colyseusConnection.IsOpen)
+        {
+            Task task = gameRoom.Send(_data);
+            yield return new WaitUntil(() => task.IsCompleted);
+            Debug.Log("[BountyColyseusManager] Send success.");
+        }
+        else
+        {
+            Debug.LogError("[BountyColyseusManager] [Send] Room is not available...");
+        }
     }
 }

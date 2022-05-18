@@ -34,12 +34,24 @@ public class UserDataManager : MonoBehaviour
     /// <summary>
     /// Updte the Roll Number
     /// </summary>
-    /// <param name="rollNB"></param>
-    public void SetRollNumber(int rollNB)
+    /// <param name="_FFEPoint"></param>
+    public void SetFFEPoint(int _FFEPoint)
     {
         if(UserData != null)
         {
-            UserData.rollNumber = rollNB;
+            UserData.tokenBalance.FFE_Point = _FFEPoint;
+        }
+    }
+
+    public float GetFFEPoint()
+    {
+        if(UserData != null && UserData.tokenBalance != null)
+        {
+            return UserData.tokenBalance.FFE_Point;
+        }
+        else
+        {
+            return -1;
         }
     }
 }

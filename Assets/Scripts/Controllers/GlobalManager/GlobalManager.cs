@@ -14,13 +14,9 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
     [SerializeField]
     public NetworkManager NetworkManager { get; private set; }
 
-
-
-
     void Start()
     {
         Init();
-
         
         if(LoadingManager != null)
         {
@@ -29,16 +25,7 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
         else
         {
             Debug.LogError("Loading Manager cannot be found...");
-        }
-        
-        //if (LanguageManager != null)
-        //{
-        //    LanguageManager.languageView.SetCanvasStatus(false);
-        //}
-        //else
-        //{
-        //    Debug.LogError("Language Manager cannot be found...");
-        //}        
+        }    
     }
 
     private void Init()

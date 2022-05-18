@@ -1,14 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 
 public class GameEventController : MonoBehaviour
 {
-    [SerializeField]
-    private InputField RollNumberInput;
-
     [SerializeField]
     private LocalGameView LocalGameView;
     [SerializeField]
@@ -26,7 +21,6 @@ public class GameEventController : MonoBehaviour
         BountyColyseusManager.onReceiveMessage += HandleOnMessage;
         LocalGameView.RollDice_Btn.onClick.AddListener(() => { HandleRoll(); });
         LocalGameView.Exit_Btn.onClick.AddListener(() => { HandleExitGame(); });
-        RollNumberInput.text = UserDataManager.UserData.rollNumber.ToString();
     }
 
     void HandleOnMessage(string messageType, object message)
@@ -51,15 +45,12 @@ public class GameEventController : MonoBehaviour
         }
     }
 
-   
-
     #region Handle Game Event
     void HandleRoll()
     {
-        if (UserDataManager.UserData.rollNumber > 0)
+        if (UserDataManager.GetFFEPoint() > 0)
         {
             NetworkManager.Send(PLAYER_SENT_EVENTS.ROLL_DICE);
-            //UserDataManager.UserData.rollNumber--;
         }
         else
         {
@@ -70,14 +61,14 @@ public class GameEventController : MonoBehaviour
 
     void HandleExitGame()
     {
-        NetworkManager.ExitGame();
+        NetworkManager.Disconnect();
     }
     #endregion
 
     public void RefillSuccess(string _rollNumber)
     {
         int rollNumber = int.Parse(_rollNumber);
-        UserDataManager.SetRollNumber(rollNumber);
+        UserDataManager.SetFFEPoint(rollNumber);
         Debug.Log("Refilled");
     }
 }

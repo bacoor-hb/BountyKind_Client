@@ -1,30 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern void Login();
-    [DllImport("__Internal")]
-    private static extern void Logout();
     [SerializeField]
-    private Button LoginBTN;
+    private LobbyView LobbyView;
 
-    private LoadingManager LoadingManager;
     private NetworkManager NetworkManager;
     private UserDataManager UserDataManager;
-    void Start()
+    public void Init()
     {
-        LoadingManager = GlobalManager.Instance.LoadingManager;
         NetworkManager = GlobalManager.Instance.NetworkManager;
         UserDataManager = GlobalManager.Instance.UserDataManager;
 
-        LoginBTN.onClick.AddListener(() => { HandleLogin(); });   
+        LobbyView.Login_Btn.onClick.AddListener(() => { HandleLogin(); });   
     }
 
     public void HandleLogin()
@@ -32,13 +23,13 @@ public class LoginManager : MonoBehaviour
 #if TEST_FAKE_DATA
         UserData user = new UserData();   
         user.GenerateFakeData();
-        SetLoginData(user);
+        NextLoginStep(user);
 #endif
     }
 
     public void HandleLogout()  
     {
-        Logout(); 
+        NetworkManager.Logout_External(); 
     }    
 
     /// <summary>
@@ -48,23 +39,13 @@ public class LoginManager : MonoBehaviour
     public void LoginSuccess(string data)
     {
         UserData user = JsonUtility.FromJson<UserData>(data);
-        user.rollNumber = 10;
-        SetLoginData(user);
+        NextLoginStep(user);
     }
 
-    private void SetLoginData(UserData _dataReceived)
+    private void NextLoginStep(UserData _dataReceived)
     {
         UserDataManager.SetUserData(_dataReceived);
-        LoadingManager.LoadWithLoadingScene(SCENE_NAME.Test_Login_Success);
-    }
 
-    void Update()
-    {
-        
-    }
-
-    private void OnDestroy()
-    {
-        Debug.Log("[LoginManager] Destroyed...");
+        NetworkManager.Connect();
     }
 }

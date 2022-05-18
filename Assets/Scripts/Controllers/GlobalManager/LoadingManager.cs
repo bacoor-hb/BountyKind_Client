@@ -30,7 +30,7 @@ public class LoadingManager : MonoBehaviour
         asyncOperation.allowSceneActivation = false;
         while (!asyncOperation.isDone)
         {
-            Debug.Log("ProgressB :" + asyncOperation.progress);
+            Debug.Log("[LoadScene_Async] ProgressB :" + asyncOperation.progress);
             LoadingView.IncrementProgess(asyncOperation.progress);
             LoadingView.SetMessage(asyncOperation.progress * 100 + "%");
             if (asyncOperation.progress >= 0.9f)

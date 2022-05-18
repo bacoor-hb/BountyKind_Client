@@ -8,7 +8,12 @@ public class NetworkManager : MonoBehaviour
 {
     [DllImport("__Internal")]
     private static extern void Refill();
-   
+    [DllImport("__Internal")]
+    private static extern void Login();
+    [DllImport("__Internal")]
+    private static extern void Logout();
+
+
     [SerializeField]
     private BountyColyseusManager socketManager;
 
@@ -24,20 +29,16 @@ public class NetworkManager : MonoBehaviour
         host_EndPoint = CONSTS.HOST_ENDPOINT_DEFAULT;
     }
 
-    public BountyColyseusManager GetSocketManager()
-    {
-        return socketManager;
-    }
-
     #region NETWORK FLOW
     /// <summary>
     /// Join the Game Lobby after connect to socket success.
     /// </summary>
-    public void JoinLobby()
+    private void JoinLobby()
     {
         if(!socketManager.LobbyStatus())
             StartCoroutine(socketManager.JoinLobby(UserDataManager.UserData.token));
     }
+
     /// <summary>
     /// Create the room with map key and room type.
     /// </summary>
@@ -55,31 +56,38 @@ public class NetworkManager : MonoBehaviour
         }
         
     }
-    /// <summary>
-    /// Disconnect the socket and reload the Login Scene
-    /// </summary>
-    public void ExitGame()
-    {
-        StartCoroutine(socketManager.Disconnect());
-        LoadingManager.LoadWithLoadingScene(SCENE_NAME.Test_Login_Success);
-    }
-
     public void Connect()
     {
         socketManager.Connect(host_EndPoint);
+        JoinLobby();
     }
-
+    /// <summary>
+    /// Disconnect the socket and reload the Login Scene
+    /// </summary>
     public void Disconnect()
     {
         socketManager.Disconnect();
+        LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
     }
     #endregion
 
-    #region ROOM EVENT
+    #region EVENT MANAGEMENT
     public void Refill_External()
     {
         //Call external Refill feature.
         Refill();
+    }
+
+    public void Login_External()
+    {
+        //Call external Login feature.
+        Login();
+    }
+
+    public void Logout_External()
+    {
+        //Call external Logout feature.
+        Logout();
     }
 
     /// <summary>
@@ -93,6 +101,5 @@ public class NetworkManager : MonoBehaviour
         else
             Debug.LogError("[NetworkManager] Send Error: Socket Manager == null");
     }
-
     #endregion
 }

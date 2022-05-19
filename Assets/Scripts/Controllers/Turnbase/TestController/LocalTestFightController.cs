@@ -32,8 +32,8 @@ public class LocalTestFightController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int[] yourPets =  { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-        int[] opponentPets = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+        int[] yourPets =  { 0, 1, 2, 6, 8 };
+        int[] opponentPets = { 1, 2, 5, 6, 7 };
         for (var i = 0; i < yourPets.Length; i++)
         {
             Vector3 pos = new Vector3(spawnPosPets[yourPets[i]].GetComponent<Transform>().position.x, spawnPosPets[yourPets[i]].GetComponent<Transform>().position.y, spawnPosPets[yourPets[i]].GetComponent<Transform>().position.z);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 enum UnitState
 {
-    INIT,
+    STAND_STILL,
     IN_FIGHT_ANIMATE,
     FINISH_FIGHT_ANIMATE,
 }
@@ -23,16 +23,17 @@ public class UnitController : MonoBehaviour
     [SerializeField]
     public int id;
     [SerializeField]
-    private float timeToTarget = 1.5f;
+    private float timeToTarget = 1f;
     private UnitState state;
     private string skillName;
     private GameObject barrier;
+    private bool isMoving;
     private void Start()    
     {
+        isMoving = false;
         barrier = GameObject.FindGameObjectWithTag("Barrier");
-        state = UnitState.INIT;
+        state = UnitState.STAND_STILL;
         animator = GetComponent<Animator>();
-        transform.LookAt(barrier.transform);
         rootPos = transform.position;
         movementController.SetObjectToMove(gameObject);
         movementController.OnStartMoving += HandleStartMoving;
@@ -42,11 +43,11 @@ public class UnitController : MonoBehaviour
 
     private void Update()
     {
-        
+     
     }
     private void HandleStartMoving()
     {
-       
+
     }
     private void HandEndMoving()
     {
@@ -56,8 +57,7 @@ public class UnitController : MonoBehaviour
         }
         else
         {
-            transform.LookAt(barrier.transform);
-            state = UnitState.INIT;
+            state = UnitState.STAND_STILL;
             onEndFight?.Invoke();
         }
     }
@@ -84,10 +84,17 @@ public class UnitController : MonoBehaviour
     }
     public void HandleMove(Vector3 targetPos, string _skillName)
     {
+        state = UnitState.STAND_STILL;
+        isMoving = true;
+        animator.SetFloat("Speed_f", 0.5f);
         skillName = _skillName;
-        state = UnitState.INIT;
-        Vector3 target = new Vector3(targetPos.x, targetPos.y, targetPos.z / 1.5f);
+        Vector3 target = new Vector3(targetPos.x, targetPos.y, targetPos.z / 1.1f);
         movementController.SetTarget(target, timeToTarget);
         movementController.StartMoving();
+    }
+
+    public void PlayDeathAnimation()
+    {
+        animator.SetBool("Death_b", true);
     }
 }

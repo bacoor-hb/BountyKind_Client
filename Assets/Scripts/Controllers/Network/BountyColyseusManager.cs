@@ -53,10 +53,11 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         };
 
         Task<ColyseusRoom<LobbySchema>> task = client.JoinOrCreate<LobbySchema>(ROOM_TYPE.LOBBY_ROOM, options);
-        yield return new WaitUntil(() => task.IsCompleted);
+        yield return new WaitUntil(() => task.IsCompleted); 
         Debug.Log("[BountyColyseusManager] JoinLobby success.");
         lobbyRoom = task.Result;
-        AssignLobbyEvent();        
+        AssignLobbyEvent();
+         
     }
 
     /// <summary>

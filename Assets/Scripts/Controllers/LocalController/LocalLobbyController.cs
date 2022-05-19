@@ -16,9 +16,9 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     // Start is called before the first frame update
     void Start()
     {
-        LoginManager.Init();
-        RoomEventController.Init();
         LobbyView.Init();
+        LoginManager.Init();
+        RoomEventController.Init();        
 
         NetworkManager = GlobalManager.Instance.NetworkManager;
         BountyColyseusManager.Instance.OnJoinLobbySuccess = null;
@@ -37,6 +37,6 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
 
     void OnConnectSuccess()
     {
-        RoomEventController.GetRoomType();
+        RoomEventController.GetMap_FromServer();
     }
 }

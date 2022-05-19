@@ -16,14 +16,20 @@ public class LoginManager : MonoBehaviour
         UserDataManager = GlobalManager.Instance.UserDataManager;
 
         LobbyView.Login_Btn.onClick.AddListener(() => { HandleLogin(); });   
+        LobbyView.Logout_Btn.onClick.AddListener(() => { HandleLogout(); });
+
+        NetworkManager.OnLoginSuccess = null;
+        NetworkManager.OnLoginSuccess += LoginSuccess;
     }
 
     public void HandleLogin()
     {
-#if TEST_FAKE_DATA
-        UserData user = new UserData();   
-        user.GenerateFakeData();
+#if UNITY_EDITOR
+        UserData user = new UserData();
+        user = UserData.GenerateFakeData();
         NextLoginStep(user);
+#else
+        NetworkManager.Login_External();
 #endif
     }
 

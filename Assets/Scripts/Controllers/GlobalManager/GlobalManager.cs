@@ -32,7 +32,7 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
     {
         //Get all Manager... 
         LoadingManager = GetComponentInChildren<LoadingManager>();
-        LanguageManager = GetComponentInChildren<LanguageManager>();
+        //LanguageManager = GetComponentInChildren<LanguageManager>();
         UserDataManager = GetComponentInChildren<UserDataManager>();
         NetworkManager = GetComponentInChildren<NetworkManager>();
 
@@ -40,7 +40,7 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
         LoadingManager.Init();
         UserDataManager.Init();
         NetworkManager.Init();
-        LanguageManager.Init();
+        //LanguageManager.Init();
     }
 
     void Update()

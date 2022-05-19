@@ -21,7 +21,8 @@ public class CONSTS
     #endregion
 
     #region NETWORK SETTING
-    public const string HOST_ENDPOINT_DEFAULT = "dev-game-api.w3w.app";
+    public const string HOST_ENDPOINT_DEFAULT = "wss://dev-game-api.w3w.app";
+    //public const string HOST_ENDPOINT_DEFAULT = "ws://192.168.9.4:2567";
     public const string HOST_GET_MAP_API = "https://dev-game-api.w3w.app/api/maps";
     #endregion
 }
@@ -73,6 +74,7 @@ public class ROOM_TYPE
 public class PLAYER_RECEIVE_EVENTS
 {
     public const string ROLL_RESULT = "roll_result";
+    public const string LUCKY_DRAW_RESULT = "lucky_draw_result";
     public const string FIGHT_RESULT = "fight_result";
     public const string BATTLE_INIT = "battle_init";
     public const string ERROR = "error";
@@ -83,6 +85,8 @@ public class PLAYER_SENT_EVENTS
     public const string ROLL_DICE = "roll";
     public const string FIGHT = "fight";
     public const string GAME_EXIT = "exit";
+    public const string LUCKY_DRAW = "lucky_draw";
+
 }
 public class PLAYER_ERRORS
 {

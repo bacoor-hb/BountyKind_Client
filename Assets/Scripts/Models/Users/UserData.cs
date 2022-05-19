@@ -17,7 +17,7 @@ public class UserData
     /// Only for TEST
     /// </summary>
     /// <returns></returns>
-    public UserData GenerateFakeData()
+    public static UserData GenerateFakeData()
     {
         UserData user = new UserData
         {

@@ -13,6 +13,8 @@ public class NetworkManager : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void Logout();
 
+    public delegate void OnEventTrigger<T>(T data);
+    public OnEventTrigger<string> OnLoginSuccess;
 
     [SerializeField]
     private BountyColyseusManager socketManager;
@@ -88,6 +90,11 @@ public class NetworkManager : MonoBehaviour
     {
         //Call external Logout feature.
         Logout();
+    }
+
+    public void LoginSuccess(string data)
+    {
+        OnLoginSuccess?.Invoke(data);
     }
 
     /// <summary>

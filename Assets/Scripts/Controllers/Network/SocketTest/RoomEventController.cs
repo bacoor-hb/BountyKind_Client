@@ -7,7 +7,7 @@ using System;
 public class RoomEventController : MonoBehaviour
 {
     public delegate void OnEventTrigger();
-    public OnEventTrigger OnGetRoomTypeSuccess;
+    public OnEventTrigger OnGetMapSuccess;
 
     [SerializeField]
     private LobbyView LobbyView;
@@ -29,9 +29,10 @@ public class RoomEventController : MonoBehaviour
     /// <summary>
     /// Call the Server API to get the room type, then update the dropdown list.
     /// </summary>
-    public void GetRoomType()
+    public void GetMap_FromServer()
     {
-        StartCoroutine(GetAllRoomTypes(CONSTS.HOST_GET_MAP_API));
+        Debug.Log("[RoomEventController] GetMap_FromServer: " + CONSTS.HOST_GET_MAP_API);
+        StartCoroutine(GetAllMapTypes(CONSTS.HOST_GET_MAP_API));
     }
 
     /// <summary>
@@ -39,9 +40,9 @@ public class RoomEventController : MonoBehaviour
     /// </summary>
     /// <param name="uri"></param>
     /// <returns></returns>
-    IEnumerator GetAllRoomTypes(string uri)
+    IEnumerator GetAllMapTypes(string uri)
     {
-        bountyMaps = new List<BountyMap>();
+        //bountyMaps = new List<BountyMap>();
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             yield return webRequest.SendWebRequest();
@@ -72,18 +73,18 @@ public class RoomEventController : MonoBehaviour
             }
         }
 
-        if(bountyMaps.Count > 0)
-        {
-            GetRoomTypeSuccess();
-        }        
+        //if(bountyMaps.Count > 0)
+        //{
+        //    GetMapSuccess();
+        //}        
     }
 
     /// <summary>
     /// Trigger this event when the server return the room list.
     /// </summary>
-    void GetRoomTypeSuccess()
+    void GetMapSuccess()
     {
-        OnGetRoomTypeSuccess?.Invoke();
+        OnGetMapSuccess?.Invoke();
         LobbyView.CreateRoom_Btn.enabled = true;
     }
 

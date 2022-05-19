@@ -7,17 +7,23 @@
 
 using Colyseus.Schema;
 
-public partial class PetSchema : Schema {
+public partial class ItemSchema : Schema {
 	[Type(0, "string")]
+	public string _id = default(string);
+
+	[Type(1, "string")]
 	public string name = default(string);
 
-	[Type(1, "number")]
+	[Type(2, "number")]
 	public float atk = default(float);
 
-	[Type(2, "number")]
+	[Type(3, "number")]
 	public float def = default(float);
 
-	[Type(3, "number")]
+	[Type(4, "number")]
+	public float speed = default(float);
+
+	[Type(5, "number")]
 	public float hp = default(float);
 }
 

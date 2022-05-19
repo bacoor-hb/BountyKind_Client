@@ -42,7 +42,7 @@ public class RoomEventController : MonoBehaviour
     /// <returns></returns>
     IEnumerator GetAllMapTypes(string uri)
     {
-        //bountyMaps = new List<BountyMap>();
+        bountyMaps = new List<BountyMap>();
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             yield return webRequest.SendWebRequest();
@@ -73,10 +73,10 @@ public class RoomEventController : MonoBehaviour
             }
         }
 
-        //if(bountyMaps.Count > 0)
-        //{
-        //    GetMapSuccess();
-        //}        
+        if (bountyMaps.Count > 0)
+        {
+            GetMapSuccess();
+        }
     }
 
     /// <summary>

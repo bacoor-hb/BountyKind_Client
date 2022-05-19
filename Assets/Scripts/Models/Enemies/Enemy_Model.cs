@@ -7,6 +7,7 @@ using System;
 public class Enemy
 {
     public string name { get; set; }
+    public string key { get; set; }
     public int atk { get; set; }
     public int def { get; set; }
     public int hp { get; set; }

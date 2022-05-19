@@ -28,6 +28,9 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
         BountyColyseusManager.Instance.OnJoinRoomSuccess += OnCreateRoomSuccess;
 
         LoadingManager = GlobalManager.Instance.LoadingManager;
+
+        RoomEventController.OnGetMapSuccess = null;
+        RoomEventController.OnGetMapSuccess += OnGetMapSuccess;
     }
 
     void OnCreateRoomSuccess()
@@ -38,5 +41,11 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     void OnConnectSuccess()
     {
         RoomEventController.GetMap_FromServer();
+    }
+
+    void OnGetMapSuccess()
+    {
+        LobbyView.SetLoobyFormStatus(true);
+        LobbyView.SetLoginFormStatus(false);
     }
 }

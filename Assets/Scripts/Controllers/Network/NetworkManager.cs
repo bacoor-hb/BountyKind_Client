@@ -69,7 +69,7 @@ public class NetworkManager : MonoBehaviour
     public void Disconnect()
     {
         socketManager.Disconnect();
-        LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
+        //LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
     }
     #endregion
 

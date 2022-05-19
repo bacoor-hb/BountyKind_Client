@@ -7,14 +7,14 @@ using UnityEngine;
 public class MapNode
 {
     public string name;
-    public int position;
-    public string type;
+    public string key;
+    public string type;    
     public List<Enemy> emeny;
+    public int position;
 }
 [Serializable]
 public class BountyMap
 {
-    public string _id;
     public string key;
     public string name;
     public int totalNode;

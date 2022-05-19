@@ -34,13 +34,9 @@ public class LoadingManager : MonoBehaviour
             LoadingView.IncrementProgess(asyncOperation.progress);
             LoadingView.SetMessage(asyncOperation.progress * 100 + "%");
             if (asyncOperation.progress >= 0.9f)
-            {
-                LoadingView.SetMessage("Press the space bar to continue...");
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    asyncOperation.allowSceneActivation = true;
-                    LoadingView.SetCanvasStatus(false);
-                }                    
+            { 
+                asyncOperation.allowSceneActivation = true;
+                LoadingView.SetCanvasStatus(false);
             }
 
             yield return null;
@@ -56,6 +52,7 @@ public class LoadingManager : MonoBehaviour
         targetScene = sceneName;
         PlayerPrefs.SetString(CONSTS.SCENE_KEY, sceneName.ToString());
 
+        Debug.Log("[LoadingManager] Load With LoadingScene: " + sceneName.ToString());
         StartCoroutine(LoadScene_Async(SCENE_NAME.LoadingScene));
     }
 }

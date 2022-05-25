@@ -32,22 +32,22 @@ public class UserDataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Updte the Roll Number
+    /// Update the Energy Value
     /// </summary>
-    /// <param name="_FFEPoint"></param>
-    public void SetFFEPoint(int _FFEPoint)
+    /// <param name="_energy"></param>
+    public void SetEnergy(int _energy)
     {
         if(UserData != null)
         {
-            UserData.tokenBalance.FFE_Point = _FFEPoint;
+            UserData.tokenBalance.Energy = _energy;
         }
     }
 
-    public float GetFFEPoint()
+    public int GetEnergy()
     {
         if(UserData != null && UserData.tokenBalance != null)
         {
-            return UserData.tokenBalance.FFE_Point;
+            return UserData.tokenBalance.Energy;
         }
         else
         {

@@ -19,13 +19,9 @@ public class LobbyView : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI Username_Txt;
     [SerializeField]
-    private TextMeshProUGUI BalanceYU_Txt;
-    [SerializeField]
     private TextMeshProUGUI BalanceYU2_Txt;
     [SerializeField]
-    private TextMeshProUGUI BalanceFFE_Txt;
-    [SerializeField]
-    private TextMeshProUGUI BalanceRollTime_Txt;
+    private TextMeshProUGUI BalanceEnergy_Txt;
 
     [Header("Room Area")]
     public TMP_Dropdown RoomType_DD;
@@ -73,15 +69,13 @@ public class LobbyView : MonoBehaviour
     {
         Address_Txt.text = userData.address;
         Username_Txt.text = userData.username;
-        BalanceYU_Txt.text = userData.tokenBalance.YU.ToString();
         BalanceYU2_Txt.text = userData.tokenBalance.YU_Point.ToString();
-        BalanceFFE_Txt.text = userData.tokenBalance.FFE.ToString();
-        BalanceRollTime_Txt.text = userData.tokenBalance.FFE_Point.ToString();
+        BalanceEnergy_Txt.text = userData.tokenBalance.Energy.ToString();
     }
 
     public void UpdateRollTime_Txt(int _newRollTime)
     {
-        BalanceRollTime_Txt.text = _newRollTime.ToString();
+        BalanceEnergy_Txt.text = _newRollTime.ToString();
     }
 
     /// <summary>

@@ -12,6 +12,11 @@ public class LocalGameView : MonoBehaviour
     public Button EndTurn_Btn;
     public Button Exit_Btn;
 
+    [Header("User Data")]
+    public TextMeshProUGUI userNameTxt;
+    public TextMeshProUGUI energyTxt;
+    public TextMeshProUGUI yuPointTxt;
+
     /// <summary>
     /// Reset all Button Event and Clear all the Text
     /// </summary>
@@ -43,5 +48,12 @@ public class LocalGameView : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void UpdateUserData(UserData userData)
+    {
+        userNameTxt.text = userData.username;
+        energyTxt.text = userData.tokenBalance.Energy.ToString();
+        yuPointTxt.text = userData.tokenBalance.YU_Point.ToString();
     }
 }

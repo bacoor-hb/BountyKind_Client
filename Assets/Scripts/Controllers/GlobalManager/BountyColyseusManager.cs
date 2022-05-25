@@ -53,11 +53,17 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         };
 
         Task<ColyseusRoom<LobbySchema>> task = client.JoinOrCreate<LobbySchema>(ROOM_TYPE.LOBBY_ROOM, options);
-        yield return new WaitUntil(() => task.IsCompleted); 
-        Debug.Log("[BountyColyseusManager] JoinLobby success.");
-        lobbyRoom = task.Result;
-        AssignLobbyEvent();
-         
+        yield return new WaitUntil(() => task.IsCompleted);
+        try
+        {
+            Debug.Log("[BountyColyseusManager] JoinLobby Task IsCompleted.");
+            lobbyRoom = task.Result;
+            AssignLobbyEvent();
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError("[BountyColyseusManager] JoinLobby Error: " + ex.Message);
+        }
     }
 
     /// <summary>
@@ -79,15 +85,11 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     public IEnumerator CreateRoom(string roomType, string _mapKey, string _token)
     {
         Debug.Log("[BountyColyseusManager] Create and join room.");
-        var options = new Dictionary<string, object>
-        {
-            { "authorization", new { token = "Bearer " + _token } },
-            { "others", new { mapKey = _mapKey } }
-        };
+        var options = new RoomOption(_token, _mapKey);
         switch (roomType)
         {
             case ROOM_TYPE.GAME_ROOM:
-                Task<ColyseusRoom<GameRoomSchema>> task = client.JoinOrCreate<GameRoomSchema>(ROOM_TYPE.GAME_ROOM, options);
+                Task<ColyseusRoom<GameRoomSchema>> task = client.JoinOrCreate<GameRoomSchema>(ROOM_TYPE.GAME_ROOM, options.option);
                 yield return new WaitUntil(() => task.IsCompleted);
                 Debug.Log("[BountyColyseusManager] CreateRoom success.");
                 gameRoom = task.Result;
@@ -105,6 +107,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     private void AssignLobbyEvent()
     {
         OnJoinLobbySuccess?.Invoke();
+        Debug.Log("[BountyColyseusManager] JoinLobby success.");
     }
 
     /// <summary>

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameEventController : MonoBehaviour
+public class Multiplayer_GameEventController : MonoBehaviour
 {
     [SerializeField]
     private LocalGameView LocalGameView;
@@ -29,7 +29,8 @@ public class GameEventController : MonoBehaviour
         {
             case PLAYER_RECEIVE_EVENTS.ROLL_RESULT:
                 RollResultMessage rollMessage = (RollResultMessage) message;
-                Debug.Log(rollMessage.totalStep);
+                Debug.Log("[GameEventController] Roll Success...");
+                OnRollSuccess(rollMessage);
                 break;
             case PLAYER_RECEIVE_EVENTS.FIGHT_RESULT:
                 Debug.Log("FIGHT_RESULT");
@@ -48,7 +49,7 @@ public class GameEventController : MonoBehaviour
     #region Handle Game Event
     void HandleRoll()
     {
-        if (UserDataManager.GetFFEPoint() > 0)
+        if (UserDataManager.GetEnergy() > 0)
         {
             NetworkManager.Send(PLAYER_SENT_EVENTS.ROLL_DICE);
         }
@@ -57,6 +58,11 @@ public class GameEventController : MonoBehaviour
             //Call external Refill feature.
             NetworkManager.Refill_External();
         }
+    }
+
+    void OnRollSuccess(RollResultMessage rollResult)
+    {
+        LocalGameView.UpdateUserData(UserDataManager.UserData);
     }
 
     void HandleExitGame()
@@ -68,7 +74,7 @@ public class GameEventController : MonoBehaviour
     public void RefillSuccess(string _rollNumber)
     {
         int rollNumber = int.Parse(_rollNumber);
-        UserDataManager.SetFFEPoint(rollNumber);
+        UserDataManager.SetEnergy(rollNumber);
         Debug.Log("Refilled");
     }
 }

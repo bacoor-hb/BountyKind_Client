@@ -9,7 +9,7 @@ public class LocalGameController : MonoBehaviour
 
     [Header ("Event Controller")]
     [SerializeField]
-    private GameEventController GameEventController;
+    private Multiplayer_GameEventController GameEventController;
 
     [Header ("Controller Modules")]
     [SerializeField]

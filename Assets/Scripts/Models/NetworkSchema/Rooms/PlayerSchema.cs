@@ -30,7 +30,7 @@ public partial class PlayerSchema : Schema {
 	public float totalRoll = default(float);
 
 	[Type(7, "number")]
-	public float ffePoint = default(float);
+	public float energy = default(float);
 
 	[Type(8, "number")]
 	public float yuPoint = default(float);

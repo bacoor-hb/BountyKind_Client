@@ -15,20 +15,27 @@ public class NetworkManager : MonoBehaviour
 
     public delegate void OnEventTrigger<T>(T data);
     public OnEventTrigger<string> OnLoginSuccess;
+    public OnEventTrigger<List<BountyMap>> OnGetMapSuccess;
+    public OnEventTrigger<UserData_API> OnGetUserdataSuccess;
 
     [SerializeField]
     private BountyColyseusManager socketManager;
-
+    [SerializeField]
+    private APIManager APIManager;
     private UserDataManager UserDataManager;
-    private LoadingManager LoadingManager;
 
     private string host_EndPoint;
     public void Init()
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
-        LoadingManager = GlobalManager.Instance.LoadingManager;
-
+        APIManager.Init();
         host_EndPoint = CONSTS.HOST_ENDPOINT_DEFAULT;
+
+        APIManager.OnGetMapFinished = null;
+        APIManager.OnGetMapFinished += GetAllMapSuccess;
+        APIManager.OnGetUserDataFinished = null;
+        APIManager.OnGetUserDataFinished += GetUserDataSuccess;
+
     }
 
     #region NETWORK FLOW
@@ -58,11 +65,16 @@ public class NetworkManager : MonoBehaviour
         }
         
     }
+
+    /// <summary>
+    /// Connect Socket + Join Lobby
+    /// </summary>
     public void Connect()
     {
         socketManager.Connect(host_EndPoint);
         JoinLobby();
     }
+
     /// <summary>
     /// Disconnect the socket and reload the Login Scene
     /// </summary>
@@ -107,6 +119,46 @@ public class NetworkManager : MonoBehaviour
             StartCoroutine(socketManager.Send(_data));
         else
             Debug.LogError("[NetworkManager] Send Error: Socket Manager == null");
+    }
+    #endregion
+
+    #region Get Data from API
+    /// <summary>
+    /// Call Get map API
+    /// </summary>
+    /// <param name="uri"></param>
+    public void GetAllMap_FromAPI(string uri)
+    {
+        StartCoroutine(APIManager.GetAllMapTypes(uri));
+    }
+    /// <summary>
+    /// Trigger When get map success
+    /// </summary>
+    /// <param name="mapList"></param>
+    public void GetAllMapSuccess(List<BountyMap> mapList)
+    {
+        if (mapList != null)
+            OnGetMapSuccess?.Invoke(mapList);
+        else
+            Debug.LogError("[NetworkManager] Get Map Error: Map is null");
+    }
+    /// <summary>
+    /// Call Get User API
+    /// </summary>
+    /// <param name="uri"></param>
+    /// <param name="_address"></param>
+    /// <param name="_token"></param>
+    public void GetUserData_FromAPI(string uri, string _address, string _token)
+    {
+        if(UserDataManager.UserData != null)
+        {
+            StartCoroutine(APIManager.GetUserData(uri, _address, _token));
+        }        
+    }
+    public void GetUserDataSuccess(UserData_API userData)
+    {
+        UserDataManager.UserData.SetUserData_API(userData);
+        OnGetUserdataSuccess?.Invoke(userData);
     }
     #endregion
 }

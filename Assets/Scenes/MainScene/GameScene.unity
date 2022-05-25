@@ -902,7 +902,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 995314726}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &701843000
 MonoBehaviour:
@@ -1403,6 +1403,9 @@ MonoBehaviour:
   Move_Btn: {fileID: 1182464049}
   EndTurn_Btn: {fileID: 208262571}
   Exit_Btn: {fileID: 1075475597}
+  userNameTxt: {fileID: 0}
+  energyTxt: {fileID: 0}
+  yuPointTxt: {fileID: 0}
 --- !u!114 &833866538 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 607431508688730803, guid: 1ab0391f2506ee54988cfcfe6d834395, type: 3}
@@ -1618,6 +1621,7 @@ GameObject:
   m_Component:
   - component: {fileID: 995314726}
   - component: {fileID: 995314727}
+  - component: {fileID: 995314728}
   m_Layer: 0
   m_Name: LocalGameManager
   m_TagString: Untagged
@@ -1641,7 +1645,6 @@ Transform:
   - {fileID: 1016989033}
   - {fileID: 1612899146}
   - {fileID: 22487581}
-  - {fileID: 1373115430}
   - {fileID: 701842998}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -1660,7 +1663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players:
   - {fileID: 22487577}
-  GameEventController: {fileID: 0}
+  GameEventController: {fileID: 995314728}
   MovementController: {fileID: 616360742}
   DicesController: {fileID: 1016989034}
   TurnBaseController: {fileID: 1612899147}
@@ -1707,6 +1710,20 @@ MonoBehaviour:
   - {fileID: 388525096}
   board: {fileID: 701843000}
   LocalGameView: {fileID: 795895966}
+--- !u!114 &995314728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995314725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da9653d8146b5934c89e717f8109bfc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LocalGameView: {fileID: 795895966}
+  LocalGameController: {fileID: 995314727}
 --- !u!1 &1016989032
 GameObject:
   m_ObjectHideFlags: 0
@@ -2273,50 +2290,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3684686d8973e06449a0e00b761bd8da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1373115429
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1373115430}
-  - component: {fileID: 1373115431}
-  m_Layer: 0
-  m_Name: Wallet
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1373115430
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1373115429}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 995314726}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1373115431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1373115429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af2f3cda22c2c4f20a4dc330ff908772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1390782568

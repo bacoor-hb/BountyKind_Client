@@ -9,7 +9,7 @@ using Colyseus.Schema;
 
 public partial class UserSchema : Schema {
 	[Type(0, "string")]
-	public string _id = default(string);
+	public string userId = default(string);
 
 	[Type(1, "string")]
 	public string username = default(string);

@@ -15,7 +15,7 @@ public class NetworkManager : MonoBehaviour
 
     public delegate void OnEventTrigger<T>(T data);
     public OnEventTrigger<string> OnLoginSuccess;
-    public OnEventTrigger<List<BountyMap>> OnGetMapSuccess;
+    public OnEventTrigger<List<BountyMap_Short>> OnGetMapSuccess;
     public OnEventTrigger<UserData_API> OnGetUserdataSuccess;
 
     [SerializeField]
@@ -31,8 +31,8 @@ public class NetworkManager : MonoBehaviour
         APIManager.Init();
         host_EndPoint = CONSTS.HOST_ENDPOINT_DEFAULT;
 
-        APIManager.OnGetMapFinished = null;
-        APIManager.OnGetMapFinished += GetAllMapSuccess;
+        APIManager.OnGetAllMapFinished = null;
+        APIManager.OnGetAllMapFinished += GetAllMapSuccess;
         APIManager.OnGetUserDataFinished = null;
         APIManager.OnGetUserDataFinished += GetUserDataSuccess;
 
@@ -135,7 +135,7 @@ public class NetworkManager : MonoBehaviour
     /// Trigger When get map success
     /// </summary>
     /// <param name="mapList"></param>
-    public void GetAllMapSuccess(List<BountyMap> mapList)
+    public void GetAllMapSuccess(List<BountyMap_Short> mapList)
     {
         if (mapList != null)
             OnGetMapSuccess?.Invoke(mapList);

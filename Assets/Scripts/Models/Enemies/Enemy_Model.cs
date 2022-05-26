@@ -11,5 +11,7 @@ public class Enemy
     public int atk { get; set; }
     public int def { get; set; }
     public int hp { get; set; }
+    public int speed { get; set; }
+    public int level { get; set; }
     public int position { get; set; }
 }

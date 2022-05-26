@@ -4,6 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
+public class GetMapsResponse_Short
+{
+    public List<BountyMap_Short> data;
+}
+
+[Serializable]
+public class GetMapsDetailResponse
+{
+    public BountyMap data;
+}
+
+[Serializable]
 public class MapNode
 {
     public string name;
@@ -24,15 +36,9 @@ public class BountyMap
 }
 
 [Serializable]
-public class MapNode_Short
+public class BountyMap_Short
 {
     public string key;
     public string name;
     public int totalNode;
-}
-
-[Serializable]
-public class BountyMap_List
-{
-    public List<MapNode_Short> maps;
 }

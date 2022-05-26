@@ -7,7 +7,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     [SerializeField]
     private LobbyView LobbyView;
 
-    private List<BountyMap> bountyMaps;
+    private List<BountyMap_Short> bountyMaps;
     private string selectedMapKey;
 
     private UserDataManager UserDataManager;
@@ -131,7 +131,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     /// Trigger when the server return the map list: Update the map list on the UI.
     /// </summary>
     /// <param name="mapList"></param>
-    void OnGetMapSuccess(List<BountyMap> mapList)
+    void OnGetMapSuccess(List<BountyMap_Short> mapList)
     {
         bountyMaps = mapList;
 

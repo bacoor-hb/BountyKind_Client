@@ -19,7 +19,7 @@ public class LobbyView : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI Username_Txt;
     [SerializeField]
-    private TextMeshProUGUI BalanceYU2_Txt;
+    private TextMeshProUGUI BalanceYuPoint_Txt;
     [SerializeField]
     private TextMeshProUGUI BalanceEnergy_Txt;
 
@@ -69,20 +69,20 @@ public class LobbyView : MonoBehaviour
     {
         Address_Txt.text = userData.address;
         Username_Txt.text = userData.username;
-        BalanceYU2_Txt.text = userData.tokenBalance.YU_Point.ToString();
+        BalanceYuPoint_Txt.text = userData.tokenBalance.YU_Point.ToString();
         BalanceEnergy_Txt.text = userData.tokenBalance.Energy.ToString();
     }
 
-    public void UpdateRollTime_Txt(int _newRollTime)
+    public void UpdateEnergy_Txt(int _newEnergyValue)
     {
-        BalanceEnergy_Txt.text = _newRollTime.ToString();
+        BalanceEnergy_Txt.text = _newEnergyValue.ToString();
     }
 
     /// <summary>
     /// Update the Room Type Drop down List
     /// </summary>
     /// <param name="_mapList"></param>
-    public void UpdateMapList(List<BountyMap> _mapList)
+    public void UpdateMapList(List<BountyMap_Short> _mapList)
     {
         RoomType_DD.ClearOptions();
 

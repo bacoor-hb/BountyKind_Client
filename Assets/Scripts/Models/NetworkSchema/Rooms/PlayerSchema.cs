@@ -32,13 +32,16 @@ public partial class PlayerSchema : Schema {
 	[Type(7, "number")]
 	public float energy = default(float);
 
-	[Type(8, "number")]
+	[Type(8, "boolean")]
+	public bool isInteracted = default(bool);
+
+	[Type(9, "number")]
 	public float yuPoint = default(float);
 
-	[Type(9, "array", typeof(ArraySchema<ItemSchema>))]
+	[Type(10, "array", typeof(ArraySchema<ItemSchema>))]
 	public ArraySchema<ItemSchema> itemListEarned = new ArraySchema<ItemSchema>();
 
-	[Type(10, "number")]
+	[Type(11, "number")]
 	public float yuEarned = default(float);
 }
 

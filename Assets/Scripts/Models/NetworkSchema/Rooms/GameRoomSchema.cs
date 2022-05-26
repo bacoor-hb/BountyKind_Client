@@ -17,22 +17,10 @@ public partial class GameRoomSchema : Schema {
 	[Type(2, "number")]
 	public float currentIndexPlayer = default(float);
 
-	[Type(3, "boolean")]
-	public bool isInteracted = default(bool);
-
-	[Type(4, "boolean")]
-	public bool inBattle = default(bool);
-
-	[Type(5, "ref", typeof(BattleSchema))]
-	public BattleSchema battleState = new BattleSchema();
-
-	[Type(6, "string")]
+	[Type(3, "string")]
 	public string name = default(string);
 
-	[Type(7, "array", typeof(ArraySchema<NodeSchema>))]
-	public ArraySchema<NodeSchema> nodes = new ArraySchema<NodeSchema>();
-
-	[Type(8, "string")]
-	public string image = default(string);
+	[Type(4, "string")]
+	public string mapKey = default(string);
 }
 

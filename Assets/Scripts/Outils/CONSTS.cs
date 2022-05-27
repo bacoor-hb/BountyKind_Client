@@ -21,7 +21,7 @@ public class CONSTS
     #endregion
 
     #region NETWORK SETTING
-    public const string HOST_ENDPOINT_DEFAULT = "wss://dev-game-api.w3w.app";
+    public const string HOST_ENDPOINT_SOCKET = "wss://dev-game-server.w3w.app ";
     public const string HOST_ENDPOINT_API = "https://dev-game-api.w3w.app/";
     public const string HOST_GET_MAP_API = HOST_ENDPOINT_API + "api/maps";
     public const string HOST_GET_USERDATA_API = HOST_ENDPOINT_API + "api/users/";
@@ -72,26 +72,63 @@ public class ROOM_TYPE
     public const string LOBBY_ROOM = "lobby";
 }
 
-public class PLAYER_RECEIVE_EVENTS
+#region SERVER EVENT
+public enum GAMEROOM_SENT_EVENTS
 {
-    public const string ROLL_RESULT = "roll_result";
-    public const string LUCKY_DRAW_RESULT = "lucky_draw_result";
-    public const string FIGHT_RESULT = "fight_result";
-    public const string BATTLE_INIT = "battle_init";
-    public const string ERROR = "error";
+    ROLL_DICE,
+    LUCKY_DRAW,
+    FIGHT,
+    BALANCE,
+    GAME_EXIT,
 }
 
-public class PLAYER_SENT_EVENTS
+public enum GAMEROOM_RECEIVE_EVENTS
 {
-    public const string ROLL_DICE = "roll";
-    public const string FIGHT = "fight";
-    public const string GAME_EXIT = "exit";
-    public const string LUCKY_DRAW = "lucky_draw";
+    ROLL_RESULT,
+    LUCKY_DRAW_RESULT,
+    FIGHT_RESULT,
+    BALANCE_RESULT,
+}
 
-}
-public class PLAYER_ERRORS
+public enum LOBBY_SENT_EVENTS
 {
-    public const string NOT_YOUR_TURN = "NOT_YOUR_TURN";
+    MAP_LIST,
+    MAP_NODE,
+};
+
+public enum LOBBY_RECEIVE_EVENTS
+{
+    MAP_LIST_RESULT,
+    MAP_NODE_RESULT,
+};
+
+public enum PLAYER_ERRORS
+{
+    NOT_YOUR_TURN,
+    NOT_ENOUGH_ENERGY,
+    NOT_ENOUGH_YU_POINT,
+    NOT_INTERACTED_WITH_NODE,
+    INTERACTED_WITH_NODE,
+    SENT_EVENT_WRONG,
+    TICKET_INVALID,
+    TICKET_NOT_OWNER,
+    TICKET_IS_USED,
+    INVALID_GAME,
 }
+
+public enum REQUEST_ERRORS
+{
+    USER_NOT_FOUND,
+    INVALID_ACCESS_TOKEN,
+}
+
+public enum STATUS_BATTLE
+{
+    WIN = 1,
+    DRAW = 0,
+    LOSS = -1,
+}
+#endregion
+
 
 

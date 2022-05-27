@@ -7,17 +7,17 @@
 
 using Colyseus.Schema;
 
-public partial class CharacterSchema : Schema {
-	[Type(0, "string")]
-	public string name = default(string);
+public partial class RollResultSchema : Schema {
+	[Type(0, "number")]
+	public float currentNode = default(float);
 
 	[Type(1, "number")]
-	public float atk = default(float);
+	public float totalStep = default(float);
 
 	[Type(2, "number")]
-	public float def = default(float);
+	public float totalRoll = default(float);
 
 	[Type(3, "number")]
-	public float hp = default(float);
+	public float rollResult = default(float);
 }
 

@@ -7,8 +7,8 @@
 
 using Colyseus.Schema;
 
-public partial class LobbySchema : Schema {
-	[Type(0, "map", typeof(MapSchema<UserSchema>))]
-	public MapSchema<UserSchema> players = new MapSchema<UserSchema>();
+public partial class MapSchema : MapShortSchema {
+	[Type(3, "array", typeof(ArraySchema<NodeSchema>))]
+	public ArraySchema<NodeSchema> nodes = new ArraySchema<NodeSchema>();
 }
 

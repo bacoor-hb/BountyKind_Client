@@ -9,8 +9,9 @@ using System.Collections;
 
 public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
 {
-    public delegate void OnRoomMessage(string messageType, object message);
-    public static event OnRoomMessage onReceiveMessage;
+    public delegate void OnRoomMessage<T>(T messageType, object message);
+    public static event OnRoomMessage<GAMEROOM_RECEIVE_EVENTS> onGameReceiveMsg;
+    public static event OnRoomMessage<LOBBY_RECEIVE_EVENTS> onLobbyReceiveMsg;
 
     public delegate void OnEventTrigger();
     public OnEventTrigger OnJoinLobbySuccess;
@@ -106,8 +107,16 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// </summary>
     private void AssignLobbyEvent()
     {
+        lobbyRoom.OnMessage<MapSchema>(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT.ToString(), (message) =>
+        {
+            onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT, message);
+        });
+        lobbyRoom.OnMessage<MapNode>(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT.ToString(), (message) =>
+        {
+            onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT, message);
+        });
         OnJoinLobbySuccess?.Invoke();
-        Debug.Log("[BountyColyseusManager] JoinLobby success.");
+        Debug.Log("[BountyColyseusManager] AssignLobbyEvent success.");
     }
 
     /// <summary>
@@ -115,21 +124,22 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// </summary>
     private void AssignRoomEvent()
     {
-        gameRoom.OnMessage<RollResultMessage>(PLAYER_RECEIVE_EVENTS.ROLL_RESULT, (message) =>
+        gameRoom.OnMessage<RollResultSchema>(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT.ToString(), (message) =>
         {
-            onReceiveMessage(PLAYER_RECEIVE_EVENTS.ROLL_RESULT, message);
+            onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT, message);
         });
-        gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.FIGHT_RESULT, (message) => {
-            onReceiveMessage(PLAYER_RECEIVE_EVENTS.FIGHT_RESULT, message);
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.FIGHT_RESULT.ToString(), (message) => {
+            onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.FIGHT_RESULT, message);
         });
-        gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.BATTLE_INIT, (message) => {
-            onReceiveMessage(PLAYER_RECEIVE_EVENTS.BATTLE_INIT, message);
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT.ToString(), (message) => {
+            onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT, message);
         });
-        gameRoom.OnMessage<string>(PLAYER_RECEIVE_EVENTS.ERROR, (message) => {
-            onReceiveMessage(PLAYER_RECEIVE_EVENTS.ERROR, message);
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.BALANCE_RESULT.ToString(), (message) => {
+            onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.BALANCE_RESULT, message);
         });
 
         OnJoinRoomSuccess?.Invoke();
+        Debug.Log("[BountyColyseusManager] AssignRoomEvent success.");
     }
 
     /// <summary>

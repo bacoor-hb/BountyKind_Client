@@ -29,7 +29,7 @@ public class NetworkManager : MonoBehaviour
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
         APIManager.Init();
-        host_EndPoint = CONSTS.HOST_ENDPOINT_DEFAULT;
+        host_EndPoint = CONSTS.HOST_ENDPOINT_SOCKET;
 
         APIManager.OnGetAllMapFinished = null;
         APIManager.OnGetAllMapFinished += GetAllMapSuccess;

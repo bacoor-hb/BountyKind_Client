@@ -18,28 +18,28 @@ public class Multiplayer_GameEventController : MonoBehaviour
         UserDataManager = GlobalManager.Instance.UserDataManager;
         NetworkManager = GlobalManager.Instance.NetworkManager;
 
-        BountyColyseusManager.onReceiveMessage += HandleOnMessage;
+        BountyColyseusManager.onGameReceiveMsg += HandleOnMessage;
         LocalGameView.RollDice_Btn.onClick.AddListener(() => { HandleRoll(); });
         LocalGameView.Exit_Btn.onClick.AddListener(() => { HandleExitGame(); });
     }
 
-    void HandleOnMessage(string messageType, object message)
+    void HandleOnMessage(GAMEROOM_RECEIVE_EVENTS messageType, object message)
     {
         switch (messageType)
         {
-            case PLAYER_RECEIVE_EVENTS.ROLL_RESULT:
-                RollResultMessage rollMessage = (RollResultMessage) message;
+            case GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT:
+                RollResultSchema rollMessage = (RollResultSchema) message;
                 Debug.Log("[GameEventController] Roll Success...");
                 OnRollSuccess(rollMessage);
                 break;
-            case PLAYER_RECEIVE_EVENTS.FIGHT_RESULT:
+            case GAMEROOM_RECEIVE_EVENTS.FIGHT_RESULT:
                 Debug.Log("FIGHT_RESULT");
                 break;
-            case PLAYER_RECEIVE_EVENTS.BATTLE_INIT:
-                Debug.Log("BATTLE_INIT");
+            case GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT:
+                Debug.Log("LUCKY_DRAW_RESULT");
                 break;
-            case PLAYER_RECEIVE_EVENTS.ERROR:
-                Debug.Log("ERROR");
+            case GAMEROOM_RECEIVE_EVENTS.BALANCE_RESULT:
+                Debug.Log("BALANCE_RESULT");
                 break;
             default:
                 break;
@@ -51,7 +51,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
     {
         if (UserDataManager.GetEnergy() > 0)
         {
-            NetworkManager.Send(PLAYER_SENT_EVENTS.ROLL_DICE);
+            NetworkManager.Send(GAMEROOM_SENT_EVENTS.ROLL_DICE.ToString());
         }
         else
         {
@@ -60,7 +60,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
         }
     }
 
-    void OnRollSuccess(RollResultMessage rollResult)
+    void OnRollSuccess(RollResultSchema rollResult)
     {
         LocalGameView.UpdateUserData(UserDataManager.UserData);
     }

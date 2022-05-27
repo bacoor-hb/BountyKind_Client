@@ -9,6 +9,35 @@ public enum CharacterStatus
     DESTROYED,
 };
 
+public enum GameCharacterRace
+{
+    HUMANOID,
+    BEAST,
+    GOD,
+    DEMON,
+    MACHINE,
+};
+
+public enum GameCharacterElement
+{
+    IGNIS,
+    PLANT,
+    ANIMA,
+    EARTH,
+    ELEKI,
+    AQUA,
+};
+
+public enum GameCharacterRarity
+{
+    COMMON,
+    UNCOMMON,
+    RARE,
+    EPIC,
+    LEGENDARY,
+    EMPEROR
+};
+
 [Serializable]
 public class NFTItem
 {

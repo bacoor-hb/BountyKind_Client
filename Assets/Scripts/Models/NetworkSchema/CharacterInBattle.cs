@@ -7,20 +7,11 @@
 
 using Colyseus.Schema;
 
-public partial class CharacterInBattle : Schema {
-	[Type(0, "number")]
-	public float positionId = default(float);
+public partial class CharacterInBattle : StatusSchema {
+	[Type(4, "string")]
+	public string id = default(string);
 
-	[Type(1, "number")]
-	public float atk = default(float);
-
-	[Type(2, "number")]
-	public float def = default(float);
-
-	[Type(3, "number")]
-	public float hp = default(float);
-
-	[Type(4, "number")]
-	public float speed = default(float);
+	[Type(5, "string")]
+	public string faction = default(string);
 }
 

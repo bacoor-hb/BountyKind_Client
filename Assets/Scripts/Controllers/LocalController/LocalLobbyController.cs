@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     private string selectedMapKey;
 
     private UserDataManager UserDataManager;
+    private MapNodeDataManager MapNodeDataManager;
     private NetworkManager NetworkManager;
     private LoadingManager LoadingManager;
     // Start is called before the first frame update
@@ -23,14 +25,15 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
         BountyColyseusManager.Instance.OnJoinRoomSuccess = null;
         BountyColyseusManager.Instance.OnJoinRoomSuccess += OnCreateRoomSuccess;
 
-        NetworkManager.OnGetMapSuccess = null;
-        NetworkManager.OnGetMapSuccess += OnGetMapSuccess;
+        BountyColyseusManager.Instance.onLobbyReceiveMsg = null;
+        BountyColyseusManager.Instance.onLobbyReceiveMsg += HandleLobbyMessage;
         NetworkManager.OnGetUserdataSuccess = null;
         NetworkManager.OnGetUserdataSuccess += OnGetUserDataAPI_Sucess;
         NetworkManager.OnLoginSuccess = null;
         NetworkManager.OnLoginSuccess += LoginSuccess;
 
         UserDataManager = GlobalManager.Instance.UserDataManager;
+        MapNodeDataManager = GlobalManager.Instance.MapNodeDataManager;
         LoadingManager = GlobalManager.Instance.LoadingManager;
 
         //Lobby View Setting
@@ -98,10 +101,9 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     /// </summary>
     void OnConnectSuccess()
     {
-        Debug.Log("[RoomEventController] GetMap_FromServer: " + CONSTS.HOST_GET_MAP_API);
-        NetworkManager.GetAllMap_FromAPI(CONSTS.HOST_GET_MAP_API);
         Debug.Log("[RoomEventController] GetUserData_FromServer");
-        NetworkManager.GetUserData_FromAPI(CONSTS.HOST_GET_USERDATA_API, UserDataManager.UserData.address, UserDataManager.UserData.token);
+        NetworkManager.Send(SEND_TYPE.LOBBY_SEND, LOBBY_SENT_EVENTS.MAP_LIST.ToString());
+        NetworkManager.GetUserData_FromAPI(CONSTS.HOST_GET_USERDATA_API, UserDataManager.UserData.token);
     }
     #endregion
 
@@ -112,7 +114,10 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     void CreateRoom()
     {
         if (bountyMaps != null && bountyMaps.Count > 0)
+        {
+            NetworkManager.Send(SEND_TYPE.LOBBY_SEND, LOBBY_SENT_EVENTS.MAP_NODE.ToString(), selectedMapKey);
             NetworkManager.CreateRoom(ROOM_TYPE.GAME_ROOM, selectedMapKey);
+        }            
         else
             Debug.LogError("[RoomEventController] Create Room ERROR: No Map Data.");
     }
@@ -126,7 +131,43 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     }
     #endregion
 
-    #region Return Event from Server API
+    #region Handle Event from Server
+    void HandleLobbyMessage(LOBBY_RECEIVE_EVENTS messageType, object message)
+    {
+        try
+        {
+            switch (messageType)
+            {
+                case LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT:
+                    Debug.Log("[HandleLobbyMessage] MAP LIST RESULT.");
+                    //Convert Server Data to Game Data
+                    string mapJsonData = (string)message;
+                    MapShortListSchema mapShortList = (MapShortListSchema)message;
+                    //MapShortListSchema mapShortList = new MapShortListSchema()
+                    NetworkManager.OnGetMapSuccess?.Invoke(mapShortList);
+                    List<BountyMap_Short> mapShortLst = new List<BountyMap_Short>();
+                    for (int i = 0; i < mapShortList.maps.Count; i++)
+                    {
+                        mapShortLst.Add(new BountyMap_Short(mapShortList.maps[i]));
+                    }
+                    OnGetMapSuccess(mapShortLst);                    
+                    break;
+                case LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT:
+                    Debug.Log("[HandleLobbyMessage] MAP NODE RESULT.");
+                    string nodeJsonData = (string)message;
+                    MapSchema mapSchema = (MapSchema)message;
+                    NetworkManager.OnGetMapDetailSuccess?.Invoke(mapSchema);
+                    break;
+                default:
+                    Debug.Log("[HandleLobbyMessage] Default");
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("[HandleLobbyMessage] ERROR:" + ex.Message);
+        }
+    }
     /// <summary>
     /// Trigger when the server return the map list: Update the map list on the UI.
     /// </summary>
@@ -147,6 +188,8 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
         {
             selectedMapKey = bountyMaps[currentMap].key;
         });
+
+        
     }
 
     /// <summary>

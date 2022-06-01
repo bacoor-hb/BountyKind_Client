@@ -7,23 +7,11 @@
 
 using Colyseus.Schema;
 
-public partial class ItemSchema : Schema {
-	[Type(0, "string")]
+public partial class ItemSchema : StatusSchema {
+	[Type(4, "string")]
 	public string _id = default(string);
 
-	[Type(1, "string")]
+	[Type(5, "string")]
 	public string name = default(string);
-
-	[Type(2, "number")]
-	public float atk = default(float);
-
-	[Type(3, "number")]
-	public float def = default(float);
-
-	[Type(4, "number")]
-	public float speed = default(float);
-
-	[Type(5, "number")]
-	public float hp = default(float);
 }
 

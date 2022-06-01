@@ -24,8 +24,14 @@ public class CONSTS
     public const string HOST_ENDPOINT_SOCKET = "wss://dev-game-server.w3w.app ";
     public const string HOST_ENDPOINT_API = "https://dev-game-api.w3w.app/";
     public const string HOST_GET_MAP_API = HOST_ENDPOINT_API + "api/maps";
-    public const string HOST_GET_USERDATA_API = HOST_ENDPOINT_API + "api/users/";
+    public const string HOST_GET_USERDATA_API = HOST_ENDPOINT_API + "api/users/detail";
     #endregion
+}
+
+public enum SEND_TYPE
+{
+    LOBBY_SEND,
+    GAMEROOM_SEND
 }
 
 public enum SCENE_NAME

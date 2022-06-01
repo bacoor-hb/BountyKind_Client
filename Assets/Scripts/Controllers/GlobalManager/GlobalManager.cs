@@ -12,6 +12,8 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
     [SerializeField]
     public UserDataManager UserDataManager { get; private set; }
     [SerializeField]
+    public MapNodeDataManager MapNodeDataManager { get; private set; }
+    [SerializeField]
     public NetworkManager NetworkManager { get; private set; }
 
     void Start()
@@ -34,11 +36,13 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
         LoadingManager = GetComponentInChildren<LoadingManager>();
         //LanguageManager = GetComponentInChildren<LanguageManager>();
         UserDataManager = GetComponentInChildren<UserDataManager>();
+        MapNodeDataManager = GetComponentInChildren<MapNodeDataManager>();
         NetworkManager = GetComponentInChildren<NetworkManager>();
 
         //Init all Manager...
         LoadingManager.Init();
         UserDataManager.Init();
+        MapNodeDataManager.Init();
         NetworkManager.Init();
         //LanguageManager.Init();
     }

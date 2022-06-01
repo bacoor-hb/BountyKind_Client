@@ -10,8 +10,8 @@ using System.Collections;
 public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
 {
     public delegate void OnRoomMessage<T>(T messageType, object message);
-    public static event OnRoomMessage<GAMEROOM_RECEIVE_EVENTS> onGameReceiveMsg;
-    public static event OnRoomMessage<LOBBY_RECEIVE_EVENTS> onLobbyReceiveMsg;
+    public OnRoomMessage<GAMEROOM_RECEIVE_EVENTS> onGameReceiveMsg;
+    public OnRoomMessage<LOBBY_RECEIVE_EVENTS> onLobbyReceiveMsg;
 
     public delegate void OnEventTrigger();
     public OnEventTrigger OnJoinLobbySuccess;
@@ -107,11 +107,11 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// </summary>
     private void AssignLobbyEvent()
     {
-        lobbyRoom.OnMessage<MapSchema>(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT.ToString(), (message) =>
+        lobbyRoom.OnMessage<string>(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT.ToString(), (message) =>
         {
             onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT, message);
         });
-        lobbyRoom.OnMessage<MapNode>(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT.ToString(), (message) =>
+        lobbyRoom.OnMessage<string>(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT.ToString(), (message) =>
         {
             onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT, message);
         });
@@ -147,17 +147,40 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// </summary>
     /// <param name="_data"></param>
     /// <returns></returns>
-    public IEnumerator Send(string _data)
+    public void Send(SEND_TYPE sendChannel, string _data, object message = null)
     {
-        if(gameRoom.colyseusConnection.IsOpen)
+        switch (sendChannel)
         {
-            Task task = gameRoom.Send(_data);
-            yield return new WaitUntil(() => task.IsCompleted);
-            Debug.Log("[BountyColyseusManager] Send success.");
+            case SEND_TYPE.LOBBY_SEND:
+                if (lobbyRoom.colyseusConnection.IsOpen)
+                {
+                    if (message != null)
+                        lobbyRoom.Send(_data, message);
+                    else
+                        lobbyRoom.Send(_data);
+                }
+                else
+                {
+                    Debug.LogError("[BountyColyseusManager] [Send] lobbyRoom is not available...");
+                }
+                break;
+            case SEND_TYPE.GAMEROOM_SEND:
+                if (gameRoom.colyseusConnection.IsOpen)
+                {
+                    if(message != null)
+                        gameRoom.Send(_data, message);
+                    else
+                        gameRoom.Send(_data);
+                }
+                else
+                {
+                    Debug.LogError("[BountyColyseusManager] [Send] Room is not available...");
+                }
+                break;
+            default:
+                Debug.LogError("[BountyColyseusManager] [Send] Channel not supported...");
+                break;
         }
-        else
-        {
-            Debug.LogError("[BountyColyseusManager] [Send] Room is not available...");
-        }
+        
     }
 }

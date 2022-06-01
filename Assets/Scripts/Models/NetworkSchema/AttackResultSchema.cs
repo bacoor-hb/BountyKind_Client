@@ -12,7 +12,7 @@ public partial class AttackResultSchema : Schema {
 	public CharacterInBattle attacker = new CharacterInBattle();
 
 	[Type(1, "ref", typeof(CharacterInBattle))]
-	public CharacterInBattle defender = new CharacterInBattle();
+	public CharacterInBattle target = new CharacterInBattle();
 
 	[Type(2, "number")]
 	public float turn = default(float);

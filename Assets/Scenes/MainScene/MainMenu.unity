@@ -3195,7 +3195,7 @@ MonoBehaviour:
   LobbyForm_Root: {fileID: 493683685}
   Address_Txt: {fileID: 783832951}
   Username_Txt: {fileID: 709945943}
-  BalanceYU2_Txt: {fileID: 1140616761}
+  BalanceYuPoint_Txt: {fileID: 1140616761}
   BalanceEnergy_Txt: {fileID: 1240844270}
   RoomType_DD: {fileID: 936991882}
   Logout_Btn: {fileID: 1303526100}

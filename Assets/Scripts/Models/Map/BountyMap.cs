@@ -3,30 +3,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
 public class GetMapsResponse_Short
 {
     public List<BountyMap_Short> data;
 }
 
-[Serializable]
 public class GetMapsDetailResponse
 {
     public BountyMap data;
 }
 
-[Serializable]
 public class MapNode
 {
     public string name;
     public string key;
-    public string type;    
-    public List<Enemy> emeny;
+    public TypeNode type;    
+    public List<Enemy> enemies;
     public int position;
-    public int preNode;
-    public int nextNode;
+    public List<int> preNode;
+    public List<int> nextNode;
+
+    public MapNode(NodeSchema node)
+    {
+        name = node.name;
+        key = node.key;
+        Enum.TryParse(node.type, out type);
+        position = Mathf.RoundToInt(node.position);
+
+        if(node.enemy != null && node.enemy.Count > 0)
+        {
+            enemies = new List<Enemy>();
+            for (int i = 0; i < node.enemy.Count; i++)
+            {
+                Enemy enemy = new Enemy(node.enemy[i]);
+                enemies.Add(enemy);
+            }
+        }
+        
+    }
 }
-[Serializable]
+
+public enum TypeNode
+{
+    START,
+    CHANCE,
+    LUCKY_DRAW,
+    BOSS,
+    DEFAULT
+}
+
 public class BountyMap
 {
     public string key;
@@ -35,10 +60,16 @@ public class BountyMap
     public List<MapNode> nodes;
 }
 
-[Serializable]
 public class BountyMap_Short
 {
     public string key;
     public string name;
     public int totalNode;
+
+    public BountyMap_Short(MapShortSchema node)
+    {
+        key = node.key;
+        name = node.name;
+        totalNode = Mathf.RoundToInt(node.totalNode);
+    }
 }

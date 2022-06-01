@@ -8,7 +8,7 @@
 using Colyseus.Schema;
 
 public partial class MapShortListSchema : Schema {
-	[Type(0, "array", typeof(ArraySchema<MapShortListSchema>))]
-	public ArraySchema<MapShortListSchema> maps = new ArraySchema<MapShortListSchema>();
+	[Type(0, "array", typeof(ArraySchema<MapShortSchema>))]
+	public ArraySchema<MapShortSchema> maps = new ArraySchema<MapShortSchema>();
 }
 

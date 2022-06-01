@@ -15,7 +15,8 @@ public class NetworkManager : MonoBehaviour
 
     public delegate void OnEventTrigger<T>(T data);
     public OnEventTrigger<string> OnLoginSuccess;
-    public OnEventTrigger<List<BountyMap_Short>> OnGetMapSuccess;
+    public OnEventTrigger<MapShortListSchema> OnGetMapSuccess;
+    public OnEventTrigger<MapSchema> OnGetMapDetailSuccess;
     public OnEventTrigger<UserData_API> OnGetUserdataSuccess;
 
     [SerializeField]
@@ -23,19 +24,23 @@ public class NetworkManager : MonoBehaviour
     [SerializeField]
     private APIManager APIManager;
     private UserDataManager UserDataManager;
+    private MapNodeDataManager MapNodeDataManager;
 
     private string host_EndPoint;
     public void Init()
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
+        MapNodeDataManager = GlobalManager.Instance.MapNodeDataManager;
+
         APIManager.Init();
         host_EndPoint = CONSTS.HOST_ENDPOINT_SOCKET;
 
-        APIManager.OnGetAllMapFinished = null;
-        APIManager.OnGetAllMapFinished += GetAllMapSuccess;
         APIManager.OnGetUserDataFinished = null;
         APIManager.OnGetUserDataFinished += GetUserDataSuccess;
-
+        OnGetMapSuccess = null;
+        OnGetMapSuccess += OnGetMapProcess;
+        OnGetMapDetailSuccess = null;
+        OnGetMapDetailSuccess += OnGetMapDetailProcess;
     }
 
     #region NETWORK FLOW
@@ -113,10 +118,10 @@ public class NetworkManager : MonoBehaviour
     /// Send data to the Game room in the Server
     /// </summary>
     /// <param name="_data"></param>
-    public void Send(string _data)
+    public void Send(SEND_TYPE sendChannel, string _data, object message = null)
     {
         if (socketManager != null)
-            StartCoroutine(socketManager.Send(_data));
+            socketManager.Send(sendChannel, _data, message);
         else
             Debug.LogError("[NetworkManager] Send Error: Socket Manager == null");
     }
@@ -124,41 +129,39 @@ public class NetworkManager : MonoBehaviour
 
     #region Get Data from API
     /// <summary>
-    /// Call Get map API
-    /// </summary>
-    /// <param name="uri"></param>
-    public void GetAllMap_FromAPI(string uri)
-    {
-        StartCoroutine(APIManager.GetAllMapTypes(uri));
-    }
-    /// <summary>
-    /// Trigger When get map success
-    /// </summary>
-    /// <param name="mapList"></param>
-    public void GetAllMapSuccess(List<BountyMap_Short> mapList)
-    {
-        if (mapList != null)
-            OnGetMapSuccess?.Invoke(mapList);
-        else
-            Debug.LogError("[NetworkManager] Get Map Error: Map is null");
-    }
-    /// <summary>
     /// Call Get User API
     /// </summary>
     /// <param name="uri"></param>
     /// <param name="_address"></param>
     /// <param name="_token"></param>
-    public void GetUserData_FromAPI(string uri, string _address, string _token)
+    public void GetUserData_FromAPI(string uri, string _token)
     {
         if(UserDataManager.UserData != null)
         {
-            StartCoroutine(APIManager.GetUserData(uri, _address, _token));
+            StartCoroutine(APIManager.GetUserData(uri, _token));
         }        
     }
     public void GetUserDataSuccess(UserData_API userData)
     {
         UserDataManager.UserData.SetUserData_API(userData);
         OnGetUserdataSuccess?.Invoke(userData);
+    }
+
+    /// <summary>
+    /// Trigger this event when the lobby return the map List
+    /// </summary>
+    /// <param name="mapList"></param>
+    void OnGetMapProcess(MapShortListSchema mapList)
+    {
+        MapNodeDataManager.UpdateMapList(mapList);
+    }
+    /// <summary>
+    /// Trigger this event when the lobby return the map detail
+    /// </summary>
+    /// <param name="mapList"></param>
+    void OnGetMapDetailProcess(MapSchema map)
+    {
+        MapNodeDataManager.UpdateMap(map);
     }
     #endregion
 }

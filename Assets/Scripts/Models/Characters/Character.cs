@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public enum CharacterStatus 
@@ -45,19 +46,39 @@ public class NFTItem
     public string nftId;
 }
 
-[Serializable]
-public class Character
+public class CharacterBaseStat
 {
     public string name;
+    public string key;
+    public int baseAtk;
+    public int baseDef;
+    public int baseSpeed;
+    public int baseHp;
+    public int level;
+    public int position;
+
+    public CharacterBaseStat(CharacterSchema character)
+    {
+        name = character.name;
+        key = character.key;
+        baseAtk = Mathf.RoundToInt(character.atk);
+        baseDef = Mathf.RoundToInt(character.def);
+        baseHp = Mathf.RoundToInt(character.hp);
+        baseSpeed = Mathf.RoundToInt(character.speed);
+        level = Mathf.RoundToInt(character.level);
+    }
+}
+
+public class Character
+{
+    public CharacterBaseStat baseStat;
     public int atk;
     public int def;
     public int speed;
     public int hp;
-    public int baseAtk;
-    public int baseSpeed;
-    public int baseHp;
+    
     public int exp;
-    public int level;
+    
 
     public NFTItem[] itemList;
     public CharacterStatus status;

@@ -82,7 +82,7 @@ public class LobbyView : MonoBehaviour
     /// Update the Room Type Drop down List
     /// </summary>
     /// <param name="_mapList"></param>
-    public void UpdateMapList(List<BountyMap_Short> _mapList)
+    public void UpdateMapList(List<MapShort_MSG> _mapList)
     {
         RoomType_DD.ClearOptions();
 

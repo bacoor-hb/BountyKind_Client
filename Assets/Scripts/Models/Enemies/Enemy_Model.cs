@@ -14,7 +14,7 @@ public class Enemy
     public int level { get; set; }
     public int position { get; set; }
 
-    public Enemy(CharacterSchema character)
+    public Enemy(Character_MSG character)
     {
         name = character.name;
         key = character.key;

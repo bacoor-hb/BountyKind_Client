@@ -109,11 +109,13 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     {
         lobbyRoom.OnMessage<string>(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT.ToString(), (message) =>
         {
-            onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT, message);
+            MapShortList_MSG data = JsonUtility.FromJson<MapShortList_MSG>(message);
+            onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT, data);
         });
         lobbyRoom.OnMessage<string>(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT.ToString(), (message) =>
         {
-            onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT, message);
+            Map_MSG data = JsonUtility.FromJson<Map_MSG>(message);
+            onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT, data);
         });
         OnJoinLobbySuccess?.Invoke();
         Debug.Log("[BountyColyseusManager] AssignLobbyEvent success.");

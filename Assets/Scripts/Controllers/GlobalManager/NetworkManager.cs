@@ -15,8 +15,8 @@ public class NetworkManager : MonoBehaviour
 
     public delegate void OnEventTrigger<T>(T data);
     public OnEventTrigger<string> OnLoginSuccess;
-    public OnEventTrigger<MapShortListSchema> OnGetMapSuccess;
-    public OnEventTrigger<MapSchema> OnGetMapDetailSuccess;
+    public OnEventTrigger<MapShortList_MSG> OnGetMapSuccess;
+    public OnEventTrigger<Map_MSG> OnGetMapDetailSuccess;
     public OnEventTrigger<UserData_API> OnGetUserdataSuccess;
 
     [SerializeField]
@@ -151,7 +151,7 @@ public class NetworkManager : MonoBehaviour
     /// Trigger this event when the lobby return the map List
     /// </summary>
     /// <param name="mapList"></param>
-    void OnGetMapProcess(MapShortListSchema mapList)
+    void OnGetMapProcess(MapShortList_MSG mapList)
     {
         MapNodeDataManager.UpdateMapList(mapList);
     }
@@ -159,7 +159,7 @@ public class NetworkManager : MonoBehaviour
     /// Trigger this event when the lobby return the map detail
     /// </summary>
     /// <param name="mapList"></param>
-    void OnGetMapDetailProcess(MapSchema map)
+    void OnGetMapDetailProcess(Map_MSG map)
     {
         MapNodeDataManager.UpdateMap(map);
     }

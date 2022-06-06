@@ -21,7 +21,7 @@ public class CONSTS
     #endregion
 
     #region NETWORK SETTING
-    public const string HOST_ENDPOINT_SOCKET = "wss://dev-game-server.w3w.app ";
+    public const string HOST_ENDPOINT_SOCKET = "wss://f083-113-161-74-234.ap.ngrok.io";
     public const string HOST_ENDPOINT_API = "https://dev-game-api.w3w.app/";
     public const string HOST_GET_MAP_API = HOST_ENDPOINT_API + "api/maps";
     public const string HOST_GET_USERDATA_API = HOST_ENDPOINT_API + "api/users/detail";

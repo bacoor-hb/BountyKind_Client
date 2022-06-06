@@ -96,3 +96,58 @@ public class UserData_WebLogin
     public string img;
     public string token;
 }
+
+[Serializable]
+public class MapShortList_MSG
+{
+    public MapShort_MSG[] maps;
+}
+
+[Serializable]
+public class MapShort_MSG
+{
+    public string key;
+    public string name;
+    public float totalNode;
+
+    public MapShort_MSG(string _key, string _name, float _totalNode) {
+        key = _key;
+        name = _name;
+        totalNode = _totalNode;
+    }
+}
+
+[Serializable]
+public class Map_MSG
+{
+    public string key;
+    public string name;
+    public float totalNode;
+    public Node_MSG[] nodes;
+}
+
+public class Node_MSG
+{
+    public string key;
+    public string name;
+    public float position;
+    public string type;
+    public Character_MSG[] enemy = {};
+    public float[] preNode;
+    public float[] nextNode;
+}
+
+public class Status_MSG
+{
+    public float atk;
+    public float def;
+    public float speed;
+    public float hp;
+}
+public class Character_MSG: Status_MSG
+{
+    public string key;
+    public string name;
+    public float position;
+    public float level;
+}

@@ -8,7 +8,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     [SerializeField]
     private LobbyView LobbyView;
 
-    private List<BountyMap_Short> bountyMaps;
+    private List<MapShort_MSG> bountyMaps;
     private string selectedMapKey;
 
     private UserDataManager UserDataManager;
@@ -141,21 +141,20 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
                 case LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT:
                     Debug.Log("[HandleLobbyMessage] MAP LIST RESULT.");
                     //Convert Server Data to Game Data
-                    string mapJsonData = (string)message;
-                    MapShortListSchema mapShortList = (MapShortListSchema)message;
+                    MapShortList_MSG mapShortList = (MapShortList_MSG)message;
                     //MapShortListSchema mapShortList = new MapShortListSchema()
                     NetworkManager.OnGetMapSuccess?.Invoke(mapShortList);
-                    List<BountyMap_Short> mapShortLst = new List<BountyMap_Short>();
-                    for (int i = 0; i < mapShortList.maps.Count; i++)
+                    List<MapShort_MSG> mapShortLst = new List<MapShort_MSG>();
+                    for (int i = 0; i < mapShortList.maps.Length; i++)
                     {
-                        mapShortLst.Add(new BountyMap_Short(mapShortList.maps[i]));
+                        mapShortLst.Add(new MapShort_MSG(mapShortList.maps[i].key, mapShortList.maps[i].name, mapShortList.maps[i].totalNode));
                     }
                     OnGetMapSuccess(mapShortLst);                    
                     break;
                 case LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT:
                     Debug.Log("[HandleLobbyMessage] MAP NODE RESULT.");
-                    string nodeJsonData = (string)message;
-                    MapSchema mapSchema = (MapSchema)message;
+                    Map_MSG mapSchema = (Map_MSG)message;
+                    Debug.Log(mapSchema.name);
                     NetworkManager.OnGetMapDetailSuccess?.Invoke(mapSchema);
                     break;
                 default:
@@ -172,7 +171,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     /// Trigger when the server return the map list: Update the map list on the UI.
     /// </summary>
     /// <param name="mapList"></param>
-    void OnGetMapSuccess(List<BountyMap_Short> mapList)
+    void OnGetMapSuccess(List<MapShort_MSG> mapList)
     {
         bountyMaps = mapList;
 

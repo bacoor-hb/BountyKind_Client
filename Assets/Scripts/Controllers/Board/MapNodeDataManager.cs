@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class MapNodeDataManager : MonoBehaviour
 {
-    public List<BountyMap_Short> mapList;
+    public List<MapShort_MSG> mapList;
     public BountyMap currentMap;
     // Start is called before the first frame update
     public void Init()
     {
-        mapList = new List<BountyMap_Short>();
+        mapList = new List<MapShort_MSG>();
         currentMap = new BountyMap();
     }
 
@@ -17,12 +17,12 @@ public class MapNodeDataManager : MonoBehaviour
     /// Update Map list from the server Schema
     /// </summary>
     /// <param name="mapShortList"></param>
-    public void UpdateMapList(MapShortListSchema mapShortList)
+    public void UpdateMapList(MapShortList_MSG mapShortList)
     {
-        mapList = new List<BountyMap_Short>();
-        for (int i = 0; i < mapShortList.maps.Count; i++)
+        mapList = new List<MapShort_MSG>();
+        for (int i = 0; i < mapShortList.maps.Length; i++)
         {
-            mapList.Add(new BountyMap_Short(mapShortList.maps[i]));
+            mapList.Add(new MapShort_MSG(mapShortList.maps[i].key, mapShortList.maps[i].name, mapShortList.maps[i].totalNode));
         }
     }
 
@@ -30,7 +30,7 @@ public class MapNodeDataManager : MonoBehaviour
     /// Update Map detail to the client cache
     /// </summary>
     /// <param name="mapSchema"></param>
-    public void UpdateMap(MapSchema mapSchema)
+    public void UpdateMap(Map_MSG mapSchema)
     {
         currentMap = new BountyMap();
 

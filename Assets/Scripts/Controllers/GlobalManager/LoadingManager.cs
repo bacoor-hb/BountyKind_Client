@@ -6,14 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class LoadingManager : MonoBehaviour
 {
+    private Queue<LoadingAction> actionsQueue;
     [SerializeField]
     private LoadingView LoadingView;
     [HideInInspector]
     public SCENE_NAME targetScene;
 
+    bool onLoadingAction;
     public void Init()
     {
         targetScene = SCENE_NAME.MainMenu;
+        actionsQueue = new Queue<LoadingAction>();
+        onLoadingAction = false;
     }
 
     /// <summary>
@@ -24,7 +28,9 @@ public class LoadingManager : MonoBehaviour
     public IEnumerator LoadScene_Async(SCENE_NAME sceneName)
     {
         LoadingView.SetCanvasStatus(true);
-        yield return null;
+        yield return new WaitForEndOfFrame();
+
+        ActionProcess();
 
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName.ToString());
         asyncOperation.allowSceneActivation = false;
@@ -33,13 +39,14 @@ public class LoadingManager : MonoBehaviour
             //Debug.Log("[LoadScene_Async] ProgressB :" + asyncOperation.progress);
             LoadingView.IncrementProgess(asyncOperation.progress);
             LoadingView.SetMessage(asyncOperation.progress * 100 + "%");
-            if (asyncOperation.progress >= 0.9f)
+            if (asyncOperation.progress >= 0.9f
+                && onLoadingAction)
             { 
                 asyncOperation.allowSceneActivation = true;
                 LoadingView.SetCanvasStatus(false);
             }
-
-            yield return null;
+            
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
@@ -54,5 +61,30 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("[LoadingManager] Load With LoadingScene: " + sceneName.ToString());
         StartCoroutine(LoadScene_Async(SCENE_NAME.LoadingScene));
+    }
+
+    public void AddLoadingAction(LoadingAction loadingAction)
+    {
+        actionsQueue.Enqueue(loadingAction);
+    }
+
+    /// <summary>
+    /// Process the last action in the Queue.
+    /// </summary>
+    private void ActionProcess()
+    {
+        if(actionsQueue.Count > 0)
+        {
+            onLoadingAction = false;
+            LoadingAction tmpAction = actionsQueue.Dequeue();
+            tmpAction.OnEndLoadingAction = null;
+            tmpAction.OnEndLoadingAction += ActionProcess;
+
+            tmpAction.StartAction();
+        }
+        else
+        {
+            onLoadingAction = true;
+        }
     }
 }

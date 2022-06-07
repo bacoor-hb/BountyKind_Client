@@ -3,16 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GetMapsResponse_Short
-{
-    public List<BountyMap_Short> data;
-}
-
-public class GetMapsDetailResponse
-{
-    public BountyMap data;
-}
-
 public class MapNode
 {
     public string name;
@@ -60,16 +50,51 @@ public class BountyMap
     public List<MapNode> nodes;
 }
 
-public class BountyMap_Short
+[Serializable]
+public class MapShortList_MSG
+{
+    public MapShort_MSG[] maps;
+}
+
+[Serializable]
+public class MapShort_MSG
 {
     public string key;
     public string name;
     public int totalNode;
 
-    public BountyMap_Short(MapShortSchema node)
+    public MapShort_MSG(string _key, string _name, float _totalNode)
+    {
+        key = _key;
+        name = _name;
+        totalNode = Mathf.RoundToInt(_totalNode);
+    }
+
+    public MapShort_MSG(MapShortSchema node)
     {
         key = node.key;
         name = node.name;
         totalNode = Mathf.RoundToInt(node.totalNode);
     }
+}
+
+[Serializable]
+public class Map_MSG
+{
+    public string key;
+    public string name;
+    public float totalNode;
+    public Node_MSG[] nodes;
+}
+
+[Serializable]
+public class Node_MSG
+{
+    public string key;
+    public string name;
+    public float position;
+    public string type;
+    public Character_MSG[] enemy = { };
+    public float[] preNode;
+    public float[] nextNode;
 }

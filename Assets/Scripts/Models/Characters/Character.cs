@@ -46,6 +46,7 @@ public class NFTItem
     public string nftId;
 }
 
+[Serializable]
 public class CharacterBaseStat
 {
     public string name;
@@ -69,6 +70,7 @@ public class CharacterBaseStat
     }
 }
 
+[Serializable]
 public class Character
 {
     public CharacterBaseStat baseStat;
@@ -93,4 +95,22 @@ public class Character
     public long updatedOwnerAt;
 
     public bool inGame;
+}
+
+[Serializable]
+public class Status_MSG
+{
+    public float atk;
+    public float def;
+    public float speed;
+    public float hp;
+}
+
+[Serializable]
+public class Character_MSG : Status_MSG
+{
+    public string key;
+    public string name;
+    public float position;
+    public float level;
 }

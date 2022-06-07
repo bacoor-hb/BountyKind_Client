@@ -21,10 +21,14 @@ public class CONSTS
     #endregion
 
     #region NETWORK SETTING
-    public const string HOST_ENDPOINT_SOCKET = "wss://f083-113-161-74-234.ap.ngrok.io";
+    public const string HOST_ENDPOINT_SOCKET = "wss://dev-game-server.w3w.app/";
     public const string HOST_ENDPOINT_API = "https://dev-game-api.w3w.app/";
     public const string HOST_GET_MAP_API = HOST_ENDPOINT_API + "api/maps";
     public const string HOST_GET_USERDATA_API = HOST_ENDPOINT_API + "api/users/detail";
+    #endregion
+
+    #region LOADING DETAIL MESSAGE
+    public const string LOADING_DETAIL_LOADMAP = "Initialize the map...";
     #endregion
 }
 
@@ -41,11 +45,6 @@ public enum SCENE_NAME
     GameScene,
     LoadingScene,
     CreditScene,
-
-    Test_Login_Success,
-    Test_Create_Room,
-    Test_Login,
-    Test_Game_Scene
 }
 
 public enum CYCLE_TURN 

@@ -32,8 +32,13 @@ public class MapNodeDataManager : MonoBehaviour
     /// <param name="mapSchema"></param>
     public void UpdateMap(Map_MSG mapSchema)
     {
-        currentMap = new BountyMap();
+        if(mapSchema == null|| mapSchema.nodes == null)
+        {
+            Debug.LogError("[UpdateMap] Map Data Invalid...");
+            return;
+        }
 
+        currentMap = new BountyMap();
         currentMap.key = mapSchema.key;
         currentMap.name = mapSchema.name;
         currentMap.totalNode = Mathf.RoundToInt(mapSchema.totalNode);

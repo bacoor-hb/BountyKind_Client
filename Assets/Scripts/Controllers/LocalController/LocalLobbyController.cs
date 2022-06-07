@@ -127,6 +127,12 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     /// </summary>
     void OnCreateRoomSuccess()
     {
+        //Create Loading map Component.
+        Loading_LoadMap loading_LoadMap = LoadingManager.gameObject.AddComponent<Loading_LoadMap>();
+        loading_LoadMap.Init(CONSTS.LOADING_DETAIL_LOADMAP, 0.5f);
+        LoadingManager.AddLoadingAction(loading_LoadMap);
+
+        //Call the Load Scene via the Loading Scene.
         LoadingManager.LoadWithLoadingScene(SCENE_NAME.GameScene);
     }
     #endregion
@@ -142,7 +148,6 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
                     Debug.Log("[HandleLobbyMessage] MAP LIST RESULT.");
                     //Convert Server Data to Game Data
                     MapShortList_MSG mapShortList = (MapShortList_MSG)message;
-                    //MapShortListSchema mapShortList = new MapShortListSchema()
                     NetworkManager.OnGetMapSuccess?.Invoke(mapShortList);
                     List<MapShort_MSG> mapShortLst = new List<MapShort_MSG>();
                     for (int i = 0; i < mapShortList.maps.Length; i++)

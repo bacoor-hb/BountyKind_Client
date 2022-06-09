@@ -10,12 +10,13 @@ public class LocalGameView : MonoBehaviour
     public Button RollDice_Btn;
     public Button Move_Btn;
     public Button EndTurn_Btn;
+    public Button Exit_Btn;
 
-    [Header("User Data Text")]
-    public TextMeshProUGUI UserName_Txt;
-    public TextMeshProUGUI RollTime_Txt;
+    [Header("User Data")]
+    public TextMeshProUGUI userNameTxt;
+    public TextMeshProUGUI energyTxt;
+    public TextMeshProUGUI yuPointTxt;
 
-    
     /// <summary>
     /// Reset all Button Event and Clear all the Text
     /// </summary>
@@ -24,23 +25,11 @@ public class LocalGameView : MonoBehaviour
         RollDice_Btn.onClick.RemoveAllListeners();
         Move_Btn.onClick.RemoveAllListeners();
         EndTurn_Btn.onClick.RemoveAllListeners();
+        Exit_Btn.onClick.RemoveAllListeners();
 
         SetBtn_State(ACTION_TYPE.ROLL_DICE, true);
         SetBtn_State(ACTION_TYPE.MOVE, false);
         SetBtn_State(ACTION_TYPE.END_TURN, true);
-
-        UserName_Txt.text = "--------";
-        RollTime_Txt.text = "--------";
-    }
-
-    /// <summary>
-    /// Update the user Data on the UI
-    /// </summary>
-    /// <param name="_data"></param>
-    public void SetUserData(WalletData _data)
-    {
-        UserName_Txt.text = _data.Owner.Address;
-        RollTime_Txt.text = _data.TotalDice.ToString();
     }
 
     public void SetBtn_State(ACTION_TYPE actionType, bool _state)
@@ -59,5 +48,12 @@ public class LocalGameView : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void UpdateUserData(UserData userData)
+    {
+        userNameTxt.text = userData.username;
+        energyTxt.text = userData.tokenBalance.Energy.ToString();
+        yuPointTxt.text = userData.tokenBalance.YU_Point.ToString();
     }
 }

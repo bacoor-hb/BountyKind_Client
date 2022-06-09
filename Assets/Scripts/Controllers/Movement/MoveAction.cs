@@ -26,4 +26,9 @@ public class MoveAction : Action
     {
         base.OnStartAction();
     }
+
+    public override void SetActionData(object args)
+    {
+        base.SetActionData(args);
+    }
 }

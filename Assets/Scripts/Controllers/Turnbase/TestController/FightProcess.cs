@@ -20,17 +20,8 @@ public class FightProcess : MonoBehaviour
     {
         GameObject currentGameObj;
         GameObject targetGameObj;
-        if (battleData.type == "YOUR_PET")
-        {
-            currentGameObj = localTestFightController.players[userId].characters[battleData.currentUnit.id];
-            targetGameObj = localTestFightController.players[userId].characters[battleData.targetUnit.id];
-        }
-        else
-        {
-            currentGameObj = localTestFightController.players[userId].characters[battleData.currentUnit.id];
-            targetGameObj = localTestFightController.players[userId].characters[battleData.targetUnit.id];
-        }
-
+        currentGameObj = localTestFightController.players[userId].characters[battleData.currentUnit.id];
+        targetGameObj = localTestFightController.players[userId].characters[battleData.targetUnit.id];
         UnitController prefabController = currentGameObj.GetComponent<UnitController>();
         Vector3 targetPos = targetGameObj.GetComponent<Transform>().position;
         prefabController.HandleMove(targetPos, "Crouch_b");

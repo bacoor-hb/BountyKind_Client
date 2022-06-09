@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit_Pet
       objectReference: {fileID: 0}
+    - target: {fileID: 176000, guid: 970bf01606e0c194281edb901a23dd06, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 477072, guid: 970bf01606e0c194281edb901a23dd06, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -106,6 +106,26 @@ public class LocalTestFightController : MonoBehaviour
         turnBaseController.StartGame();
     }
 
+    public void SetAllCharactersPosition(List<Character> yourCharacters, List<Character> opponentCharacters)
+    {
+        for (var i = 0; i < yourCharacters.Count; i++)
+        {
+            int characterPostion = yourCharacters[i].baseStat.position;
+            Vector3 position = spawnPosPets[characterPostion].GetComponent<Transform>().position;
+            Vector3 pos = new Vector3(position.x, position.y, position.z);
+            players[0].AddUnit(players[0].RenderUnit(prefabPet, pos, players[0].transform), yourCharacters[i].nftId);
+        }
+
+        for (var i = 0; i < opponentCharacters.Count; i++)
+        {
+            int characterPostion = opponentCharacters[i].baseStat.position;
+            Vector3 position = spawnPosEnemies[characterPostion].GetComponent<Transform>().position;
+            Vector3 pos = new Vector3(position.x, position.y, position.z);
+            players[0].AddUnit(players[0].RenderUnit(prefabMonster, pos, players[0].transform), opponentCharacters[i].nftId);
+
+        }
+    }
+
     public static void SetUnitQueueList(List<GameObject> _unitsInQueue)
     {
         unitsInQueue = _unitsInQueue;

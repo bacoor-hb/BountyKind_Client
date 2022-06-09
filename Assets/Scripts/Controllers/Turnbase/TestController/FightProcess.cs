@@ -5,7 +5,6 @@ using UnityEngine;
 public class FightProcess : MonoBehaviour
 {
     public delegate void OnEndFightAnimation();
-
     [SerializeField]
     private LocalTestFightController localTestFightController;
     void Start()
@@ -15,7 +14,7 @@ public class FightProcess : MonoBehaviour
 
     void Update()
     {
-        
+
     }
     public void AnimateFight(BattleData battleData, int userId)
     {
@@ -23,13 +22,13 @@ public class FightProcess : MonoBehaviour
         GameObject targetGameObj;
         if (battleData.type == "YOUR_PET")
         {
-            currentGameObj = localTestFightController.players[userId].yourPets[battleData.currentUnit.id];
-            targetGameObj = localTestFightController.players[userId].opponentPets[battleData.targetUnit.id];
+            currentGameObj = localTestFightController.players[userId].characters[battleData.currentUnit.id];
+            targetGameObj = localTestFightController.players[userId].characters[battleData.targetUnit.id];
         }
         else
         {
-            currentGameObj = localTestFightController.players[userId].opponentPets[battleData.currentUnit.id];
-            targetGameObj = localTestFightController.players[userId].yourPets[battleData.targetUnit.id];
+            currentGameObj = localTestFightController.players[userId].characters[battleData.currentUnit.id];
+            targetGameObj = localTestFightController.players[userId].characters[battleData.targetUnit.id];
         }
 
         UnitController prefabController = currentGameObj.GetComponent<UnitController>();

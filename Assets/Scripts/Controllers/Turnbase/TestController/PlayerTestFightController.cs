@@ -9,8 +9,7 @@ public class PlayerTestFightController : IPlayer
     [SerializeField]
     private Action EndTurnAction;
     [SerializeField]
-    public Dictionary<int, GameObject> yourPets = new Dictionary<int, GameObject>();
-    public Dictionary<int, GameObject> opponentPets = new Dictionary<int, GameObject>();
+    public Dictionary<string, GameObject> characters = new Dictionary<string, GameObject>();
 
     private TurnBaseController TurnBaseController;
 
@@ -19,22 +18,14 @@ public class PlayerTestFightController : IPlayer
     /// </summary>
     /// <param name="_id"></param>
     /// 
-    public void AddUnit(GameObject unit, string type)
+    public void AddUnit(GameObject unit, string unitId)
     {
-        if(type == "YOUR_PET")
-        {
-            yourPets.Add(yourPets.Count, unit);
-        }
-        else
-        {
-            opponentPets.Add(opponentPets.Count, unit);
-        }
-
+        characters.Add(unitId, unit);
     }
 
     public GameObject RenderUnit(GameObject prefab, Vector3 pos, Transform parent)
     {
-       return Instantiate(prefab, pos, Quaternion.identity, parent);
+        return Instantiate(prefab, pos, Quaternion.identity, parent);
     }
     public void InitPlayer(int _id, TurnBaseController _controller)
     {
@@ -69,8 +60,8 @@ public class PlayerTestFightController : IPlayer
 
     public override void StartTurn()
     {
-        
- 
+
+
     }
 
     public override void EndTurn()
@@ -80,7 +71,7 @@ public class PlayerTestFightController : IPlayer
     #endregion      
     public void OnFightStart()
     {
-      
+
     }
     public void OnFightEnd()
     {

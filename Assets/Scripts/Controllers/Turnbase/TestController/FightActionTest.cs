@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 public class BattleUnit
 {
-    public int id;
+    public string id;
     public int health;
-    public BattleUnit(int _id, int _health)
+    public BattleUnit(string _id, int _health)
     {
         id = _id;
         health = _health;
@@ -15,12 +15,14 @@ public class BattleData
 {
     public BattleUnit currentUnit;
     public BattleUnit targetUnit;
+    public int turn;
     public string type;
-    public BattleData(BattleUnit _currentUnit, BattleUnit _targetUnit, string _type)
+    public BattleData(BattleUnit _currentUnit, BattleUnit _targetUnit, string _type, int _turn)
     {
         currentUnit = _currentUnit;
         targetUnit = _targetUnit;
         type = _type;
+        turn = _turn;
     }
 }
 public class FightActionTest : Action
@@ -29,12 +31,20 @@ public class FightActionTest : Action
     public static event OnEndTurnFights onEndTurnFights;
     public delegate void InFight(BattleData battleData, int userId);
     public static event InFight inFight;
+    public delegate void OnStartFight(string unitId, int turn);
+    public static event OnStartFight startFight;
+    public delegate void OnEndFightAction(string unitId);
+    public static event OnEndFightAction endFightAction;
+    public delegate void EndFight(int userId);
+    public static event EndFight endFight;
     public List<BattleData> battleDatas;
 
     public void Start()
     {
         LocalTestFightController.onReceiveBattleDatas += HandleReceiveBattleDatas;
         UnitController.onEndFight += HandleOnEndFight;
+        UnitQueueController.onEndQueue += OnFightAction;
+
     }
     public override void InitAction(int _userId, TurnBaseController _controller)
     {
@@ -50,7 +60,7 @@ public class FightActionTest : Action
     public override void OnStartAction()
     {
         base.OnStartAction();
-        OnFightAction();
+        startFight(battleDatas[currentAction].currentUnit.id, battleDatas[currentAction].turn);
     }
 
     public void OnFightAction()
@@ -74,17 +84,18 @@ public class FightActionTest : Action
 
     void HandleOnEndFight()
     {
-        if (currentAction != 5)
+        if (currentAction != battleDatas.Count - 1)
         {
+            endFightAction(battleDatas[currentAction].currentUnit.id);
             currentAction++;
             turnBaseController.EndAction();
         }
         else
         {
+            endFightAction(battleDatas[currentAction].currentUnit.id);
             currentAction = 0;
             turnBaseController.EndAction();
             turnBaseController.EndTurn();
         }
-
     }
 }

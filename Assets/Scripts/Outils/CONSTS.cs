@@ -23,6 +23,8 @@ public class CONSTS
     #region NETWORK SETTING
     public const string HOST_ENDPOINT_SOCKET = "wss://dev-game-server.w3w.app/";
     public const string HOST_ENDPOINT_API = "https://dev-game-api.w3w.app/";
+    //public const string HOST_ENDPOINT_SOCKET = "ws://192.168.9.5:2567/";
+    //public const string HOST_ENDPOINT_API = "http://192.168.9.5:4000/";
     public const string HOST_GET_MAP_API = HOST_ENDPOINT_API + "api/maps";
     public const string HOST_GET_USERDATA_API = HOST_ENDPOINT_API + "api/users/detail";
     #endregion

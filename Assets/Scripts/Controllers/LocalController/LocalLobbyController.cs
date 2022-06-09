@@ -9,7 +9,6 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     private LobbyView LobbyView;
 
     private List<MapShort_MSG> bountyMaps;
-    private string selectedMapKey;
 
     private UserDataManager UserDataManager;
     private MapNodeDataManager MapNodeDataManager;
@@ -115,8 +114,8 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     {
         if (bountyMaps != null && bountyMaps.Count > 0)
         {
-            NetworkManager.Send(SEND_TYPE.LOBBY_SEND, LOBBY_SENT_EVENTS.MAP_NODE.ToString(), selectedMapKey);
-            NetworkManager.CreateRoom(ROOM_TYPE.GAME_ROOM, selectedMapKey);
+            
+            NetworkManager.CreateRoom(ROOM_TYPE.GAME_ROOM, UserDataManager.GetCurrentMap());
         }            
         else
             Debug.LogError("[RoomEventController] Create Room ERROR: No Map Data.");
@@ -129,7 +128,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     {
         //Create Loading map Component.
         Loading_LoadMap loading_LoadMap = LoadingManager.gameObject.AddComponent<Loading_LoadMap>();
-        loading_LoadMap.Init(CONSTS.LOADING_DETAIL_LOADMAP, 0.5f);
+        loading_LoadMap.Init(CONSTS.LOADING_DETAIL_LOADMAP, 0.5f, UserDataManager.GetCurrentMap());
         LoadingManager.AddLoadingAction(loading_LoadMap);
 
         //Call the Load Scene via the Loading Scene.
@@ -186,11 +185,11 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
         LobbyView.CreateRoom_Btn.enabled = true;
         LobbyView.UpdateMapList(mapList);
 
-        selectedMapKey = bountyMaps[0].key;
+        UserDataManager.SetCurrentMap(bountyMaps[0].key);
         LobbyView.RoomType_DD.onValueChanged.RemoveAllListeners();
         LobbyView.RoomType_DD.onValueChanged.AddListener((currentMap) =>
         {
-            selectedMapKey = bountyMaps[currentMap].key;
+            UserDataManager.SetCurrentMap(bountyMaps[currentMap].key);
         });
 
         

@@ -126,7 +126,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// </summary>
     private void AssignRoomEvent()
     {
-        gameRoom.OnMessage<RollResultSchema>(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT.ToString(), (message) =>
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT.ToString(), (message) =>
         {
             onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT, message);
         });
@@ -170,9 +170,15 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
                 if (gameRoom.colyseusConnection.IsOpen)
                 {
                     if(message != null)
+                    {
+                        Debug.Log("[BountyColyseusManager] Send: "+ sendChannel.ToString() + " | " + _data);
                         gameRoom.Send(_data, message);
+                    }                        
                     else
+                    {
+                        Debug.Log("[BountyColyseusManager] Send no data: " + sendChannel.ToString() + " | " + _data);
                         gameRoom.Send(_data);
+                    }                        
                 }
                 else
                 {

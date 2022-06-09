@@ -29,6 +29,10 @@ public class LocalGameController : MonoBehaviour
     [SerializeField]
     private LocalGameView LocalGameView;
 
+    [Header("Network Event Control")]
+    [SerializeField]
+    private Multiplayer_GameEventController Multiplayer_GameEvent;
+
     private UserDataManager UserDataManager;
     //-------------------------------------------------------------------------------------------
     #region Initialize
@@ -69,6 +73,9 @@ public class LocalGameController : MonoBehaviour
         //Init Game Event Controller
         GameEventController.Init();
 
+        //Init the Multiplayer Game Event Controller
+        Multiplayer_GameEvent.OnRollResultReturn = null;
+        Multiplayer_GameEvent.OnRollResultReturn += RollDice;
     }
     #endregion
 
@@ -147,15 +154,23 @@ public class LocalGameController : MonoBehaviour
         }        
     }
 
-    public void RollDice()
+    public void Call_RollDice()
     {
-        DicesController.RollDice(GetDiceValue());
+        Debug.Log("[LocalGameController] Call_RollDice");
+        Multiplayer_GameEvent.HandleRoll();
 
         //Deactivate the Roll button if the roll number is 0
         if (rollNumber <= 0)
         {
             LocalGameView.SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
-        }        
+        }
+    }
+
+    public void RollDice(RollResult_MSG rollResult)
+    {
+        DicesValue = new int[1];
+        DicesValue[0] = Mathf.RoundToInt(rollResult.rollResult);
+        DicesController.RollDice(DicesValue);
     }
 
     public void End_RollDice()
@@ -284,7 +299,7 @@ public class LocalGameController : MonoBehaviour
             TurnBaseController.Register(players[i]);
 
             players[i].OnStartRollingDice = null;
-            players[i].OnStartRollingDice += (x) => RollDice();
+            players[i].OnStartRollingDice += (x) => Call_RollDice();
 
             players[i].OnEndRollingDice = null;
             players[i].OnEndRollingDice += (x) => End_RollDice();

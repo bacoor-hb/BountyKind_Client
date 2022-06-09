@@ -5,12 +5,12 @@ using UnityEngine;
 public class MapNodeDataManager : MonoBehaviour
 {
     public List<MapShort_MSG> mapList;
-    public BountyMap currentMap;
+    public Dictionary<string,BountyMap> cachedMap;
     // Start is called before the first frame update
     public void Init()
     {
         mapList = new List<MapShort_MSG>();
-        currentMap = new BountyMap();
+        cachedMap = new Dictionary<string, BountyMap>();
     }
 
     /// <summary>
@@ -38,16 +38,26 @@ public class MapNodeDataManager : MonoBehaviour
             return;
         }
 
-        currentMap = new BountyMap();
-        currentMap.key = mapSchema.key;
-        currentMap.name = mapSchema.name;
-        currentMap.totalNode = Mathf.RoundToInt(mapSchema.totalNode);
-        currentMap.nodes = new List<MapNode>();
+        if(this.cachedMap.ContainsKey(mapSchema.key))
+        {
+            Debug.Log("[UpdateMap] Map existed...");
+            return;
+        }
 
-        for(int i = 0; i < currentMap.totalNode; i++)
+        var cachedMap = new BountyMap
+        {
+            key = mapSchema.key,
+            name = mapSchema.name,
+            totalNode = Mathf.RoundToInt(mapSchema.totalNode),
+            nodes = new List<MapNode>()
+        };
+
+        for (int i = 0; i < cachedMap.totalNode; i++)
         {
             MapNode node = new MapNode(mapSchema.nodes[i]);
-            currentMap.nodes.Add(node);
+            cachedMap.nodes.Add(node);
         }
+
+        this.cachedMap.Add(cachedMap.key, cachedMap);
     }
 }

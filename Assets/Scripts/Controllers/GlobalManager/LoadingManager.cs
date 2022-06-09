@@ -57,10 +57,10 @@ public class LoadingManager : MonoBehaviour
     public void LoadWithLoadingScene(SCENE_NAME sceneName)
     {
         targetScene = sceneName;
-        PlayerPrefs.SetString(CONSTS.SCENE_KEY, sceneName.ToString());
 
         Debug.Log("[LoadingManager] Load With LoadingScene: " + sceneName.ToString());
-        StartCoroutine(LoadScene_Async(SCENE_NAME.LoadingScene));
+        SceneManager.LoadScene(SCENE_NAME.LoadingScene.ToString());
+        //StartCoroutine(LoadScene_Async(SCENE_NAME.LoadingScene));
     }
 
     public void AddLoadingAction(LoadingAction loadingAction)

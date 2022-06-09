@@ -5,10 +5,11 @@ using UnityEngine;
 public class UserDataManager : MonoBehaviour
 {
     public UserData UserData { get; private set; }
-
+    public UserGameStatus UserGameStatus { get; private set; }
     public void Init()
     {
         UserData = new UserData();
+        UserGameStatus = new UserGameStatus();
     }
 
     /// <summary>
@@ -53,5 +54,23 @@ public class UserDataManager : MonoBehaviour
         {
             return -1;
         }
+    }
+
+    /// <summary>
+    /// Set the selected map key
+    /// </summary>
+    /// <param name="mapKey"></param>
+    public void SetCurrentMap(string mapKey)
+    {
+        UserGameStatus.currentMap = mapKey;
+    }
+
+    /// <summary>
+    /// Get the map key selected
+    /// </summary>
+    /// <returns></returns>
+    public string GetCurrentMap()
+    {
+        return UserGameStatus.currentMap;
     }
 }

@@ -48,6 +48,7 @@ public class NFTItem
 
 public class CharacterBaseStat
 {
+    public string baseId;
     public string name;
     public string key;
     public int baseAtk;

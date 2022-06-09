@@ -46,7 +46,6 @@ public class NFTItem
     public string nftId;
 }
 
-[Serializable]
 public class CharacterBaseStat
 {
     public string name;
@@ -55,32 +54,37 @@ public class CharacterBaseStat
     public int baseDef;
     public int baseSpeed;
     public int baseHp;
-    public int level;
-    public int position;
+    public string description;
+    public string image;
+    public GameCharacterRarity rarity;
+    public GameCharacterRace race;
+    public GameCharacterElement element;
 
-    public CharacterBaseStat(CharacterSchema character)
-    {
-        name = character.name;
-        key = character.key;
-        baseAtk = Mathf.RoundToInt(character.atk);
-        baseDef = Mathf.RoundToInt(character.def);
-        baseHp = Mathf.RoundToInt(character.hp);
-        baseSpeed = Mathf.RoundToInt(character.speed);
-        level = Mathf.RoundToInt(character.level);
-    }
+    //public CharacterBaseStat(CharacterSchema character)
+    //{
+    //    name = character.name;
+    //    key = character.key;
+    //    baseAtk = Mathf.RoundToInt(character.atk);
+    //    baseDef = Mathf.RoundToInt(character.def);
+    //    baseHp = Mathf.RoundToInt(character.hp);
+    //    baseSpeed = Mathf.RoundToInt(character.speed);
+    //    //level = Mathf.RoundToInt(character.level);
+    //}
 }
 
-[Serializable]
-public class Character
+public class Character : CharacterBaseStat
 {
-    public CharacterBaseStat baseStat;
+    //public CharacterBaseStat baseStat;
+    public string id;
     public int atk;
     public int def;
     public int speed;
     public int hp;
     
     public int exp;
-    
+    public int level;
+
+    public int position;
 
     public NFTItem[] itemList;
     public CharacterStatus status;

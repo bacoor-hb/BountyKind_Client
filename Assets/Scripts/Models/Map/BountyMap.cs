@@ -83,7 +83,7 @@ public class Map_MSG
 {
     public string key;
     public string name;
-    public float totalNode;
+    public int totalNode;
     public Node_MSG[] nodes;
 }
 
@@ -92,9 +92,18 @@ public class Node_MSG
 {
     public string key;
     public string name;
-    public float position;
+    public int position;
     public string type;
     public Character_MSG[] enemy = { };
-    public float[] preNode;
-    public float[] nextNode;
+    public int[] preNode;
+    public int[] nextNode;
+}
+
+[Serializable]
+public  class RollResult_MSG
+{
+    public float currentNode;
+    public float totalStep;
+    public float totalRoll;
+    public float rollResult;
 }

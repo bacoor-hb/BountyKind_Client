@@ -5,28 +5,21 @@ using UnityEngine;
 
 public class Multiplayer_GameEventController : MonoBehaviour
 {
-    [SerializeField]
-    private LocalGameView LocalGameView;
-    [SerializeField]
-    private LocalGameController LocalGameController;
+    public delegate void OnEventReturn<T>(T returnData);
+    public OnEventReturn<RollResult_MSG> OnRollResultReturn;
 
     private UserDataManager UserDataManager;
-    private MapNodeDataManager MapNodeDataManager;
     private NetworkManager NetworkManager;
 
     // Start is called before the first frame update
     public void Init()
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
-        MapNodeDataManager = GlobalManager.Instance.MapNodeDataManager;
         NetworkManager = GlobalManager.Instance.NetworkManager;
 
         
         BountyColyseusManager.Instance.onGameReceiveMsg = null;
         BountyColyseusManager.Instance.onGameReceiveMsg += HandleGameMessage;
-
-        LocalGameView.RollDice_Btn.onClick.AddListener(() => { HandleRoll(); });
-        LocalGameView.Exit_Btn.onClick.AddListener(() => { HandleExitGame(); });
     }
 
 
@@ -39,7 +32,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
             switch (messageType)
             {
                 case GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT:
-                    RollResultSchema rollMessage = (RollResultSchema)message;
+                    RollResult_MSG rollMessage = JsonUtility.FromJson<RollResult_MSG>(message.ToString());
                     Debug.Log("[GameEventController] Roll Success...");
                     OnRollSuccess(rollMessage);
                     break;
@@ -63,11 +56,14 @@ public class Multiplayer_GameEventController : MonoBehaviour
     }
 
 
-
-    void HandleRoll()
+    /// <summary>
+    /// Handle the Roll Dice Event with the Server.
+    /// </summary>
+    public void HandleRoll()
     {
         if (UserDataManager.GetEnergy() > 0)
         {
+            Debug.Log("[Multiplayer_GameEventController] Send Roll event...");
             NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.ROLL_DICE.ToString());
         }
         else
@@ -77,9 +73,17 @@ public class Multiplayer_GameEventController : MonoBehaviour
         }
     }
 
-    void OnRollSuccess(RollResultSchema rollResult)
+    void OnRollSuccess(RollResult_MSG rollResult)
     {
-        LocalGameView.UpdateUserData(UserDataManager.UserData);
+        Debug.Log("[Multiplayer_GameEventController] OnRollSuccess");
+        UserDataManager.UserGameStatus.UpdateGameStatus(rollResult);
+        OnRollResultReturn?.Invoke(rollResult);
+    }
+
+    public void HandleLuckyDraw()
+    {
+        Debug.Log("[Multiplayer_GameEventController] Send Lucky Draw...");
+        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.LUCKY_DRAW.ToString());
     }
 
     void HandleExitGame()

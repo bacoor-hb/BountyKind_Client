@@ -30,6 +30,23 @@ public class MapNode
             }
         }
         
+        if(node.nextNode.Length > 0)
+        {
+            nextNode = new List<int>();
+            for(int i = 0; i < node.nextNode.Length; i++)
+            {
+                nextNode.Add(node.nextNode[i]);
+            }
+        }
+
+        if (node.preNode.Length > 0)
+        {
+            preNode = new List<int>();
+            for (int i = 0; i < node.preNode.Length; i++)
+            {
+                preNode.Add(node.preNode[i]);
+            }
+        }
     }
 }
 

@@ -6,27 +6,25 @@ public class GraphNode : MonoBehaviour
 {
     public int NodeID;
 
-    [SerializeField]
-    private GraphNode preNode;
-    [SerializeField]
-    public GraphNode nextNode;
+    public List<GraphNode> preNode;
+    public List<GraphNode> nextNode;
 
     /// <summary>
-    /// Get the next Node of the graph
+    /// Get the first next Node of the graph
     /// </summary>
     /// <returns></returns>
     public GraphNode Next()
     {
-        return nextNode;
+        return nextNode[0];
     }
 
     /// <summary>
-    /// Get the previous node of the graph
+    /// Get the first previous node of the graph
     /// </summary>
     /// <returns></returns>
     public GraphNode Previous()
     {
-        return preNode;
+        return preNode[0];
     }
 
     /// <summary>

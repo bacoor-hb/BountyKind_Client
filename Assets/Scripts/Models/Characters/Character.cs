@@ -119,3 +119,9 @@ public class Character_MSG : Status_MSG
     public float position;
     public float level;
 }
+
+public class FormationCharacter
+{
+    public string characterId;
+    public int position;
+}

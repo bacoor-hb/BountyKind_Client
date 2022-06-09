@@ -62,14 +62,23 @@ public class UserDataManager : MonoBehaviour
     /// <param name="mapKey"></param>
     public void SetCurrentMap(string mapKey)
     {
-        UserGameStatus.currentMap = mapKey;
+        UserGameStatus.UpdateMapKey(mapKey);
     }
 
     /// <summary>
     /// Get the map key selected
     /// </summary>
     /// <returns></returns>
-    public string GetCurrentMap()
+    public string GetCurrentMapId()
+    {
+        return UserGameStatus.currentMapKey;
+    }
+
+    /// <summary>
+    /// Get the current map detail
+    /// </summary>
+    /// <returns></returns>
+    public BountyMap GetCurrentMap()
     {
         return UserGameStatus.currentMap;
     }

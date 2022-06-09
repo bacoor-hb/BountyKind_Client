@@ -13,11 +13,14 @@ public class Graph : MonoBehaviour
     protected Dictionary<int, GraphNode> nodes;    
     protected Dictionary<string, GraphNode> currentNodes;
 
+    private UserDataManager UserDataManager;
     #region Initialize
     public void Init()
     {
         nodes = new Dictionary<int, GraphNode>();
         currentNodes = new Dictionary<string, GraphNode>();
+
+        UserDataManager = GlobalManager.Instance.UserDataManager;
     }
 
     /// <summary>
@@ -26,6 +29,50 @@ public class Graph : MonoBehaviour
     /// <param name="nodeInScene"></param>
     public void GenerateBoard(GraphNode[] nodeInScene)
     {
+        
+        BountyMap bountyMap = UserDataManager.GetCurrentMap();
+        if(bountyMap == null
+            || bountyMap.totalNode != nodeInScene.Length)
+        {
+            Debug.LogError("[GenerateBoard] Cache Map ERROR...");
+            return;
+        }
+
+        //Update the next Node and preNode from the Server
+        for (int i = 0; i < bountyMap.totalNode; i++)
+        {
+            int newNextNodeCount = bountyMap.nodes[i].nextNode != null ? bountyMap.nodes[i].nextNode.Count : -1;            
+            if(newNextNodeCount > 0)
+            {
+                nodeInScene[i].nextNode = new List<GraphNode>();
+                for (int y = 0; y < newNextNodeCount; y++)
+                {
+                    int newNextNode = bountyMap.nodes[i].nextNode[y];
+                    nodeInScene[i].nextNode.Add(nodeInScene[newNextNode]);
+                }
+            }
+            else
+            {
+                nodeInScene[i].nextNode = null;
+            }
+
+            int newPreNodeCount = bountyMap.nodes[i].preNode != null ? bountyMap.nodes[i].preNode.Count : -1;
+            if (newPreNodeCount > 0)
+            {
+                nodeInScene[i].preNode = new List<GraphNode>();
+                for (int y = 0; y < newPreNodeCount; y++)
+                {
+                    int newPreNode = bountyMap.nodes[i].preNode[y];
+                    nodeInScene[i].preNode.Add(nodeInScene[newPreNode]);
+                }
+            }
+            else
+            {
+                nodeInScene[i].preNode = null;
+            }
+        }
+
+        //Set the node to the cache
         for (var i = 0; i < nodeInScene.Length; i++)
         {
             nodeInScene[i].NodeID = i;

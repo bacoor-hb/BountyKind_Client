@@ -6,11 +6,15 @@ public class MapNodeDataManager : MonoBehaviour
 {
     public List<MapShort_MSG> mapList;
     public Dictionary<string,BountyMap> cachedMap;
+
+    UserDataManager UserDataManager;
     // Start is called before the first frame update
     public void Init()
     {
         mapList = new List<MapShort_MSG>();
         cachedMap = new Dictionary<string, BountyMap>();
+
+        UserDataManager = GlobalManager.Instance.UserDataManager;
     }
 
     /// <summary>
@@ -59,5 +63,6 @@ public class MapNodeDataManager : MonoBehaviour
         }
 
         this.cachedMap.Add(cachedMap.key, cachedMap);
+        UserDataManager.UserGameStatus.UpdateMapData();
     }
 }

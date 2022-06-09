@@ -115,7 +115,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
         if (bountyMaps != null && bountyMaps.Count > 0)
         {
             
-            NetworkManager.CreateRoom(ROOM_TYPE.GAME_ROOM, UserDataManager.GetCurrentMap());
+            NetworkManager.CreateRoom(ROOM_TYPE.GAME_ROOM, UserDataManager.GetCurrentMapId());
         }            
         else
             Debug.LogError("[RoomEventController] Create Room ERROR: No Map Data.");
@@ -128,7 +128,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     {
         //Create Loading map Component.
         Loading_LoadMap loading_LoadMap = LoadingManager.gameObject.AddComponent<Loading_LoadMap>();
-        loading_LoadMap.Init(CONSTS.LOADING_DETAIL_LOADMAP, 0.5f, UserDataManager.GetCurrentMap());
+        loading_LoadMap.Init(CONSTS.LOADING_DETAIL_LOADMAP, 0.5f, UserDataManager.GetCurrentMapId());
         LoadingManager.AddLoadingAction(loading_LoadMap);
 
         //Call the Load Scene via the Loading Scene.

@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class UserGameStatus
 {
-    public string currentMap;
+    public string currentMapKey;
+    public BountyMap currentMap;
 
     public int currentNode;
     public int totalStep;
     public int totalRoll;
 
     public List<Character> Characters;
+    public List<FormationCharacter> FormationList;
 
     public UserGameStatus()
     {
@@ -19,6 +21,7 @@ public class UserGameStatus
         totalRoll = -1;
 
         Characters = new List<Character>();
+        FormationList = new List<FormationCharacter>();
     }
 
     /// <summary>
@@ -30,5 +33,25 @@ public class UserGameStatus
         currentNode = Mathf.RoundToInt(rollResult.currentNode);
         totalStep = Mathf.RoundToInt(rollResult.totalStep);
         totalRoll = Mathf.RoundToInt(rollResult.totalRoll);
+    }
+
+    public void UpdateMapKey(string mapKey)
+    {
+        currentMapKey = mapKey;
+    }
+
+    public void UpdateMapData()
+    {
+        MapNodeDataManager mapNodeData = GlobalManager.Instance.MapNodeDataManager;
+        if (mapNodeData != null
+            && mapNodeData.cachedMap.ContainsKey(currentMapKey))
+        {
+            currentMap = mapNodeData.cachedMap[currentMapKey];
+            Debug.Log("[UserGameStatus] Update map success..." + currentMapKey);
+        }
+        else
+        {
+            Debug.LogError("[UserGameStatus] UpdateMap ERROR: map not exists.");
+        }
     }
 }

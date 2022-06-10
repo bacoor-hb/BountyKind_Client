@@ -87,5 +87,11 @@ public class APIManager : MonoBehaviour
             }
         }
     }
+
+    //TODO: Get Character Data
+
+    //TODO: Get Formation
+
+    //TODO: SET Formation
     #endregion
 }

@@ -191,4 +191,28 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         }
         
     }
+
+    public LobbySchema GetLobbyData()
+    {
+        if(lobbyRoom != null)
+        {
+            return lobbyRoom.State;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public GameRoomSchema GetRoomData()
+    {
+        if (gameRoom != null)
+        {
+            return gameRoom.State;
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

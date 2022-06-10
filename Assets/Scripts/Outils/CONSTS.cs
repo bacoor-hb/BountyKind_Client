@@ -62,6 +62,9 @@ public enum ACTION_TYPE
 {
     MOVE,
     ROLL_DICE,
+    LUCKY_DRAW,
+    CHANCE,
+    COMBAT,
     END_TURN,
 }
 

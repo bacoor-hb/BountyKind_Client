@@ -34,12 +34,16 @@ public class LocalGameController : MonoBehaviour
     private Multiplayer_GameEventController Multiplayer_GameEvent;
 
     private UserDataManager UserDataManager;
+    private NetworkManager NetworkManager;
+
+    //-------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------
     #region Initialize
     // Start is called before the first frame update
     void Start()
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
+        NetworkManager = GlobalManager.Instance.NetworkManager;
 
         //Init Turnbase Controller
         TurnBaseController.Init();
@@ -58,14 +62,21 @@ public class LocalGameController : MonoBehaviour
         board.Init();
         board.GenerateBoard(nodeList);
 
-        //Register all users to the Map
-        GraphNode startNode = board.GetNode(0);//Set the current Node is the node 0
+        //Register all users to the Map        
         string[] usersAddress = new string[players.Count];
         GraphNode[] graphNodes = new GraphNode[players.Count];
-        for(int i = 0; i < players.Count; i++)
+        GameRoomSchema currentRoom = NetworkManager.GetRoomState();
+
+        //Initialize the player on the board
+        for (int i = 0; i < players.Count; i++)
         {
             usersAddress[i] = GetUserAddress(i);
-            graphNodes[i] = startNode;
+            int currentNodeId = Mathf.RoundToInt(currentRoom.players[i].currentNode);
+            Debug.Log("[LocalGameController] Init user position: " + currentNodeId);
+            GraphNode userPos = board.GetNode(currentNodeId);
+            graphNodes[i] = userPos;
+
+            MovementController.Teleport(userPos.transform);
         }
         board.InitUserNodeList(usersAddress, graphNodes);
 
@@ -76,9 +87,13 @@ public class LocalGameController : MonoBehaviour
         //Init the Multiplayer Game Event Controller
         Multiplayer_GameEvent.OnRollResultReturn = null;
         Multiplayer_GameEvent.OnRollResultReturn += RollDice;
+
+        //Update the User Data View
+        LocalGameView.UpdateUserData(UserDataManager.UserData);
     }
     #endregion
-
+    //-------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------
     #region Turn Base Controller
     int rollNumber = 0;
     UserActionLocalManager currentPlayer;
@@ -97,10 +112,15 @@ public class LocalGameController : MonoBehaviour
 
         //Init the View + Button Event, Only for local player.
         LocalGameView.Init();
+        LocalGameView.UpdateUserData(UserDataManager.UserData);
 
         LocalGameView.RollDice_Btn.onClick.AddListener(RollDice_Action);
         LocalGameView.Move_Btn.onClick.AddListener(Move_Action);
+        LocalGameView.Chance_Btn.onClick.AddListener(Chance_Action);
+        LocalGameView.LuckyDraw_Btn.onClick.AddListener(LuckyDraw_Action);
+        LocalGameView.Combat_Btn.onClick.AddListener(Combat_Action);
         LocalGameView.EndTurn_Btn.onClick.AddListener(EndTurn_Action);
+
     }
 
     /// <summary>
@@ -121,6 +141,22 @@ public class LocalGameController : MonoBehaviour
     {
         TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.MOVE));
     }
+
+    private void Chance_Action()
+    {
+        Debug.Log("[LocalGameController] Accept Chance...");
+    }
+
+    private void LuckyDraw_Action()
+    {
+        Debug.Log("[LocalGameController] Accept Lucky Draw...");
+    }
+
+    private void Combat_Action()
+    {
+        Debug.Log("[LocalGameController] Accept combat...");
+    }
+
     /// <summary>
     /// Add End Turn Action to the Queue
     /// </summary>
@@ -130,7 +166,8 @@ public class LocalGameController : MonoBehaviour
         TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.END_TURN));
     }
     #endregion
-
+    //-------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------
     #region Dice Controller
     int[] DicesValue;
     /// <summary>
@@ -181,7 +218,8 @@ public class LocalGameController : MonoBehaviour
         }
     }
     #endregion
-
+    //-------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------
     #region Movement Controller  
     /// <summary>
     /// Order the current player to Move
@@ -267,11 +305,12 @@ public class LocalGameController : MonoBehaviour
 
     private void EndMovingAllTarget()
     {
-        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
+        OnTriggerMathEffect();
     }
 
     #endregion
-
+    //-------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------
     #region User Controller
     public string GetUserAddress(int _userLocalId)
     {
@@ -310,6 +349,11 @@ public class LocalGameController : MonoBehaviour
             players[i].OnEndMoving = null;
             players[i].OnEndMoving += (x) => EndMovingAllTarget();
         }
+    }
+
+    private void OnTriggerMathEffect()
+    {
+        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
     }
     #endregion
 }

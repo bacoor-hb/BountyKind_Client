@@ -88,6 +88,24 @@ public class NetworkManager : MonoBehaviour
         socketManager.Disconnect();
         //LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
     }
+
+    /// <summary>
+    /// Get the Room State from Server
+    /// </summary>
+    /// <returns></returns>
+    public GameRoomSchema GetRoomState()
+    {
+        return socketManager.GetRoomData();
+    }
+
+    /// <summary>
+    /// Get the Lobby State from Server
+    /// </summary>
+    /// <returns></returns>
+    public LobbySchema GetLobbyState()
+    {
+        return socketManager.GetLobbyData();
+    }
     #endregion
 
     #region EVENT MANAGEMENT

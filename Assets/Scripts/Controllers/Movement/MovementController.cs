@@ -75,5 +75,16 @@ public class MovementController : MonoBehaviour
 
         OnEndMoving?.Invoke();
     }
+
+    /// <summary>
+    /// Move the object immediatly to the target
+    /// </summary>
+    /// <param name="target"></param>
+    public void Teleport(Transform target)
+    {
+        ObjectToMove.transform.position = target.position;
+        ObjectToMove.transform.LookAt(target);
+    }
+
     #endregion
 }

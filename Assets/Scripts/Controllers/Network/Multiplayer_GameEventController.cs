@@ -22,8 +22,6 @@ public class Multiplayer_GameEventController : MonoBehaviour
         BountyColyseusManager.Instance.onGameReceiveMsg += HandleGameMessage;
     }
 
-
-
     #region Handle Game Event
     void HandleGameMessage(GAMEROOM_RECEIVE_EVENTS messageType, object message)
     {
@@ -91,11 +89,4 @@ public class Multiplayer_GameEventController : MonoBehaviour
         NetworkManager.Disconnect();
     }
     #endregion
-
-    public void RefillSuccess(string _rollNumber)
-    {
-        int rollNumber = int.Parse(_rollNumber);
-        UserDataManager.SetEnergy(rollNumber);
-        Debug.Log("Refilled");
-    }
 }

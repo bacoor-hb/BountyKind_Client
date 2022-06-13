@@ -12,6 +12,8 @@ public class UnitQueueController : MonoBehaviour
     [SerializeField]
     public string id;
     [SerializeField]
+    public int turn;
+    [SerializeField]
     private Vector3 endPositon = Vector3.zero;
     public delegate void OnEndQueue();
     public static event OnEndQueue onEndQueue;
@@ -20,7 +22,6 @@ public class UnitQueueController : MonoBehaviour
 
     void Start()
     {
-        endPositon = Vector3.zero;
         unitInitPosition = transform.position;
     }
 
@@ -63,7 +64,6 @@ public class UnitQueueController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Reend");
                 endPositon = Vector3.zero;
             }
         }

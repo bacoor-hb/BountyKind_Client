@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class UnitQueue
+{
+    public string id;
+    public int turn;
+    public UnitQueue(string _id, int _turn)
+    {
+        id = _id;
+        turn = _turn;
+    }
+}
 class CharacterPosition
 {
     public string id;
@@ -17,10 +27,12 @@ class CharacterPosition
 }
 public class LocalTestFightController : MonoBehaviour
 {
-    public delegate void OnRenderQueue(int[] arr);
+    public delegate void OnRenderQueue(List<UnitQueue> arr);
     public static event OnRenderQueue onRenderQueue;
     public delegate void OnReceiveBattleDatas(List<BattleData> battleDatas, int playerId);
     public static event OnReceiveBattleDatas onReceiveBattleDatas;
+    [SerializeField]
+    private List<GameObject> characterPrefabs;
     [SerializeField]
     private GameObject prefabPet;
 
@@ -31,7 +43,7 @@ public class LocalTestFightController : MonoBehaviour
     private GameObject unitInQueue;
 
     [SerializeField]
-    private static List<GameObject> unitsInQueue;
+    private static List<GameObject> unitsInQueue = new List<GameObject>();
 
     [SerializeField]
     private List<GameObject> unitsOutQueue;
@@ -58,38 +70,34 @@ public class LocalTestFightController : MonoBehaviour
     private Button FightBTN;
     [SerializeField]
     private Button EndTurnBTN;
-    private string currentUnitId;
-    private int currentTurn;
+    private List<BattleData> battleDatas = new List<BattleData>();
 
     // Start is called before the first frame update
     void Start()
     {
-        List<CharacterPosition> charactersPosition = new List<CharacterPosition>();
-        charactersPosition.Add(new CharacterPosition("id1", 0, "YOUR_PET"));
-        charactersPosition.Add(new CharacterPosition("id2", 1, "YOUR_PET"));
-        charactersPosition.Add(new CharacterPosition("id3", 0, "OPPONENT_PET"));
-        charactersPosition.Add(new CharacterPosition("id4", 1, "OPPONENT_PET"));
+        List<Character> yourCharacters = new List<Character>();
+        List<Character> opponentCharacters = new List<Character>();
 
-        int[] arr = { 1, 2, 3, 4 };
-        onRenderQueue?.Invoke(arr);
+        Character character1 = new Character();
+        character1.id = "id1";
+        character1.position = 0;
+        Character character2 = new Character();
+        character2.id = "id2";
+        character2.position = 1;
+        Character character3 = new Character();
+        character3.id = "id7";
+        character3.position = 0;
+        Character character4 = new Character();
+        character4.id = "id8";
+        character4.position = 1;
 
-        for (var i = 0; i < charactersPosition.Count; i++)
-        {
-            int characterPostion = charactersPosition[i].position;
-            if (charactersPosition[i].side == "YOUR_PET")
-            {
+        yourCharacters.Add(character1);
+        yourCharacters.Add(character2);
+        opponentCharacters.Add(character3);
+        opponentCharacters.Add(character4);
 
-                Vector3 position = spawnPosPets[characterPostion].GetComponent<Transform>().position;
-                Vector3 pos = new Vector3(position.x, position.y, position.z);
-                players[0].AddUnit(players[0].RenderUnit(prefabPet, pos, players[0].transform), charactersPosition[i].id);
-            }
-            else
-            {
-                Vector3 position = spawnPosEnemies[characterPostion].GetComponent<Transform>().position;
-                Vector3 pos = new Vector3(position.x, position.y, position.z);
-                players[0].AddUnit(players[0].RenderUnit(prefabMonster, pos, players[0].transform), charactersPosition[i].id);
-            }
-        }
+        SetAllCharactersPosition(yourCharacters, opponentCharacters);
+
         turnBaseController.Init();
         //Set Player id ~ The turn order
         for (int i = 0; i < players.Count; i++)
@@ -101,7 +109,6 @@ public class LocalTestFightController : MonoBehaviour
         EndTurnBTN.onClick.AddListener(() => { HandleEndTurn(); });
         FightActionTest.onEndTurnFights += HandleEndTurnFights;
         FightActionTest.startFight += HandleStartFight;
-        FightActionTest.endFightAction += HandleEndFightAction;
         UnitQueueController.onEndQueue += HandleEndQueue;
         turnBaseController.StartGame();
     }
@@ -110,18 +117,20 @@ public class LocalTestFightController : MonoBehaviour
     {
         for (var i = 0; i < yourCharacters.Count; i++)
         {
-            int characterPostion = yourCharacters[i].baseStat.position;
+            int characterPostion = yourCharacters[i].position;
             Vector3 position = spawnPosPets[characterPostion].GetComponent<Transform>().position;
             Vector3 pos = new Vector3(position.x, position.y, position.z);
-            players[0].AddUnit(players[0].RenderUnit(prefabPet, pos, players[0].transform), yourCharacters[i].nftId);
+            GameObject myGameObj = characterPrefabs.Find(prefab => prefab.name == yourCharacters[i].id);
+            players[0].AddUnit(players[0].RenderUnit(myGameObj, pos, players[0].transform), yourCharacters[i].id);
         }
 
         for (var i = 0; i < opponentCharacters.Count; i++)
         {
-            int characterPostion = opponentCharacters[i].baseStat.position;
+            int characterPostion = opponentCharacters[i].position;
             Vector3 position = spawnPosEnemies[characterPostion].GetComponent<Transform>().position;
             Vector3 pos = new Vector3(position.x, position.y, position.z);
-            players[0].AddUnit(players[0].RenderUnit(prefabMonster, pos, players[0].transform), opponentCharacters[i].nftId);
+            GameObject myGameObj = characterPrefabs.Find(prefab => prefab.name == opponentCharacters[i].id);
+            players[0].AddUnit(players[0].RenderUnit(myGameObj, pos, players[0].transform), opponentCharacters[i].id);
 
         }
     }
@@ -129,6 +138,7 @@ public class LocalTestFightController : MonoBehaviour
     public static void SetUnitQueueList(List<GameObject> _unitsInQueue)
     {
         unitsInQueue = _unitsInQueue;
+
     }
 
     // Update is called once per frame
@@ -142,69 +152,34 @@ public class LocalTestFightController : MonoBehaviour
         turnBaseController.EndTurn();
     }
 
-    void InitTurn()
+    void InitTurn(List<UnitQueue> unitQueues)
     {
-
+        onRenderQueue?.Invoke(unitQueues);
     }
 
     void HandleStartFight(string unitId, int turn)
     {
-        if (unitsInQueue.Count > 0)
+        for (var i = 0; i < unitsInQueue.Count; i++)
         {
-            currentUnitId = unitId;
-            currentTurn = turn;
-            for (var i = 0; i < unitsInQueue.Count; i++)
+            UnitQueueController currentUnitInQueue = unitsInQueue[i].GetComponent<UnitQueueController>();
+            if (currentUnitInQueue.id == unitId && currentUnitInQueue.turn == turn)
             {
-                if (unitsInQueue[i].GetComponent<UnitQueueController>().id != unitId)
-                {
-                    unitsInQueue[i].GetComponent<UnitQueueController>().SetEndPosition(unitsInQueue[i - 1].transform.position);
-                }
-                else
-                {
-                    unitsInQueue[i].GetComponent<UnitQueueController>().SetEndPosition(new Vector3(-180, 0, 0));
-                    unitsInQueue[i].GetComponent<UnitQueueController>().SetIsCurrentTarget();
-                }
+                unitsInQueue[i].GetComponent<UnitQueueController>().SetEndPosition(new Vector3(-180, 0, 0));
+                unitsInQueue[i].GetComponent<UnitQueueController>().SetIsCurrentTarget();
             }
-            unitsOutQueue.Add(unitsInQueue[0]);
-            unitsInQueue.RemoveAt(0);
+            else
+            {
+                unitsInQueue[i].GetComponent<UnitQueueController>().SetEndPosition(unitsInQueue[i - 1].transform.position);
+            }
         }
-        else
-        {
-            unitsInQueue = unitsOutQueue;
-            currentTurn = turn;
-            unitsOutQueue = new List<GameObject>();
-            for (var i = 0; i < unitsInQueue.Count; i++)
-            {
-                unitsInQueue[i].GetComponent<UnitQueueController>().ResetPosition();
-            }
-            currentUnitId = unitId;
-            currentTurn = turn;
-            for (var i = 0; i < unitsInQueue.Count; i++)
-            {
-                if (unitsInQueue[i].GetComponent<UnitQueueController>().id != unitId)
-                {
-                    unitsInQueue[i].GetComponent<UnitQueueController>().SetEndPosition(unitsInQueue[i - 1].transform.position);
-                }
-                else
-                {
-                    unitsInQueue[i].GetComponent<UnitQueueController>().SetEndPosition(new Vector3(-180, 0, 0));
-                    unitsInQueue[i].GetComponent<UnitQueueController>().SetIsCurrentTarget();
-                }
-            }
-            unitsOutQueue.Add(unitsInQueue[0]);
-            unitsInQueue.RemoveAt(0);
-        }
+        unitsOutQueue.Add(unitsInQueue[0]);
+        unitsInQueue.RemoveAt(0);
     }
 
     void HandleEndQueue()
     {
         currentUnitInQueue.transform.Find("Avatar").GetComponent<Image>().sprite = unitsOutQueue[unitsOutQueue.Count - 1].transform.Find("Background").transform.Find("Avatar").GetComponent<Image>().sprite;
         bigCurrentUnit.transform.Find("Avatar").GetComponent<Image>().sprite = unitsOutQueue[unitsOutQueue.Count - 1].transform.Find("Background").transform.Find("Avatar").GetComponent<Image>().sprite;
-    }
-
-    void HandleEndFightAction(string unitId)
-    {
-
     }
 
     void HandleEndTurn()
@@ -214,28 +189,34 @@ public class LocalTestFightController : MonoBehaviour
     }
     void InsertFakeData()
     {
-        List<BattleData> battleDatas = new List<BattleData>();
+        battleDatas = new List<BattleData>();
         BattleUnit currentUnit1 = new BattleUnit("id1", 100);
-        BattleUnit targetUnit1 = new BattleUnit("id3", 90);
+        BattleUnit targetUnit1 = new BattleUnit("id7", 90);
         BattleUnit currentUnit2 = new BattleUnit("id2", 100);
-        BattleUnit targetUnit2 = new BattleUnit("id4", 80);
+        BattleUnit targetUnit2 = new BattleUnit("id8", 80);
 
-        BattleUnit currentUnit3 = new BattleUnit("id3", 100);
+        BattleUnit currentUnit3 = new BattleUnit("id7", 100);
         BattleUnit targetUnit3 = new BattleUnit("id1", 90);
-        BattleUnit currentUnit4 = new BattleUnit("id4", 100);
+        BattleUnit currentUnit4 = new BattleUnit("id8", 100);
         BattleUnit targetUnit4 = new BattleUnit("id2", 80);
 
-        battleDatas.Add(new BattleData(currentUnit1, targetUnit1, "YOUR_PET", 1));
-        battleDatas.Add(new BattleData(currentUnit2, targetUnit2, "YOUR_PET", 1));
-        battleDatas.Add(new BattleData(currentUnit3, targetUnit3, "OPPONENT_PET", 1));
-        battleDatas.Add(new BattleData(currentUnit4, targetUnit4, "OPPONENT_PET", 1));
+        battleDatas.Add(new BattleData(currentUnit1, targetUnit1, 1));
+        battleDatas.Add(new BattleData(currentUnit2, targetUnit2, 1));
+        battleDatas.Add(new BattleData(currentUnit3, targetUnit3, 1));
+        battleDatas.Add(new BattleData(currentUnit4, targetUnit4, 1));
 
-        battleDatas.Add(new BattleData(currentUnit1, targetUnit1, "YOUR_PET", 2));
-        battleDatas.Add(new BattleData(currentUnit2, targetUnit2, "YOUR_PET", 2));
-        battleDatas.Add(new BattleData(currentUnit3, targetUnit3, "OPPONENT_PET", 2));
-        battleDatas.Add(new BattleData(currentUnit4, targetUnit4, "OPPONENT_PET", 2));
-
-
+        battleDatas.Add(new BattleData(currentUnit1, targetUnit1, 2));
+        battleDatas.Add(new BattleData(currentUnit2, targetUnit2, 2));
+        battleDatas.Add(new BattleData(currentUnit3, targetUnit3, 2));
+        battleDatas.Add(new BattleData(currentUnit4, targetUnit4, 2));
+        List<UnitQueue> unitQueues = new List<UnitQueue>();
+        for (var i = 0; i < battleDatas.Count; i++)
+        {
+            string id = battleDatas[i].currentUnit.id;
+            int turn = battleDatas[i].turn;
+            unitQueues.Add(new UnitQueue(id, turn));
+        }
+        InitTurn(unitQueues);
         onReceiveBattleDatas(battleDatas, turnBaseController.CurrentPlayer);
         var currentPlayer = players[turnBaseController.CurrentPlayer];
         for (var i = 0; i < battleDatas.Count; i++)

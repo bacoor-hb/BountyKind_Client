@@ -16,12 +16,10 @@ public class BattleData
     public BattleUnit currentUnit;
     public BattleUnit targetUnit;
     public int turn;
-    public string type;
-    public BattleData(BattleUnit _currentUnit, BattleUnit _targetUnit, string _type, int _turn)
+    public BattleData(BattleUnit _currentUnit, BattleUnit _targetUnit, int _turn)
     {
         currentUnit = _currentUnit;
         targetUnit = _targetUnit;
-        type = _type;
         turn = _turn;
     }
 }
@@ -33,8 +31,6 @@ public class FightActionTest : Action
     public static event InFight inFight;
     public delegate void OnStartFight(string unitId, int turn);
     public static event OnStartFight startFight;
-    public delegate void OnEndFightAction(string unitId);
-    public static event OnEndFightAction endFightAction;
     public delegate void EndFight(int userId);
     public static event EndFight endFight;
     public List<BattleData> battleDatas;
@@ -86,13 +82,11 @@ public class FightActionTest : Action
     {
         if (currentAction != battleDatas.Count - 1)
         {
-            endFightAction(battleDatas[currentAction].currentUnit.id);
             currentAction++;
             turnBaseController.EndAction();
         }
         else
         {
-            endFightAction(battleDatas[currentAction].currentUnit.id);
             currentAction = 0;
             turnBaseController.EndAction();
             turnBaseController.EndTurn();

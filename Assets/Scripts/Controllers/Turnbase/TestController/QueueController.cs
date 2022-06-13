@@ -22,14 +22,19 @@ public class QueueController : MonoBehaviour
 
     }
 
-    public void RenderQueue(int[] arr)
+    public void RenderQueue(List<UnitQueue> arr)
     {
         List<GameObject> unitsInQueue = new List<GameObject>();
-        for (var i = 0; i < arr.Length; i++)
+        for (var i = 0; i < arr.Count; i++)
         {
-            GameObject unit = Instantiate(unitInQueue, sampleUnitsInQueue[i].transform.position, Quaternion.identity, transform);
-            unit.GetComponent<UnitQueueController>().id = "id" + arr[i];
-            Sprite avatarSprite = Resources.Load<Sprite>("Avatar/id" + arr[i]);
+            float xValue = sampleUnitsInQueue[0].transform.position.x + (86 * i);
+            float yValue = sampleUnitsInQueue[0].transform.position.y;
+            float zValue = sampleUnitsInQueue[0].transform.position.z;
+            Vector3 position = new Vector3(xValue, yValue, zValue);
+            GameObject unit = Instantiate(unitInQueue, position, Quaternion.identity, transform);
+            unit.GetComponent<UnitQueueController>().id = arr[i].id;
+            unit.GetComponent<UnitQueueController>().turn = arr[i].turn;
+            Sprite avatarSprite = Resources.Load<Sprite>("Avatar/" + arr[i].id);
             unit.transform.Find("Background").transform.Find("Avatar").GetComponent<Image>().sprite = avatarSprite;
             unitsInQueue.Add(unit);
         }

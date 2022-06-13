@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public enum CharacterStatus 
+public enum CharacterStatus
 {
     ACTIVE,
     ONSALE,
@@ -48,6 +48,7 @@ public class NFTItem
 
 public class CharacterBaseStat
 {
+    public string baseId;
     public string name;
     public string key;
     public int baseAtk;
@@ -80,7 +81,7 @@ public class Character : CharacterBaseStat
     public int def;
     public int speed;
     public int hp;
-    
+
     public int exp;
     public int level;
 

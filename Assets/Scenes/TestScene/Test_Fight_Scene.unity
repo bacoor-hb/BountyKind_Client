@@ -754,6 +754,7 @@ MonoBehaviour:
   unitInitPosition: {x: 0, y: 0, z: 0}
   speed: 5
   id: id4
+  turn: 0
   endPositon: {x: 0, y: 0, z: 0}
 --- !u!1 &168606981
 GameObject:
@@ -1905,8 +1906,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 31.9}
+  m_SizeDelta: {x: 0, y: -63.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &695851931
 MonoBehaviour:
@@ -2261,6 +2262,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ddd72dd40870a84f9a2f7bcff8dcd37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterPrefabs:
+  - {fileID: 2456848683615008564, guid: b3b8cf772ea07db4dbc002dc449813e9, type: 3}
+  - {fileID: 2456848683615008564, guid: f8ee26cf141d5594ba4ac980f5055806, type: 3}
+  - {fileID: 2456848683615008564, guid: 8ea18bc9569633e47ab51d5f790adbd7, type: 3}
+  - {fileID: 2456848683615008564, guid: 3f2683d39d670e04ea481a11a59f79f1, type: 3}
+  - {fileID: 2456848683615008564, guid: 3b1745f4421bf094caea462f0b0a5a91, type: 3}
+  - {fileID: 2456848683615008564, guid: 7d633aa490b45d24b904783bd7c8d220, type: 3}
+  - {fileID: 2456848683615008564, guid: 61065d96957355544a4161f0d602658e, type: 3}
+  - {fileID: 2456848683615008564, guid: fb871acdbfb0da348bed0badde5d9313, type: 3}
+  - {fileID: 2456848683615008564, guid: 51f3cbdf31844cf48a3130a699e9da6f, type: 3}
   prefabPet: {fileID: 2607983856138588628, guid: dfe24f683f9c5b34b9f6a51ba5de5015, type: 3}
   prefabMonster: {fileID: 550561232666822922, guid: 04ab27489494823428eff0ba8d0c5d67, type: 3}
   unitInQueue: {fileID: 5161649066514713945, guid: 88352e5c4c8dfd34d8dfd1c0357c8aab, type: 3}
@@ -2551,6 +2562,7 @@ MonoBehaviour:
   unitInitPosition: {x: 0, y: 0, z: 0}
   speed: 5
   id: id2
+  turn: 0
   endPositon: {x: 0, y: 0, z: 0}
 --- !u!1001 &949484280
 PrefabInstance:
@@ -3710,6 +3722,7 @@ MonoBehaviour:
   unitInitPosition: {x: 0, y: 0, z: 0}
   speed: 5
   id: id3
+  turn: 0
   endPositon: {x: 0, y: 0, z: 0}
 --- !u!1 &1289006819
 GameObject:
@@ -3824,7 +3837,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 194}
+  m_AnchoredPosition: {x: -1, y: 194}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1318769186

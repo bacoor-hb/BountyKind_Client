@@ -66,6 +66,8 @@ public enum ACTION_TYPE
     CHANCE,
     COMBAT,
     END_TURN,
+
+    INVALID_ACTION = 100
 }
 
 public class TEXT_UI

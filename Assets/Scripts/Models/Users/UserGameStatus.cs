@@ -54,4 +54,39 @@ public class UserGameStatus
             Debug.LogError("[UserGameStatus] UpdateMap ERROR: map not exists.");
         }
     }
+
+    public ACTION_TYPE Get_MapActionType()
+    {
+        if(string.IsNullOrEmpty(currentMapKey)
+            || currentMap == null
+            || currentNode < 0)
+        {
+            return ACTION_TYPE.INVALID_ACTION;
+        }
+
+        var MathAction = currentMap.nodes[currentNode].type;
+        switch (MathAction)
+        {
+            case TypeNode.START:
+                return ACTION_TYPE.END_TURN;
+                break;
+            case TypeNode.CHANCE:
+                return ACTION_TYPE.CHANCE;
+                break;
+            case TypeNode.LUCKY_DRAW:
+                return ACTION_TYPE.LUCKY_DRAW;
+                break;
+            case TypeNode.BOSS:
+                return ACTION_TYPE.COMBAT;
+                break;
+            case TypeNode.DEFAULT:
+                return ACTION_TYPE.END_TURN;
+                break;
+            default:
+                return ACTION_TYPE.INVALID_ACTION;
+                break;
+        }
+
+        
+    }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LocalGameController : MonoBehaviour
+public partial class LocalGameController : MonoBehaviour
 {
     [SerializeField]
     private List<UserActionLocalManager> players;
@@ -36,6 +36,7 @@ public class LocalGameController : MonoBehaviour
     private UserDataManager UserDataManager;
     private NetworkManager NetworkManager;
 
+    private GameRoomSchema currentRoom;
     //-------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------
     #region Initialize
@@ -65,7 +66,7 @@ public class LocalGameController : MonoBehaviour
         //Register all users to the Map        
         string[] usersAddress = new string[players.Count];
         GraphNode[] graphNodes = new GraphNode[players.Count];
-        GameRoomSchema currentRoom = NetworkManager.GetRoomState();
+        currentRoom = NetworkManager.GetRoomState();
 
         //Initialize the player on the board
         for (int i = 0; i < players.Count; i++)
@@ -77,6 +78,7 @@ public class LocalGameController : MonoBehaviour
             graphNodes[i] = userPos;
 
             MovementController.Teleport(userPos.transform);
+           
         }
         board.InitUserNodeList(usersAddress, graphNodes);
 
@@ -121,6 +123,13 @@ public class LocalGameController : MonoBehaviour
         LocalGameView.Combat_Btn.onClick.AddListener(Combat_Action);
         LocalGameView.EndTurn_Btn.onClick.AddListener(EndTurn_Action);
 
+        //Update current User's current Node
+        UserDataManager.UserGameStatus.currentNode = Mathf.RoundToInt(currentRoom.players[currentPlayerId].currentNode);
+        //If the current player is not yet interracted with the current node.
+        if (!currentRoom.players[currentPlayerId].isInteracted)
+        {
+            OnTriggerMathEffect();
+        }
     }
 
     /// <summary>
@@ -141,20 +150,29 @@ public class LocalGameController : MonoBehaviour
     {
         TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.MOVE));
     }
-
+    /// <summary>
+    /// Add Action trigger Chance to the Queue
+    /// </summary>
     private void Chance_Action()
     {
         Debug.Log("[LocalGameController] Accept Chance...");
+        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
     }
-
+    /// <summary>
+    /// Add Lucky Draw Action to the Queue
+    /// </summary>
     private void LuckyDraw_Action()
     {
         Debug.Log("[LocalGameController] Accept Lucky Draw...");
+        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
     }
-
+    /// <summary>
+    /// Add Combat Action to the Queue
+    /// </summary>
     private void Combat_Action()
     {
         Debug.Log("[LocalGameController] Accept combat...");
+        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
     }
 
     /// <summary>
@@ -165,150 +183,7 @@ public class LocalGameController : MonoBehaviour
         Debug.Log("[LocalGameController] End Turn...");
         TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.END_TURN));
     }
-    #endregion
-    //-------------------------------------------------------------------------------------------
-    //-------------------------------------------------------------------------------------------
-    #region Dice Controller
-    int[] DicesValue;
-    /// <summary>
-    /// Only for TEST. The real data will be got from Server. 
-    /// </summary>
-    /// <returns></returns>
-    public int[] GetDiceValue(int _diceNB = 1)
-    {
-        if(_diceNB > 0)
-        {
-            DicesValue = new int[_diceNB];
-            for(int i = 0; i< _diceNB; i++)
-            {
-                DicesValue[i] = Random.Range(1, 7);
-            }
-            return DicesValue;
-        }
-        else
-        {
-            return null;
-        }        
-    }
-
-    public void Call_RollDice()
-    {
-        Debug.Log("[LocalGameController] Call_RollDice");
-        Multiplayer_GameEvent.HandleRoll();
-
-        //Deactivate the Roll button if the roll number is 0
-        if (rollNumber <= 0)
-        {
-            LocalGameView.SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
-        }
-    }
-
-    public void RollDice(RollResult_MSG rollResult)
-    {
-        DicesValue = new int[1];
-        DicesValue[0] = Mathf.RoundToInt(rollResult.rollResult);
-        DicesController.RollDice(DicesValue);
-    }
-
-    public void End_RollDice()
-    {
-        if (DicesValue != null && DicesValue.Length > 0)
-        {
-            LocalGameView.SetBtn_State(ACTION_TYPE.MOVE, true);
-        }
-    }
-    #endregion
-    //-------------------------------------------------------------------------------------------
-    //-------------------------------------------------------------------------------------------
-    #region Movement Controller  
-    /// <summary>
-    /// Order the current player to Move
-    /// </summary>
-    private void Move_CurrentPlayer()
-    {
-        int _moveValue = DicesValue[0];
-        int _userToMove = currentPlayerId;
-
-        //Deactive all Buttons so the player cannot stack any action until the move end.
-        LocalGameView.SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
-        LocalGameView.SetBtn_State(ACTION_TYPE.MOVE, false);
-        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, false);
-
-        MovePlayer(_moveValue, _userToMove);
-    }
-    /// <summary>
-    /// Order the player to Move
-    /// </summary>
-    /// <param name="_moveValue">The number of Math to move</param>
-    /// <param name="_userToMove">Id of the user to Move in the Players List</param>
-    void MovePlayer(int _moveValue, int _userToMove)
-    {
-        GraphNode currentNode = board.GetCurrentNodeByAddress(GetUserAddress(_userToMove));
-        targetNodes = board.GetNodesByStep(currentNode, _moveValue);
-
-        if(targetNodes != null && targetNodes.Count > 0)
-        {
-            _targetsPos = new Vector3[targetNodes.Count];
-            for(int i = 0; i < targetNodes.Count; i++)
-            {
-                _targetsPos[i] = targetNodes[i].GetNodeWorldPosition();
-            }
-
-            currentTarget = 0;
-
-            //Register Move Action for this turn
-            MovementController.OnStartMoving = null;
-            MovementController.OnStartMoving += StartMoving1Math;
-            MovementController.OnEndMoving = null;
-            MovementController.OnEndMoving += EndMoving1Math;
-            MoveTheObject();
-        }
-        else
-        {
-            return;
-        }
-    }
-
-    int currentTarget = 0;
-    Vector3[] _targetsPos;
-    List<GraphNode> targetNodes;
-    float timeToTarget = 0.5f;
-
-    /// <summary>
-    /// Move the object to the targets in the _targetList. At the last target, when the move action finish, end the Turn base Action
-    /// </summary>
-    void MoveTheObject()
-    {
-        if(currentTarget < _targetsPos.Length)
-        {
-            MovementController.SetTarget(_targetsPos[currentTarget], timeToTarget);
-            currentTarget++;
-            MovementController.StartMoving();
-        }
-        else
-        {
-            TurnBaseController.EndAction();
-        }
-    }
-
-    private void StartMoving1Math()
-    {
-        Debug.Log("[StartMoving1Math] On Move Start: " + currentTarget);
-    }
-
-    private void EndMoving1Math()
-    {
-        Debug.Log("[EndMoving1Math] On Move End: " + currentTarget);
-        board.OnEnterNode(GetUserAddress(currentPlayerId), targetNodes[currentTarget-1]);
-        MoveTheObject();
-    }
-
-    private void EndMovingAllTarget()
-    {
-        OnTriggerMathEffect();
-    }
-
-    #endregion
+    #endregion    
     //-------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------
     #region User Controller
@@ -353,7 +228,28 @@ public class LocalGameController : MonoBehaviour
 
     private void OnTriggerMathEffect()
     {
-        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
+        LocalGameView.DeactiveAllBtn();
+
+        var actionType = UserDataManager.UserGameStatus.Get_MapActionType();
+        Debug.Log("[LocalGameController] OnTriggerMathEffect: " + actionType.ToString());
+        switch (actionType)
+        {
+            case ACTION_TYPE.LUCKY_DRAW:
+                LocalGameView.SetBtn_State(ACTION_TYPE.LUCKY_DRAW, true);
+                break;
+            case ACTION_TYPE.CHANCE:
+                LocalGameView.SetBtn_State(ACTION_TYPE.CHANCE, true);
+                break;
+            case ACTION_TYPE.COMBAT:
+                LocalGameView.SetBtn_State(ACTION_TYPE.COMBAT, true);
+                break;
+            case ACTION_TYPE.INVALID_ACTION:
+                Debug.LogError("[LocalGameController] OnTriggerMathEffect ERROR: INVALID ACTION.");
+                break;
+            default:
+                Debug.LogError("[LocalGameController] OnTriggerMathEffect ERROR: STRANGE ACTION: " + actionType.ToString());
+                break;
+        }
     }
     #endregion
 }

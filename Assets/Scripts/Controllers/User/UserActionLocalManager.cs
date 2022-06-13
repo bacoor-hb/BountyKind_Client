@@ -9,8 +9,12 @@ public class UserActionLocalManager : IPlayer
     public OnEventTriggered<int> OnEndRollingDice;
     public OnEventTriggered<int> OnStartMoving;
     public OnEventTriggered<int> OnEndMoving;
-
-    private UserDataManager userData;
+    public OnEventTriggered<int> OnStartLuckyDraw;
+    public OnEventTriggered<int> OnEndLuckyDraw;
+    public OnEventTriggered<int> OnStartChance;
+    public OnEventTriggered<int> OnEndChance;
+    public OnEventTriggered<int> OnStartCombat;
+    public OnEventTriggered<int> OnEndCombat;
 
     [Header ("Turn Action")]
     [SerializeField]
@@ -19,6 +23,12 @@ public class UserActionLocalManager : IPlayer
     private Action RollDiceAction;
     [SerializeField]
     private Action MoveAction;
+    [SerializeField]
+    private Action LuckyDrawAction;
+    [SerializeField]
+    private Action ChanceAction;
+    [SerializeField]
+    private Action CombatAction;
 
     private TurnBaseController TurnBaseController;
 
@@ -33,8 +43,6 @@ public class UserActionLocalManager : IPlayer
     /// <param name="user"></param>
     public void Init(TurnBaseController _controller)
     {
-        userData = GlobalManager.Instance.UserDataManager;
-
         TurnBaseController = _controller;
 
         EndTurnAction.InitAction(id, _controller);

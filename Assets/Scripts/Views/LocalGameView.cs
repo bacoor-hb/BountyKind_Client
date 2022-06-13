@@ -31,12 +31,7 @@ public class LocalGameView : MonoBehaviour
         EndTurn_Btn.onClick.RemoveAllListeners();
         Exit_Btn.onClick.RemoveAllListeners();
 
-        SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
-        SetBtn_State(ACTION_TYPE.MOVE, false);
-        SetBtn_State(ACTION_TYPE.CHANCE, false);
-        SetBtn_State(ACTION_TYPE.COMBAT, false);
-        SetBtn_State(ACTION_TYPE.LUCKY_DRAW, false);
-        SetBtn_State(ACTION_TYPE.END_TURN, false);
+        DeactiveAllBtn();
     }
 
     public void SetBtn_State(ACTION_TYPE actionType, bool _state)
@@ -64,6 +59,16 @@ public class LocalGameView : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void DeactiveAllBtn()
+    {
+        SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
+        SetBtn_State(ACTION_TYPE.MOVE, false);
+        SetBtn_State(ACTION_TYPE.CHANCE, false);
+        SetBtn_State(ACTION_TYPE.COMBAT, false);
+        SetBtn_State(ACTION_TYPE.LUCKY_DRAW, false);
+        SetBtn_State(ACTION_TYPE.END_TURN, false);
     }
 
     public void UpdateUserData(UserData userData)

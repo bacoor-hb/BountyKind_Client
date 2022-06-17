@@ -25,12 +25,14 @@ public class NetworkManager : MonoBehaviour
     private APIManager APIManager;
     private UserDataManager UserDataManager;
     private MapNodeDataManager MapNodeDataManager;
+    private LoadingManager LoadingManager;
 
     private string host_EndPoint;
     public void Init()
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
         MapNodeDataManager = GlobalManager.Instance.MapNodeDataManager;
+        LoadingManager = GlobalManager.Instance.LoadingManager;
 
         APIManager.Init();
         host_EndPoint = CONSTS.HOST_ENDPOINT_SOCKET;
@@ -49,7 +51,7 @@ public class NetworkManager : MonoBehaviour
     /// </summary>
     private void JoinLobby()
     {
-        if(!socketManager.LobbyStatus())
+        if (!socketManager.LobbyStatus())
             StartCoroutine(socketManager.JoinLobby(UserDataManager.UserData.token));
     }
 
@@ -60,7 +62,7 @@ public class NetworkManager : MonoBehaviour
     /// <param name="mapKey"></param>
     public void CreateRoom(string roomType, string mapKey)
     {
-        if(socketManager != null)
+        if (socketManager != null)
         {
             StartCoroutine(socketManager.CreateRoom(roomType, mapKey, UserDataManager.UserData.token));
         }
@@ -68,7 +70,7 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.LogError("[NetworkManager] Socket is null, cannot create room.");
         }
-        
+
     }
 
     /// <summary>
@@ -86,7 +88,7 @@ public class NetworkManager : MonoBehaviour
     public void Disconnect()
     {
         socketManager.Disconnect();
-        //LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
+        LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
     }
 
     /// <summary>
@@ -154,10 +156,10 @@ public class NetworkManager : MonoBehaviour
     /// <param name="_token"></param>
     public void GetUserData_FromAPI(string uri, string _token)
     {
-        if(UserDataManager.UserData != null)
+        if (UserDataManager.UserData != null)
         {
             StartCoroutine(APIManager.GetUserData(uri, _token));
-        }        
+        }
     }
     public void GetUserDataSuccess(UserData_API userData)
     {

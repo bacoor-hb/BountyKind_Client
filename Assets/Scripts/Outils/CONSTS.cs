@@ -49,7 +49,7 @@ public enum SCENE_NAME
     CreditScene,
 }
 
-public enum CYCLE_TURN 
+public enum CYCLE_TURN
 {
     START_TURN,
     WAITING_ACTION,
@@ -73,7 +73,7 @@ public class TEXT_UI
     public const string LANGUAGE = "Language";
     public const string ENGLISH = "English";
     public const string JAPANESE = "Japanese";
-    
+
 }
 
 public class ROOM_TYPE

@@ -54,6 +54,18 @@ public class UserActionLocalManager : IPlayer
         MoveAction.InitAction(id, _controller);
         MoveAction.StartAction += StartMoving;
         MoveAction.EndAction += EndMoving;
+
+        LuckyDrawAction.InitAction(id, _controller);
+        LuckyDrawAction.StartAction += StartLuckyDraw;
+        LuckyDrawAction.EndAction += EndLuckyDraw;
+
+        ChanceAction.InitAction(id, _controller);
+        ChanceAction.StartAction += StartChance;
+        ChanceAction.EndAction += EndChance;
+
+        CombatAction.InitAction(id, _controller);
+        CombatAction.StartAction += StartCombat;
+        CombatAction.EndAction += EndCombat;
     }
     #endregion
 
@@ -65,6 +77,9 @@ public class UserActionLocalManager : IPlayer
             ACTION_TYPE.MOVE => MoveAction,
             ACTION_TYPE.ROLL_DICE => RollDiceAction,
             ACTION_TYPE.END_TURN => EndTurnAction,
+            ACTION_TYPE.CHANCE => ChanceAction,
+            ACTION_TYPE.COMBAT => CombatAction,
+            ACTION_TYPE.LUCKY_DRAW => LuckyDrawAction,
             _ => null,
         };
     }
@@ -82,7 +97,7 @@ public class UserActionLocalManager : IPlayer
         Debug.Log("EndTurn: id: " + id);
     }
 
-    #region Event Action
+    #region Event Action Trigger
     private void StartRollDice()
     {
         OnStartRollingDice?.Invoke(id);
@@ -101,6 +116,36 @@ public class UserActionLocalManager : IPlayer
     private void EndMoving()
     {
         OnEndMoving?.Invoke(id);
+    }
+
+    private void StartLuckyDraw()
+    {
+        OnStartLuckyDraw?.Invoke(id);
+    }
+
+    private void EndLuckyDraw()
+    {
+        OnEndLuckyDraw?.Invoke(id);
+    }
+
+    private void StartChance()
+    {
+        OnStartChance?.Invoke(id);
+    }
+
+    private void EndChance()
+    {
+        OnEndChance?.Invoke(id);
+    }
+
+    private void StartCombat()
+    {
+        OnStartCombat?.Invoke(id);
+    }
+
+    private void EndCombat()
+    {
+        OnEndCombat?.Invoke(id);
     }
     #endregion
 }

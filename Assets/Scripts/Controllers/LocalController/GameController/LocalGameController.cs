@@ -77,8 +77,7 @@ public partial class LocalGameController : MonoBehaviour
             GraphNode userPos = board.GetNode(currentNodeId);
             graphNodes[i] = userPos;
 
-            MovementController.Teleport(userPos.transform);
-           
+            MovementController.Teleport(userPos.transform);           
         }
         board.InitUserNodeList(usersAddress, graphNodes);
 
@@ -92,6 +91,14 @@ public partial class LocalGameController : MonoBehaviour
 
         //Update the User Data View
         LocalGameView.UpdateUserData(UserDataManager.UserData);
+
+        LocalGameView.Init();
+        LocalGameView.RollDice_Btn.onClick.AddListener(RollDice_Action);
+        LocalGameView.Move_Btn.onClick.AddListener(Move_Action);
+        LocalGameView.Chance_Btn.onClick.AddListener(Chance_Action);
+        LocalGameView.LuckyDraw_Btn.onClick.AddListener(LuckyDraw_Action);
+        LocalGameView.Combat_Btn.onClick.AddListener(Combat_Action);
+        LocalGameView.EndTurn_Btn.onClick.AddListener(EndTurn_Action);
     }
     #endregion
     //-------------------------------------------------------------------------------------------
@@ -112,23 +119,22 @@ public partial class LocalGameController : MonoBehaviour
         //Reset Dice
         DicesController.ResetDicesPosition();
 
-        //Init the View + Button Event, Only for local player.
-        LocalGameView.Init();
+        //Init the View + Button Event, Only for local player.        
         LocalGameView.UpdateUserData(UserDataManager.UserData);
-
-        LocalGameView.RollDice_Btn.onClick.AddListener(RollDice_Action);
-        LocalGameView.Move_Btn.onClick.AddListener(Move_Action);
-        LocalGameView.Chance_Btn.onClick.AddListener(Chance_Action);
-        LocalGameView.LuckyDraw_Btn.onClick.AddListener(LuckyDraw_Action);
-        LocalGameView.Combat_Btn.onClick.AddListener(Combat_Action);
-        LocalGameView.EndTurn_Btn.onClick.AddListener(EndTurn_Action);
+        LocalGameView.DeactiveAllBtn();
 
         //Update current User's current Node
         UserDataManager.UserGameStatus.currentNode = Mathf.RoundToInt(currentRoom.players[currentPlayerId].currentNode);
+        var actionType = UserDataManager.UserGameStatus.Get_MapActionType();
+        Debug.Log("[LocalGameController] [OnStartTurn] Current Math status: " + currentRoom.players[currentPlayerId].isInteracted);
         //If the current player is not yet interracted with the current node.
         if (!currentRoom.players[currentPlayerId].isInteracted)
         {
             OnTriggerMathEffect();
+        }
+        else
+        {
+            LocalGameView.SetBtn_State(ACTION_TYPE.ROLL_DICE, true);
         }
     }
 
@@ -137,6 +143,7 @@ public partial class LocalGameController : MonoBehaviour
     /// </summary>
     void RollDice_Action()
     {
+        Debug.Log("[LocalGameController][RollDice_Action] rollNumber: " + rollNumber);
         if (rollNumber > 0)
         {
             rollNumber--;
@@ -156,7 +163,7 @@ public partial class LocalGameController : MonoBehaviour
     private void Chance_Action()
     {
         Debug.Log("[LocalGameController] Accept Chance...");
-        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.CHANCE));
     }
     /// <summary>
     /// Add Lucky Draw Action to the Queue
@@ -164,7 +171,7 @@ public partial class LocalGameController : MonoBehaviour
     private void LuckyDraw_Action()
     {
         Debug.Log("[LocalGameController] Accept Lucky Draw...");
-        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.LUCKY_DRAW));
     }
     /// <summary>
     /// Add Combat Action to the Queue
@@ -172,13 +179,13 @@ public partial class LocalGameController : MonoBehaviour
     private void Combat_Action()
     {
         Debug.Log("[LocalGameController] Accept combat...");
-        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.COMBAT));
     }
 
     /// <summary>
     /// Add End Turn Action to the Queue
     /// </summary>
-    void EndTurn_Action()
+    private void EndTurn_Action()
     {
         Debug.Log("[LocalGameController] End Turn...");
         TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.END_TURN));
@@ -223,6 +230,24 @@ public partial class LocalGameController : MonoBehaviour
 
             players[i].OnEndMoving = null;
             players[i].OnEndMoving += (x) => EndMovingAllTarget();
+
+            players[i].OnStartLuckyDraw = null;
+            players[i].OnStartLuckyDraw += (x) => Start_LuckyDraw();
+
+            players[i].OnEndLuckyDraw = null;
+            players[i].OnEndLuckyDraw += (x) => End_LuckyDraw();
+
+            players[i].OnStartChance = null;
+            players[i].OnStartChance += (x) => Start_Chance();
+
+            players[i].OnEndChance = null;
+            players[i].OnEndChance += (x) => End_Chance();
+
+            players[i].OnStartCombat = null;
+            players[i].OnStartCombat += (x) => Start_Combat();
+
+            players[i].OnEndCombat = null;
+            players[i].OnEndCombat += (x) => End_Combat();
         }
     }
 
@@ -242,6 +267,10 @@ public partial class LocalGameController : MonoBehaviour
                 break;
             case ACTION_TYPE.COMBAT:
                 LocalGameView.SetBtn_State(ACTION_TYPE.COMBAT, true);
+                break;
+            case ACTION_TYPE.END_TURN:
+                Multiplayer_GameEvent.Handle_Other_Default();
+                LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
                 break;
             case ACTION_TYPE.INVALID_ACTION:
                 Debug.LogError("[LocalGameController] OnTriggerMathEffect ERROR: INVALID ACTION.");

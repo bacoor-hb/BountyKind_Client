@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -365,6 +365,9 @@ GameObject:
   - component: {fileID: 22487580}
   - component: {fileID: 22487579}
   - component: {fileID: 22487578}
+  - component: {fileID: 22487584}
+  - component: {fileID: 22487583}
+  - component: {fileID: 22487582}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -388,6 +391,9 @@ MonoBehaviour:
   EndTurnAction: {fileID: 22487580}
   RollDiceAction: {fileID: 22487579}
   MoveAction: {fileID: 22487578}
+  LuckyDrawAction: {fileID: 22487584}
+  ChanceAction: {fileID: 22487583}
+  CombatAction: {fileID: 22487582}
   myMaterial: {fileID: 2100000, guid: 95debbf2f75d5c54ca4d83439847191c, type: 2}
 --- !u!114 &22487578
 MonoBehaviour:
@@ -442,6 +448,42 @@ Transform:
   m_Father: {fileID: 995314726}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &22487582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22487576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971878291862ac84a838ae1074ab64c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &22487583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22487576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617c87522163660449a6adc33bc8ac82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &22487584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22487576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab78f737d20dc7e4490061e47967cdd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &155555073 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 607431508544922776, guid: 1ab0391f2506ee54988cfcfe6d834395, type: 3}

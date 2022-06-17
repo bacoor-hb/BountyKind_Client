@@ -14,9 +14,7 @@ public partial class LocalGameController
         int _userToMove = currentPlayerId;
 
         //Deactive all Buttons so the player cannot stack any action until the move end.
-        LocalGameView.SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
-        LocalGameView.SetBtn_State(ACTION_TYPE.MOVE, false);
-        LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, false);
+        LocalGameView.DeactiveAllBtn();
 
         MovePlayer(_moveValue, _userToMove);
     }

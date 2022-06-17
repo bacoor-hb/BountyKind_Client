@@ -29,11 +29,19 @@ public class LocalGameView : MonoBehaviour
         RollDice_Btn.onClick.RemoveAllListeners();
         Move_Btn.onClick.RemoveAllListeners();
         EndTurn_Btn.onClick.RemoveAllListeners();
+        LuckyDraw_Btn.onClick.RemoveAllListeners();
+        Combat_Btn.onClick.RemoveAllListeners();
+        Chance_Btn.onClick.RemoveAllListeners();
         Exit_Btn.onClick.RemoveAllListeners();
 
         DeactiveAllBtn();
     }
 
+    /// <summary>
+    /// Switch the Button State
+    /// </summary>
+    /// <param name="actionType">The Button to be interract with</param>
+    /// <param name="_state">true: enable the Button</param>
     public void SetBtn_State(ACTION_TYPE actionType, bool _state)
     {
         switch (actionType)
@@ -61,6 +69,9 @@ public class LocalGameView : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Deactive all Actions button on the View
+    /// </summary>
     public void DeactiveAllBtn()
     {
         SetBtn_State(ACTION_TYPE.ROLL_DICE, false);

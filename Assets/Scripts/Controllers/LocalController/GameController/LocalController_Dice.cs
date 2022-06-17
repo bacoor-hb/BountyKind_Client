@@ -10,22 +10,22 @@ public partial class LocalGameController
     /// Only for TEST. The real data will be got from Server. 
     /// </summary>
     /// <returns></returns>
-    public int[] GetDiceValue(int _diceNB = 1)
-    {
-        if (_diceNB > 0)
-        {
-            DicesValue = new int[_diceNB];
-            for (int i = 0; i < _diceNB; i++)
-            {
-                DicesValue[i] = Random.Range(1, 7);
-            }
-            return DicesValue;
-        }
-        else
-        {
-            return null;
-        }
-    }
+    //public int[] GetDiceValue(int _diceNB = 1)
+    //{
+    //    if (_diceNB > 0)
+    //    {
+    //        DicesValue = new int[_diceNB];
+    //        for (int i = 0; i < _diceNB; i++)
+    //        {
+    //            DicesValue[i] = Random.Range(1, 7);
+    //        }
+    //        return DicesValue;
+    //    }
+    //    else
+    //    {
+    //        return null;
+    //    }
+    //}
 
     public void Call_RollDice()
     {

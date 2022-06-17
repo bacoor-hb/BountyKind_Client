@@ -7,11 +7,11 @@ public class RollDice_Action : Action
     [SerializeField]
     private DicesController DicesController;
 
-    private RollResultSchema RollResultFromServer;
+    private RollResult_MSG RollResultFromServer;
     public override void ClearEvent()
     {
         base.ClearEvent();
-        RollResultFromServer = new RollResultSchema();
+        RollResultFromServer = new RollResult_MSG();
         DicesController.ResetDicesPosition();
 
         DicesController.OnAllDiceFinishAnim = null;
@@ -43,6 +43,6 @@ public class RollDice_Action : Action
     {
         base.SetActionData(args);
 
-        RollResultFromServer = (RollResultSchema)args;
+        RollResultFromServer = (RollResult_MSG)args;
     }
 }

@@ -67,15 +67,15 @@ public class LobbyView : MonoBehaviour
     /// <param name="userData"></param>
     public void FillData(UserData userData)
     {
-        Address_Txt.text = userData.address;
-        Username_Txt.text = userData.username;
-        BalanceYuPoint_Txt.text = userData.tokenBalance.YU_Point.ToString();
-        BalanceEnergy_Txt.text = userData.tokenBalance.Energy.ToString();
+        Address_Txt.text = STRING_EXT.STRING_FORMAT(userData.address);
+        Username_Txt.text = STRING_EXT.STRING_FORMAT(userData.username);
+        BalanceYuPoint_Txt.text = STRING_EXT.NUMBER_FORMAT_DOT(userData.tokenBalance.YU_Point);
+        BalanceEnergy_Txt.text = STRING_EXT.NUMBER_FORMAT_DOT(userData.tokenBalance.Energy);
     }
 
     public void UpdateEnergy_Txt(int _newEnergyValue)
     {
-        BalanceEnergy_Txt.text = _newEnergyValue.ToString();
+        BalanceEnergy_Txt.text = STRING_EXT.NUMBER_FORMAT_DOT(_newEnergyValue);
     }
 
     /// <summary>

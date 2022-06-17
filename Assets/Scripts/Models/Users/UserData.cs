@@ -21,9 +21,9 @@ public class UserData
     /// <returns></returns>
     public void GenerateFakeData()
     {
-        address = "0x7e1ba029f0d2fb3833f8d7f291ef7e4516037289";
+        address = "0x64470e5f5dd38e497194bbcaf8daa7ca578926f6";
         username = "Test User";
-        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHg3ZTFiYTAyOWYwZDJmYjM4MzNmOGQ3ZjI5MWVmN2U0NTE2MDM3Mjg5IiwiaWF0IjoxNjUwNTM2NTY5LCJleHAiOjE5NjYxMTI1Njl9.TCWBSo-gK72h1kl2EPEE9gbShPODvE4MgEeNV0rM0Xg";
+        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHg2NDQ3MGU1ZjVkZDM4ZTQ5NzE5NGJiY2FmOGRhYTdjYTU3ODkyNmY2IiwidXNlcm5hbWUiOiJuYW1lZSIsImltYWdlIjoiUW1XTTdrdkh5aHRuVEdkMk1lSDVmTFk3TWY0OWNLZ1hSd3NzTjFWdUxnSHVldiIsImlhdCI6MTY1NDg0NTgxOSwiZXhwIjoxOTcwNDIxODE5fQ.xvZ-3ZB-HEENh7s6scjDjsqcFVV524l3neCNirE67r4";
         _id = "61ee1891d1949c6bc79425a8";
         BWP = 0;
         currentGameId = -1;

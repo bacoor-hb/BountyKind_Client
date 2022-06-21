@@ -2369,8 +2369,8 @@ MonoBehaviour:
   - {fileID: 2456848683615008564, guid: 61065d96957355544a4161f0d602658e, type: 3}
   - {fileID: 2456848683615008564, guid: fb871acdbfb0da348bed0badde5d9313, type: 3}
   - {fileID: 2456848683615008564, guid: 51f3cbdf31844cf48a3130a699e9da6f, type: 3}
-  prefabPet: {fileID: 2607983856138588628, guid: dfe24f683f9c5b34b9f6a51ba5de5015, type: 3}
-  prefabMonster: {fileID: 550561232666822922, guid: 04ab27489494823428eff0ba8d0c5d67, type: 3}
+  prefabPet: {fileID: 2607983856138588628, guid: fa63d4b0251914543a963d2645b9b2de, type: 3}
+  prefabMonster: {fileID: 550561232666822922, guid: 9b10bb1c297231d40a028db7675d5c1f, type: 3}
   unitInQueue: {fileID: 5161649066514713945, guid: 88352e5c4c8dfd34d8dfd1c0357c8aab, type: 3}
   unitsOutQueue: []
   currentUnitInQueue: {fileID: 1375598578}

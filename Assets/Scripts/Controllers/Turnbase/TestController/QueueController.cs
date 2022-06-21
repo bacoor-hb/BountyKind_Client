@@ -27,7 +27,7 @@ public class QueueController : MonoBehaviour
         List<GameObject> unitsInQueue = new List<GameObject>();
         for (var i = 0; i < arr.Count; i++)
         {
-            float xValue = sampleUnitsInQueue[0].transform.position.x + (86 * i);
+            float xValue = sampleUnitsInQueue[0].transform.position.x + (85 * i);
             float yValue = sampleUnitsInQueue[0].transform.position.y;
             float zValue = sampleUnitsInQueue[0].transform.position.z;
             Vector3 position = new Vector3(xValue, yValue, zValue);

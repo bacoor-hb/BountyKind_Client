@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public enum CharacterStatus 
+public enum CharacterStatus
 {
     ACTIVE,
     ONSALE,
@@ -81,7 +81,7 @@ public class Character : CharacterBaseStat
     public int def;
     public int speed;
     public int hp;
-    
+
     public int exp;
     public int level;
 

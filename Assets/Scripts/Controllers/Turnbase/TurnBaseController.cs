@@ -17,7 +17,7 @@ public class TurnBaseController : MonoBehaviour
     public List<IPlayer> playerList;
 
     private Action currentAction;
-    private Queue<Action> queueActionList;
+    public Queue<Action> queueActionList;
 
     private CYCLE_TURN status;
     private bool isWaiting;
@@ -197,7 +197,7 @@ public class TurnBaseController : MonoBehaviour
     /// <summary>
     ///  Script run after end turn
     /// </summary>
-    private void EndTurn()
+    public void EndTurn()
     {
         //Trigger the End turn function of the current player
         playerList[CurrentPlayer].EndTurn();
@@ -238,7 +238,7 @@ public class TurnBaseController : MonoBehaviour
     /// <returns></returns>
     private bool CheckChangePlayer()
     {
-        return true;
+       return true;
     }
 
     /// <summary>

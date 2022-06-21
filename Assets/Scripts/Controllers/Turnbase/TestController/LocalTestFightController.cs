@@ -60,8 +60,7 @@ public class LocalTestFightController : MonoBehaviour
 
     [SerializeField]
     private TurnBaseController turnBaseController;
-    [SerializeField]
-    private GameObject plane;
+
     [SerializeField]
     private List<GameObject> spawnPosPets;
     [SerializeField]

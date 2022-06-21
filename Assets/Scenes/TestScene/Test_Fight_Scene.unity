@@ -1136,7 +1136,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 342900295}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -231.3, y: -13.190704, z: -94.3}
+  m_LocalPosition: {x: -231.1, y: -12.6, z: -94.3}
   m_LocalScale: {x: 9, y: 9, z: 9}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -2378,7 +2378,7 @@ MonoBehaviour:
   players:
   - {fileID: 949484282}
   turnBaseController: {fileID: 816289142}
-  plane: {fileID: 0}
+  plane: {fileID: 2757788438417063697, guid: 2ee91eee124c6294a88f3ccbb133458d, type: 3}
   spawnPosPets:
   - {fileID: 2040053319}
   - {fileID: 2137023933}
@@ -2678,7 +2678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2757788438417063710, guid: 2ee91eee124c6294a88f3ccbb133458d, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2757788438417063710, guid: 2ee91eee124c6294a88f3ccbb133458d, type: 3}
       propertyPath: m_LocalScale.x

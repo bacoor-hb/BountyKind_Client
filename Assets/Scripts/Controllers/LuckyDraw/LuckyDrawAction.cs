@@ -18,18 +18,13 @@ public class LuckyDrawAction : Action
     public override void OnStartAction()
     {
         base.OnStartAction();
-        StartCoroutine(LuckyDraw_Process());
     }
 
-    /// <summary>
-    /// TO DO: Implement Lucky draw process.
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator LuckyDraw_Process()
+    public void OnLuckyDraw_Return(LuckyDraw_MSG msg)
     {
-        Debug.Log("[LuckyDrawAction] Processing...");
+        string result = JsonUtility.ToJson(msg);
+        Debug.Log("[LuckyDrawAction][OnLuckyDraw_Return] " + result);
 
-        yield return new WaitForSeconds(1.0f);
         turnBaseController.EndAction();
     }
 }

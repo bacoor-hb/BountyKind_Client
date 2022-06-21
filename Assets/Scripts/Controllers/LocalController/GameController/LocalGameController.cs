@@ -171,7 +171,14 @@ public partial class LocalGameController : MonoBehaviour
     private void LuckyDraw_Action()
     {
         Debug.Log("[LocalGameController] Accept Lucky Draw...");
-        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.LUCKY_DRAW));
+        var action = currentPlayer.GetAction(ACTION_TYPE.LUCKY_DRAW) as LuckyDrawAction;
+        if(action != null)
+        {
+            Multiplayer_GameEvent.OnLuckyDrawReturn = null;
+            Multiplayer_GameEvent.OnLuckyDrawReturn += action.OnLuckyDraw_Return;
+            Debug.Log("[LocalGameController] Set Lucky Draw event ...");
+        }
+        TurnBaseController.AddAction(currentPlayer, action);
     }
     /// <summary>
     /// Add Combat Action to the Queue
@@ -270,6 +277,7 @@ public partial class LocalGameController : MonoBehaviour
                 break;
             case ACTION_TYPE.END_TURN:
                 Multiplayer_GameEvent.Handle_Other_Default();
+                //EndTurn_Action();
                 LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
                 break;
             case ACTION_TYPE.INVALID_ACTION:

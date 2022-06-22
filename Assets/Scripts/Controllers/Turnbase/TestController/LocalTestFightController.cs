@@ -40,9 +40,6 @@ public class LocalTestFightController : MonoBehaviour
     private GameObject prefabMonster;
 
     [SerializeField]
-    private GameObject unitInQueue;
-
-    [SerializeField]
     private static List<GameObject> unitsInQueue = new List<GameObject>();
 
     [SerializeField]

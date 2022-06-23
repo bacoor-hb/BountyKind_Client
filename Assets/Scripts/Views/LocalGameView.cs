@@ -29,16 +29,19 @@ public class LocalGameView : MonoBehaviour
         RollDice_Btn.onClick.RemoveAllListeners();
         Move_Btn.onClick.RemoveAllListeners();
         EndTurn_Btn.onClick.RemoveAllListeners();
+        LuckyDraw_Btn.onClick.RemoveAllListeners();
+        Combat_Btn.onClick.RemoveAllListeners();
+        Chance_Btn.onClick.RemoveAllListeners();
         Exit_Btn.onClick.RemoveAllListeners();
 
-        SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
-        SetBtn_State(ACTION_TYPE.MOVE, false);
-        SetBtn_State(ACTION_TYPE.CHANCE, false);
-        SetBtn_State(ACTION_TYPE.COMBAT, false);
-        SetBtn_State(ACTION_TYPE.LUCKY_DRAW, false);
-        SetBtn_State(ACTION_TYPE.END_TURN, false);
+        DeactiveAllBtn();
     }
 
+    /// <summary>
+    /// Switch the Button State
+    /// </summary>
+    /// <param name="actionType">The Button to be interract with</param>
+    /// <param name="_state">true: enable the Button</param>
     public void SetBtn_State(ACTION_TYPE actionType, bool _state)
     {
         switch (actionType)
@@ -64,6 +67,19 @@ public class LocalGameView : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    /// <summary>
+    /// Deactive all Actions button on the View
+    /// </summary>
+    public void DeactiveAllBtn()
+    {
+        SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
+        SetBtn_State(ACTION_TYPE.MOVE, false);
+        SetBtn_State(ACTION_TYPE.CHANCE, false);
+        SetBtn_State(ACTION_TYPE.COMBAT, false);
+        SetBtn_State(ACTION_TYPE.LUCKY_DRAW, false);
+        SetBtn_State(ACTION_TYPE.END_TURN, false);
     }
 
     public void UpdateUserData(UserData userData)

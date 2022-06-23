@@ -120,7 +120,8 @@ public class TurnBaseController : MonoBehaviour
     private void NextStep()
     {
         isWaiting = false;
-        Debug.Log("[NextStep] current step: " + status.ToString());
+        string lastStep = status.ToString();
+
         switch (status)
         {
             case CYCLE_TURN.START_TURN:
@@ -146,7 +147,7 @@ public class TurnBaseController : MonoBehaviour
                 status = CYCLE_TURN.START_TURN;
                 break;
         }
-        Debug.Log("[NextStep] next step: " + status.ToString());
+        Debug.Log("[TurnBaseController][NextStep] Last step: " + lastStep + " | Next step: " + status.ToString());
     }
 
     /// <summary>
@@ -247,7 +248,7 @@ public class TurnBaseController : MonoBehaviour
     {
         if (IsStarting)
         {
-            Debug.LogError("[Register]: ERROR: Game is start.");
+            Debug.LogError("[Register]: ERROR: Game started.");
         }
         else
         {

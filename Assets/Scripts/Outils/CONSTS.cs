@@ -21,10 +21,10 @@ public class CONSTS
     #endregion
 
     #region NETWORK SETTING
-    public const string HOST_ENDPOINT_SOCKET = "wss://dev-game-server.w3w.app/";
-    public const string HOST_ENDPOINT_API = "https://dev-game-api.w3w.app/";
-    //public const string HOST_ENDPOINT_SOCKET = "ws://192.168.9.5:2567/";
-    //public const string HOST_ENDPOINT_API = "http://192.168.9.5:4000/";
+    //public const string HOST_ENDPOINT_SOCKET = "wss://dev-game-server.w3w.app/";
+    //public const string HOST_ENDPOINT_API = "https://dev-game-api.w3w.app/";
+    public const string HOST_ENDPOINT_SOCKET = "ws://192.168.9.9:2567/";
+    public const string HOST_ENDPOINT_API = "http://192.168.9.9:4000/";
     public const string HOST_GET_MAP_API = HOST_ENDPOINT_API + "api/maps";
     public const string HOST_GET_USERDATA_API = HOST_ENDPOINT_API + "api/users/detail";
     #endregion
@@ -66,6 +66,8 @@ public enum ACTION_TYPE
     CHANCE,
     COMBAT,
     END_TURN,
+
+    INVALID_ACTION = 100
 }
 
 public class TEXT_UI
@@ -90,6 +92,8 @@ public enum GAMEROOM_SENT_EVENTS
     FIGHT,
     BALANCE,
     GAME_EXIT,
+    CHANCE,
+    DEFAULT,
 }
 
 public enum GAMEROOM_RECEIVE_EVENTS
@@ -98,6 +102,7 @@ public enum GAMEROOM_RECEIVE_EVENTS
     LUCKY_DRAW_RESULT,
     FIGHT_RESULT,
     BALANCE_RESULT,
+    CHANCE_RESULT,
 }
 
 public enum LOBBY_SENT_EVENTS

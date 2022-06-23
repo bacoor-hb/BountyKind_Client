@@ -119,7 +119,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
         //Only for test: deny the battle
         Battle_MSG msg = new Battle_MSG()
         {
-            skip = true,
+            skip = false,
             status = 1,
             battleProgress = new AttackResult_MSG[0],
         };
@@ -133,7 +133,9 @@ public class Multiplayer_GameEventController : MonoBehaviour
     /// <param name="battle_MSG"></param>
     public void OnBattleEnd(Battle_MSG battle_MSG)
     {
-        Debug.Log("[Multiplayer_GameEventController] OnBattleEnd");
+        //Debug.Log("[Multiplayer_GameEventController] OnBattleEnd");
+        string jsonMsg = JsonUtility.ToJson(battle_MSG);
+        Debug.Log("[Multiplayer_GameEventController] OnBattleEnd: " + jsonMsg);
         OnBattleReturn?.Invoke(battle_MSG);
     }
 

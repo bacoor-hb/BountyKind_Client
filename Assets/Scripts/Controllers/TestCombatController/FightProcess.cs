@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class FightProcess : MonoBehaviour
 {
-    public delegate void OnEndFightAnimation();
+    public delegate void OnAnimTrigger<T>(T data);
+    public OnAnimTrigger<int> OnStartFightTrigger;
+    public OnAnimTrigger<int> OnEndFightTrigger;
     [SerializeField]
     private LocalTestFightController localTestFightController;
     void Start()

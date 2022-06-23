@@ -10,30 +10,28 @@ enum UnitState
 }
 public class UnitController : MonoBehaviour
 {
-    private delegate void OnEndFightAnimation();
-    private OnEndFightAnimation onEndFightAnimation;
+    public delegate void OnEventEnded();
+    private OnEventEnded onEndFightAnimation;
+    public static OnEventEnded onEndFight;
 
-    public delegate void OnEndFight();
-    public static OnEndFight onEndFight;
-
-    Animator animator;
+    [Header ("Movement Controller")]
     [SerializeField]
     private MovementController movementController;
-    private Vector3 rootPos;
-    [SerializeField]
-    public int id;
     [SerializeField]
     private float timeToTarget = 1f;
+
+    [Header ("User Data")]  
+    public int id;
+    [SerializeField]
+    private Animator animator;
+
+    private Vector3 rootPos;
     private UnitState state;
-    private string skillName;
-    private GameObject barrier;
     private bool isMoving;
     private void Start()    
     {
         isMoving = false;
-        barrier = GameObject.FindGameObjectWithTag("Barrier");
         state = UnitState.STAND_STILL;
-        animator = GetComponent<Animator>();
         rootPos = transform.position;
         movementController.SetObjectToMove(gameObject);
         movementController.OnStartMoving += HandleStartMoving;
@@ -71,6 +69,8 @@ public class UnitController : MonoBehaviour
         onEndFightAnimation?.Invoke();
     }
 
+
+    private string skillName;
     private IEnumerator HandleFightAnimation()
     {
         animator.SetBool(skillName, true);

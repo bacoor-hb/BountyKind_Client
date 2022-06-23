@@ -25,6 +25,7 @@ class CharacterPosition
         side = _side;
     }
 }
+
 public class LocalTestFightController : MonoBehaviour
 {
     public delegate void OnRenderQueue(List<UnitQueue> arr);

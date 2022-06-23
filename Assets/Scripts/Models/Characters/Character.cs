@@ -60,22 +60,10 @@ public class CharacterBaseStat
     public GameCharacterRarity rarity;
     public GameCharacterRace race;
     public GameCharacterElement element;
-
-    //public CharacterBaseStat(CharacterSchema character)
-    //{
-    //    name = character.name;
-    //    key = character.key;
-    //    baseAtk = Mathf.RoundToInt(character.atk);
-    //    baseDef = Mathf.RoundToInt(character.def);
-    //    baseHp = Mathf.RoundToInt(character.hp);
-    //    baseSpeed = Mathf.RoundToInt(character.speed);
-    //    //level = Mathf.RoundToInt(character.level);
-    //}
 }
 
 public class Character : CharacterBaseStat
 {
-    //public CharacterBaseStat baseStat;
     public string id;
     public int atk;
     public int def;

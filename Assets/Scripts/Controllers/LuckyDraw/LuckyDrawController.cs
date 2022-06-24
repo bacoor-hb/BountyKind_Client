@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class LuckyDrawController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Dictionary<string, GameObject> itemPrefabList;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="_itemPrefabList"></param>
+    public void SetItemList(List<GameObject> _itemPrefabList)
     {
+        itemPrefabList = new Dictionary<string, GameObject>();
+        for(int i = 0; i < _itemPrefabList.Count; i++)
+        {
+            itemPrefabList.Add(_itemPrefabList[i].name, _itemPrefabList[i]);
+        }
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetPrice()
     {
-        
+
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BountyKind;
+
 public class BattleUnit
 {
     public string id;

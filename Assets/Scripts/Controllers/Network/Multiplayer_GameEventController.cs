@@ -10,6 +10,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
     public OnEventReturn<LuckyDraw_MSG> OnLuckyDrawReturn;
     public OnEventReturn<Chance_MSG> OnChanceReturn;
     public OnEventReturn<Battle_MSG> OnBattleReturn;
+    public OnEventReturn <TokenBalance> OnBalanceReturn;
 
     private UserDataManager UserDataManager;
     private NetworkManager NetworkManager;
@@ -163,6 +164,13 @@ public class Multiplayer_GameEventController : MonoBehaviour
     public void OnDefaultEnd()
     {
 
+    }
+
+    public void OnBalanceUpdate(TokenBalance tokenBalance)
+    {
+        string jsonMsg = JsonUtility.ToJson(tokenBalance);
+        Debug.Log("[Multiplayer_GameEventController] On Balance Update: " + jsonMsg);
+        OnBalanceReturn?.Invoke(tokenBalance);
     }
     void HandleExitGame()
     {

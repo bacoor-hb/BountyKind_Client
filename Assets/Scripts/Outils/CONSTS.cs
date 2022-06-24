@@ -2,9 +2,11 @@ public class CONSTS
 {
     public const string SCENE_KEY = "SCENE_KEY";
 
-    #region LAYER ID
-    public const string LAYER_PLANE = "Plane";
-    public const string LAYER_DICE = "Dice";
+    #region PLAYER ANIM KEY
+    public const string ANIM_SPEED_F = "Speed_f";
+    public const float ANIM_SPEED_RUN = 0.5f;
+    public const float ANIM_SPEED_IDLE = 0f;
+    public const string ANIM_STATIC_B = "Static_b";
     #endregion
 
     #region DICE CONST
@@ -23,7 +25,7 @@ public class CONSTS
     #region NETWORK SETTING
     public const string HOST_ENDPOINT_SOCKET = "wss://dev-game-server.w3w.app/";
     public const string HOST_ENDPOINT_API = "https://dev-game-api.w3w.app/";
-    //public const string HOST_ENDPOINT_SOCKET = "ws://192.168.9.9:2567/";
+    //public const string HOST_ENDPOINT_SOCKET = "wss://795f-113-161-74-234.ap.ngrok.io/";
     //public const string HOST_ENDPOINT_API = "http://192.168.9.9:4000/";
     public const string HOST_GET_MAP_API = HOST_ENDPOINT_API + "api/maps";
     public const string HOST_GET_USERDATA_API = HOST_ENDPOINT_API + "api/users/detail";

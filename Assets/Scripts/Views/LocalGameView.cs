@@ -85,9 +85,14 @@ public class LocalGameView : MonoBehaviour
     public void UpdateUserData(UserData userData)
     {
         userNameTxt.text = STRING_EXT.STRING_FORMAT(userData.username);
-        energyTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(userData.tokenBalance.Energy);
-        yuPointTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(userData.tokenBalance.YU_Point);
-
         userAddressTxt.text = STRING_EXT.STRING_FORMAT(userData.address);
+
+        UpdateBalance(userData.tokenBalance);
+    }
+
+    public void UpdateBalance(TokenBalance tokenBalance)
+    {
+        energyTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.Energy);
+        yuPointTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.YU_Point);
     }
 }

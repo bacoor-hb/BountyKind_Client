@@ -82,4 +82,24 @@ public class UserDataManager : MonoBehaviour
     {
         return UserGameStatus.currentMap;
     }
+
+    /// <summary>
+    /// Get the list of next nodes of the current Map
+    /// </summary>
+    /// <param name="currentNode"></param>
+    /// <returns></returns>
+    public List<int> GetNextNodes(int currentNode)
+    {
+        return UserGameStatus.currentMap.nodes[currentNode].nextNode;
+    }
+
+    /// <summary>
+    /// Get the list of previous nodes of the current Map
+    /// </summary>
+    /// <param name="currentNode"></param>
+    /// <returns></returns>
+    public List<int> GetPreNodes(int currentNode)
+    {
+        return UserGameStatus.currentMap.nodes[currentNode].preNode;
+    }
 }

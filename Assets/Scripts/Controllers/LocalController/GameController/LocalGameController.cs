@@ -88,6 +88,8 @@ public partial class LocalGameController : MonoBehaviour
         //Init the Multiplayer Game Event Controller
         Multiplayer_GameEvent.OnRollResultReturn = null;
         Multiplayer_GameEvent.OnRollResultReturn += RollDice;
+        Multiplayer_GameEvent.OnBalanceReturn = null;
+        Multiplayer_GameEvent.OnBalanceReturn += LocalGameView.UpdateBalance;
 
         //Update the User Data View
         LocalGameView.UpdateUserData(UserDataManager.UserData);
@@ -127,6 +129,15 @@ public partial class LocalGameController : MonoBehaviour
         UserDataManager.UserGameStatus.currentNode = Mathf.RoundToInt(currentRoom.players[currentPlayerId].currentNode);
         var actionType = UserDataManager.UserGameStatus.Get_MapActionType();
         Debug.Log("[LocalGameController] [OnStartTurn] Current Math status: " + currentRoom.players[currentPlayerId].isInteracted);
+        
+        //Face the Avatar to the right direction
+        Vector3 currentPos = nodeList[UserDataManager.UserGameStatus.currentNode].transform.position;
+        var nextNodeList = UserDataManager.GetNextNodes(UserDataManager.UserGameStatus.currentNode);
+        Vector3 nextPos = nodeList[nextNodeList[0]].transform.position;
+        Vector3 dir = nextPos - currentPos;
+        MovementController.FaceToDir(dir);
+        Debug.Log("CurrentPos: "+ currentPos + " | Next Pos:" + nextPos);
+
         //If the current player is not yet interracted with the current node.
         if (!currentRoom.players[currentPlayerId].isInteracted)
         {

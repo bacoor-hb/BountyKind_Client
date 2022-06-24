@@ -86,5 +86,13 @@ public class MovementController : MonoBehaviour
         ObjectToMove.transform.LookAt(target);
     }
 
+    /// <summary>
+    /// Face the Object to Move to the direction input.
+    /// </summary>
+    /// <param name="dir"></param>
+    public void FaceToDir(Vector3 dir)
+    {
+        ObjectToMove.transform.forward = Vector3.Normalize(dir);
+    }
     #endregion
 }

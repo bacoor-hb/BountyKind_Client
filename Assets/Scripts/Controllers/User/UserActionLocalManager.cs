@@ -32,9 +32,9 @@ public class UserActionLocalManager : IPlayer
 
     private TurnBaseController TurnBaseController;
 
-    [Header ("Only for TEST")]
+    [Header ("Users Anim Action Control")]
     [SerializeField]
-    private Material myMaterial;
+    private List<UserAnimationController> UserAnim;
 
     #region Initialize
     /// <summary>
@@ -66,6 +66,11 @@ public class UserActionLocalManager : IPlayer
         CombatAction.InitAction(id, _controller);
         CombatAction.StartAction += StartCombat;
         CombatAction.EndAction += EndCombat;
+
+        for(int i = 0; i < UserAnim.Count; i++)
+        {
+            UserAnim[i].Walking(CONSTS.ANIM_SPEED_IDLE);
+        }
     }
     #endregion
 
@@ -87,13 +92,11 @@ public class UserActionLocalManager : IPlayer
 
     public override void StartTurn()
     {        
-        myMaterial.color = Color.red;
         Debug.Log("StartTurn: id: " + id);
     }
 
     public override void EndTurn()
     {
-        myMaterial.color = Color.white;
         Debug.Log("EndTurn: id: " + id);
     }
 
@@ -111,11 +114,13 @@ public class UserActionLocalManager : IPlayer
     private void StartMoving()
     {
         OnStartMoving?.Invoke(id);
+        UserAnim[id].Walking(CONSTS.ANIM_SPEED_RUN);
     }
 
     private void EndMoving()
     {
         OnEndMoving?.Invoke(id);
+        UserAnim[id].Walking(CONSTS.ANIM_SPEED_IDLE);
     }
 
     private void StartLuckyDraw()

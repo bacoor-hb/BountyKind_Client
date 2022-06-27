@@ -61,9 +61,4 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
     {
         NetworkManager.LoginSuccess(data);
     }
-
-    public void LoginSuccess(string data)
-    {
-        NetworkManager.LoginSuccess(data);
-    }
 }

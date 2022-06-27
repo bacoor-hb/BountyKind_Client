@@ -9,3 +9,10 @@ public enum GameEquipmentType
     SOUL,
     SPIRIT,
 };
+
+public enum ItemType
+{
+    item,
+    sapphire,
+    character
+}

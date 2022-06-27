@@ -43,5 +43,8 @@ public partial class PlayerSchema : Schema {
 
 	[Type(11, "number")]
 	public float yuEarned = default(float);
+
+	[Type(12, "number")]
+	public float energyEarned = default(float);
 }
 

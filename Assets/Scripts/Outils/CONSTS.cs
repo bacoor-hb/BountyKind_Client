@@ -2,7 +2,7 @@ public class CONSTS
 {
     public const string SCENE_KEY = "SCENE_KEY";
 
-    #region PLAYER ANIM KEY
+    #region PLAYER ANIM SETTING
     public const string ANIM_SPEED_F = "Speed_f";
     public const float ANIM_SPEED_RUN = 0.5f;
     public const float ANIM_SPEED_IDLE = 0f;

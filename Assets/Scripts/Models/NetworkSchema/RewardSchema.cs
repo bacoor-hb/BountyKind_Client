@@ -7,11 +7,14 @@
 
 using Colyseus.Schema;
 
-public partial class ItemSchema : Schema {
-	[Type(0, "string")]
-	public string _id = default(string);
+public partial class RewardSchema : Schema {
+	[Type(0, "number")]
+	public float amount = default(float);
 
 	[Type(1, "string")]
 	public string type = default(string);
+
+	[Type(2, "string")]
+	public string key = default(string);
 }
 

@@ -19,15 +19,15 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
     void Start()
     {
         Init();
-        
-        if(LoadingManager != null)
+
+        if (LoadingManager != null)
         {
             LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
         }
         else
         {
             Debug.LogError("Loading Manager cannot be found...");
-        }    
+        }
     }
 
     private void Init()
@@ -49,7 +49,17 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
 
     void Update()
     {
-        
+
+    }
+
+    public void Logout()
+    {
+        NetworkManager.Disconnect();
+    }
+
+    public void LoginSuccess(string data)
+    {
+        NetworkManager.LoginSuccess(data);
     }
 
     public void LoginSuccess(string data)

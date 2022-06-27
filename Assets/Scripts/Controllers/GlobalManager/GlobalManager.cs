@@ -57,4 +57,9 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
         NetworkManager.Disconnect();
     }
 
+    public void LoginSuccess(string data)
+    {
+        NetworkManager.LoginSuccess(data);
+    }
+
 }

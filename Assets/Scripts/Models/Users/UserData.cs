@@ -29,7 +29,7 @@ public class UserData
         _id = "61ee1891d1949c6bc79425a8";
         BWP = 0;
         currentGameId = -1;
-        ranking = 1;       
+        ranking = 1;
 
         TokenBalance tokenBalance = new TokenBalance()
         {
@@ -45,7 +45,7 @@ public class UserData
 
     }
 
-    public void  SetUserData_API (UserData_API userData)
+    public void SetUserData_API(UserData_API userData)
     {
         address = userData.address;
         username = userData.username;
@@ -60,7 +60,7 @@ public class UserData
         };
         _id = userData._id;
     }
-    
+
     public void SetUserData_FromWeb(UserData_WebLogin webLogin)
     {
         address = webLogin.address;
@@ -99,3 +99,87 @@ public class UserData_WebLogin
     public string token;
 }
 
+[Serializable]
+public class UserCharactersResponse
+{
+    public UserCharacters_API data;
+    public string message;
+}
+
+[Serializable]
+public class UserCharacters_API
+{
+    public UserCharacter[] data;
+    public int limit;
+    public int page;
+    public int total;
+    public int pages;
+}
+
+[Serializable]
+public class UserCharacter
+{
+    public string _id;
+    public string key;
+    public string baseKey;
+    public string name;
+    public string status;
+    public int level;
+    public string race;
+    public string element;
+    public string type;
+    public string contractAddress;
+    public string nftId;
+    public string ownerAddress;
+    public string image;
+}
+
+[Serializable]
+public class UserFormationResponse
+{
+    public string message;
+    public FormationCharacters[] data;
+}
+
+[Serializable]
+public class FormationCharacters
+{
+    public string _id;
+    public string key;
+    public string baseKey;
+    public string status;
+    public string[] itemList;
+    public int atk;
+    public int def;
+    public int speed;
+    public int hp;
+    public int level;
+    public string contractAddress;
+    public string nftId;
+    public int position;
+}
+[Serializable]
+public class CharacterWithPositionList
+{
+    public List<CharacterWithPosition> data;
+    public CharacterWithPositionList()
+    {
+        data = new List<CharacterWithPosition>();
+    }
+}
+[Serializable]
+public class CharacterWithPosition
+{
+    public string characterId;
+    public int position;
+    public CharacterWithPosition(string _characterId, int _position)
+    {
+        characterId = _characterId;
+        position = _position;
+    }
+}
+[Serializable]
+public class SetFormationResponse
+{
+    public string message;
+}

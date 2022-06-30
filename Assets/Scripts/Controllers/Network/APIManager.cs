@@ -11,6 +11,7 @@ public class APIManager : MonoBehaviour
     public OnEventFinished<UserCharacters_API> OnGetUserCharactersFinished;
     public OnEventFinished<FormationCharacters[]> OnGetFormationFinished;
     public OnEventFinished<string> OnSetFormationFinished;
+    public OnEventFinished<UserItems_API> OnGetUserItemsFinished;
 
     public void Init()
     {
@@ -120,7 +121,35 @@ public class APIManager : MonoBehaviour
             }
         }
     }
-
+    public IEnumerator GetUserItems(string uri, string address)
+    {
+        Debug.Log("[APIManager][GetUserItems] URI: " + (uri));
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + "?owner=" + address))
+        {
+            yield return webRequest.SendWebRequest();
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError("[APIManager] " + pages[page] + ": GetUserItems Error: " + webRequest.error);
+                    OnGetUserItemsFinished?.Invoke(null);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError("[APIManager] " + pages[page] + ": GetUserItems HTTP Error: " + webRequest.error);
+                    OnGetUserItemsFinished?.Invoke(null);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    string responseData = webRequest.downloadHandler.text;
+                    UserItemsResponse getUserItems = JsonUtility.FromJson<UserItemsResponse>(responseData);
+                    Debug.Log("[APIManager] GetUserItems Success: " + responseData);
+                    OnGetUserItemsFinished?.Invoke(getUserItems.data);
+                    OnGetUserItemsFinished = null;
+                    break;
+            }
+        }
+    }
     public IEnumerator GetFormation(string uri, string _token)
     {
         Debug.Log("[APIManager][GetFormation] URI: " + (uri));

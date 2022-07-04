@@ -12,3 +12,20 @@ public class LuckyDraw_MSG
     public float speed;
     public float hp;
 }
+
+[SerializeField]
+public class Reward_MSG
+{
+    public int amount;
+    public RewardType type;
+    public string key;
+}
+
+public enum RewardType
+{
+    yu,
+    energy,
+    item,
+    character,
+    sapphire,
+}

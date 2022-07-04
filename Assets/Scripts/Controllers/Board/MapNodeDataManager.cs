@@ -6,6 +6,7 @@ public class MapNodeDataManager : MonoBehaviour
 {
     public List<MapShort_MSG> mapList;
     public Dictionary<string,BountyMap> cachedMap;
+    public Dictionary<string, ItemData_MSG> cachedItems;
 
     UserDataManager UserDataManager;
     // Start is called before the first frame update

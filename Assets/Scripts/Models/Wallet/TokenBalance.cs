@@ -3,20 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[SerializeField]
 public class TokenBalance
 {
-    public int YU_Point;
-    public int Energy;
+    public int yuPoint;
+    public int energy;
+    public int yuEarned;
+    public int energyEarned;
 
     public TokenBalance()
     {
-        YU_Point = 0;
-        Energy = 0;
+        yuPoint = 0;
+        energy = 0;
+        yuEarned = 0;
+        energyEarned = 0;
     }
-    public TokenBalance(int _YUPoint, int _Energy)
+    public TokenBalance(TokenBalance_MSG balance)
     {
-        YU_Point = _YUPoint;
-        Energy = _Energy;
+        yuPoint = Mathf.RoundToInt(balance.yuPoint);
+        energy = Mathf.RoundToInt(balance.energy);
+        yuEarned = Mathf.RoundToInt(balance.yuEarned);
+        energyEarned = Mathf.RoundToInt(balance.energyEarned);
     }
+}
+
+[SerializeField]
+public class TokenBalance_MSG
+{
+    public float yuPoint;
+    public float energy;
+    public float yuEarned;
+    public float energyEarned;
 }

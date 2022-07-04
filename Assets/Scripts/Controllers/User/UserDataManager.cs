@@ -40,7 +40,7 @@ public class UserDataManager : MonoBehaviour
     {
         if(UserData != null)
         {
-            UserData.tokenBalance.Energy = _energy;
+            UserData.tokenBalance.energy = _energy;
         }
     }
 
@@ -48,7 +48,7 @@ public class UserDataManager : MonoBehaviour
     {
         if(UserData != null && UserData.tokenBalance != null)
         {
-            return UserData.tokenBalance.Energy;
+            return UserData.tokenBalance.energy;
         }
         else
         {

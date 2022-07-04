@@ -7,8 +7,8 @@ public class Multiplayer_GameEventController : MonoBehaviour
 {
     public delegate void OnEventReturn<T>(T returnData);
     public OnEventReturn<RollResult_MSG> OnRollResultReturn;
-    public OnEventReturn<LuckyDraw_MSG> OnLuckyDrawReturn;
-    public OnEventReturn<Chance_MSG> OnChanceReturn;
+    public OnEventReturn<Reward_MSG> OnLuckyDrawReturn;
+    public OnEventReturn<Reward_MSG> OnChanceReturn;
     public OnEventReturn<Battle_MSG> OnBattleReturn;
     public OnEventReturn <TokenBalance> OnBalanceReturn;
 
@@ -45,15 +45,17 @@ public class Multiplayer_GameEventController : MonoBehaviour
                     break;
                 case GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT:
                     Debug.Log("[GameEventController] LUCKY_DRAW_RESULT");
-                    LuckyDraw_MSG ld_msg = JsonUtility.FromJson<LuckyDraw_MSG>(message.ToString());
+                    Reward_MSG ld_msg = JsonUtility.FromJson<Reward_MSG>(message.ToString());
                     OnLuckyDrawSuccess(ld_msg);
                     break;
                 case GAMEROOM_RECEIVE_EVENTS.BALANCE_RESULT:
                     Debug.Log("[GameEventController] BALANCE_RESULT");
+                    TokenBalance_MSG tokenBalance = JsonUtility.FromJson<TokenBalance_MSG>(message.ToString());
+                    OnBalanceUpdate(tokenBalance);
                     break;
                 case GAMEROOM_RECEIVE_EVENTS.CHANCE_RESULT:
                     Debug.Log("[GameEventController] CHANCE_RESULT");
-                    Chance_MSG chance_msg = JsonUtility.FromJson<Chance_MSG>(message.ToString());
+                    Reward_MSG chance_msg = JsonUtility.FromJson<Reward_MSG>(message.ToString());
                     OnChanceEnd(chance_msg);
                     break;
                 default:
@@ -105,7 +107,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
     /// On Lucky Draw return from Server.
     /// </summary>
     /// <param name="luckyDraw"></param>
-    private void OnLuckyDrawSuccess(LuckyDraw_MSG luckyDraw)
+    private void OnLuckyDrawSuccess(Reward_MSG luckyDraw)
     {
         Debug.Log("[Multiplayer_GameEventController] OnLuckyDrawSuccess");
         OnLuckyDrawReturn?.Invoke(luckyDraw);
@@ -149,7 +151,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
         NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.CHANCE.ToString());
     }
 
-    public void OnChanceEnd(Chance_MSG chance_MSG)
+    public void OnChanceEnd(Reward_MSG chance_MSG)
     {
         Debug.Log("[Multiplayer_GameEventController] OnChanceEnd");
         OnChanceReturn?.Invoke(chance_MSG);
@@ -166,11 +168,12 @@ public class Multiplayer_GameEventController : MonoBehaviour
 
     }
 
-    public void OnBalanceUpdate(TokenBalance tokenBalance)
+    public void OnBalanceUpdate(TokenBalance_MSG tokenBalance)
     {
         string jsonMsg = JsonUtility.ToJson(tokenBalance);
         Debug.Log("[Multiplayer_GameEventController] On Balance Update: " + jsonMsg);
-        OnBalanceReturn?.Invoke(tokenBalance);
+        TokenBalance balance = new TokenBalance(tokenBalance);
+        OnBalanceReturn?.Invoke(balance);
     }
     void HandleExitGame()
     {

@@ -4,10 +4,12 @@ using UnityEngine;
 [Serializable]
 public enum CharacterStatus
 {
-    ACTIVE,
-    ONSALE,
-    ONRENT,
-    DESTROYED,
+    active,
+    on_sale, 
+    on_rent, 
+    destroyed, 
+    collected,
+    in_game,
 };
 
 public enum GameCharacterRace

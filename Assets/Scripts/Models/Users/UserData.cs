@@ -33,8 +33,8 @@ public class UserData
 
         TokenBalance tokenBalance = new TokenBalance()
         {
-            YU_Point = 0,
-            Energy = 0
+            yuPoint = 0,
+            energy = 0
         };
 
         this.tokenBalance = tokenBalance;
@@ -55,8 +55,8 @@ public class UserData
 
         tokenBalance = new TokenBalance()
         {
-            YU_Point = userData.yuPoint,
-            Energy = userData.energy
+            yuPoint = userData.yuPoint,
+            energy = userData.energy
         };
         _id = userData._id;
     }

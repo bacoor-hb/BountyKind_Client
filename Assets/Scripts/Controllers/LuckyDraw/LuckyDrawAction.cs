@@ -21,7 +21,7 @@ public class LuckyDrawAction : Action
         base.OnStartAction();
     }
 
-    public void OnLuckyDraw_Return(LuckyDraw_MSG msg)
+    public void OnLuckyDraw_Return(Reward_MSG msg)
     {
         string result = JsonUtility.ToJson(msg);
         Debug.Log("[LuckyDrawAction][OnLuckyDraw_Return] " + result);

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LocalGameView : MonoBehaviour
 {
-    [Header("Action Button")]
+    [Header("Action Popup")]
     public Button RollDice_Btn;
     public Button Move_Btn;
     public Button LuckyDraw_Btn;
@@ -14,6 +14,12 @@ public class LocalGameView : MonoBehaviour
     public Button Chance_Btn;
     public Button EndTurn_Btn;
     public Button Exit_Btn;
+
+    [Header ("Feature Popup")]
+    public LuckyDrawView LuckyDrawPopup;
+    public CombatGameView CombatGameView;
+    public ChanceView ChanceView;
+    public RollDiceView RollDiceView;
 
     [Header("User Data")]
     public TextMeshProUGUI userNameTxt;
@@ -26,15 +32,12 @@ public class LocalGameView : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        RollDice_Btn.onClick.RemoveAllListeners();
-        Move_Btn.onClick.RemoveAllListeners();
-        EndTurn_Btn.onClick.RemoveAllListeners();
-        LuckyDraw_Btn.onClick.RemoveAllListeners();
-        Combat_Btn.onClick.RemoveAllListeners();
-        Chance_Btn.onClick.RemoveAllListeners();
-        Exit_Btn.onClick.RemoveAllListeners();
+        LuckyDrawPopup.Init();
+        CombatGameView.Init();
+        ChanceView.Init();
+        RollDiceView.Init();
 
-        DeactiveAllBtn();
+        DeactiveAllPopup();
     }
 
     /// <summary>
@@ -72,7 +75,7 @@ public class LocalGameView : MonoBehaviour
     /// <summary>
     /// Deactive all Actions button on the View
     /// </summary>
-    public void DeactiveAllBtn()
+    public void DeactiveAllPopup()
     {
         SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
         SetBtn_State(ACTION_TYPE.MOVE, false);
@@ -92,7 +95,7 @@ public class LocalGameView : MonoBehaviour
 
     public void UpdateBalance(TokenBalance tokenBalance)
     {
-        energyTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.Energy);
-        yuPointTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.YU_Point);
+        energyTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.energy);
+        yuPointTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.yuPoint);
     }
 }

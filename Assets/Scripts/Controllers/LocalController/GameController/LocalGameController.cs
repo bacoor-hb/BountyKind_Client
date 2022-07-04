@@ -123,7 +123,7 @@ public partial class LocalGameController : MonoBehaviour
 
         //Init the View + Button Event, Only for local player.        
         LocalGameView.UpdateUserData(UserDataManager.UserData);
-        LocalGameView.DeactiveAllBtn();
+        LocalGameView.DeactiveAllPopup();
 
         //Update current User's current Node
         UserDataManager.UserGameStatus.currentNode = Mathf.RoundToInt(currentRoom.players[currentPlayerId].currentNode);
@@ -271,7 +271,7 @@ public partial class LocalGameController : MonoBehaviour
 
     private void OnTriggerMathEffect()
     {
-        LocalGameView.DeactiveAllBtn();
+        LocalGameView.DeactiveAllPopup();
 
         var actionType = UserDataManager.UserGameStatus.Get_MapActionType();
         Debug.Log("[LocalGameController] OnTriggerMathEffect: " + actionType.ToString());

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -60,5 +61,15 @@ public class GlobalManager : GlobalSingleton<GlobalManager>
     public void LoginSuccess(string data)
     {
         NetworkManager.LoginSuccess(data);
+    }
+
+    public void QuitApp()
+    {
+        Application.Quit();
+    }
+
+    private void OnApplicationQuit()
+    {
+        QuitApp();
     }
 }

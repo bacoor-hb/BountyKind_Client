@@ -69,8 +69,8 @@ public class LobbyView : MonoBehaviour
     {
         Address_Txt.text = STRING_EXT.STRING_FORMAT(userData.address);
         Username_Txt.text = STRING_EXT.STRING_FORMAT(userData.username);
-        BalanceYuPoint_Txt.text = STRING_EXT.NUMBER_FORMAT_DOT(userData.tokenBalance.YU_Point);
-        BalanceEnergy_Txt.text = STRING_EXT.NUMBER_FORMAT_DOT(userData.tokenBalance.Energy);
+        BalanceYuPoint_Txt.text = STRING_EXT.NUMBER_FORMAT_DOT(userData.tokenBalance.yuPoint);
+        BalanceEnergy_Txt.text = STRING_EXT.NUMBER_FORMAT_DOT(userData.tokenBalance.energy);
     }
 
     public void UpdateEnergy_Txt(int _newEnergyValue)

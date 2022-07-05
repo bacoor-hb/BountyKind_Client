@@ -52,6 +52,8 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
 
         LobbyView.Login_Btn.onClick.AddListener(() => { HandleLogin(); });
         LobbyView.Logout_Btn.onClick.AddListener(() => { HandleLogout(); });
+
+        LobbyView.Formation_Btn.onClick.AddListener(() => { HandleOpenFormation(); });
     }
 
     #region LOGIN Event
@@ -114,9 +116,9 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     {
         if (bountyMaps != null && bountyMaps.Count > 0)
         {
-            
+
             NetworkManager.CreateRoom(ROOM_TYPE.GAME_ROOM, UserDataManager.GetCurrentMapId());
-        }            
+        }
         else
             Debug.LogError("[RoomEventController] Create Room ERROR: No Map Data.");
     }
@@ -153,7 +155,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
                     {
                         mapShortLst.Add(new MapShort_MSG(mapShortList.maps[i].key, mapShortList.maps[i].name, mapShortList.maps[i].totalNode));
                     }
-                    OnGetMapSuccess(mapShortLst);                    
+                    OnGetMapSuccess(mapShortLst);
                     break;
                 case LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT:
                     Debug.Log("[HandleLobbyMessage] MAP NODE RESULT.");
@@ -192,7 +194,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
             UserDataManager.SetCurrentMap(bountyMaps[currentMap].key);
         });
 
-        
+
     }
 
     /// <summary>
@@ -204,4 +206,9 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
         LobbyView.FillData(UserDataManager.UserData);
     }
     #endregion
+    void HandleOpenFormation()
+    {
+        Debug.Log("HandleOpenFormation");
+        GlobalManager.Instance.LoadingManager.LoadWithLoadingScene(SCENE_NAME.Test_GetData);
+    }
 }

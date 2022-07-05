@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public class LobbyView : MonoBehaviour
 {
-    [Header ("Login Form")]
+    [Header("Login Form")]
     [SerializeField]
     private GameObject LoginForm_Root;
     public Button Login_Btn;
 
-    [Header ("User Data Area")]
+    [Header("User Data Area")]
     [SerializeField]
     private GameObject LobbyForm_Root;
     [SerializeField]
@@ -27,6 +27,7 @@ public class LobbyView : MonoBehaviour
     public TMP_Dropdown RoomType_DD;
     public Button Logout_Btn;
     public Button CreateRoom_Btn;
+    public Button Formation_Btn;
 
     /// <summary>
     /// Initialize the View.
@@ -36,6 +37,7 @@ public class LobbyView : MonoBehaviour
         Login_Btn.onClick.RemoveAllListeners();
         Logout_Btn.onClick.RemoveAllListeners();
         CreateRoom_Btn.onClick.RemoveAllListeners();
+        Formation_Btn.onClick.RemoveAllListeners();
 
         SetLoobyFormStatus(false);
         SetLoginFormStatus(true);
@@ -47,7 +49,7 @@ public class LobbyView : MonoBehaviour
     /// <param name="state">false = Hide the popup</param>
     public void SetLoginFormStatus(bool state)
     {
-        if(LoginForm_Root != null)
+        if (LoginForm_Root != null)
             LoginForm_Root.SetActive(state);
     }
 

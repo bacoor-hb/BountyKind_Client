@@ -11,7 +11,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     [SerializeField]
     private Transform rootParent;
     public GameObject panelParent;
-    public GameObject canvas;
+    public GameObject board;
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -20,6 +20,11 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     private void Start()
     {
         rootParent = transform.parent;
+    }
+
+    public void SetBoard(GameObject _board)
+    {
+        board = _board;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -50,6 +55,6 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     public void OnPointerDown(PointerEventData eventData)
     {
         rootTransform = GetComponent<RectTransform>().localPosition;
-        transform.SetParent(canvas.transform);
+        transform.SetParent(board.transform);
     }
 }

@@ -14,13 +14,16 @@ namespace UnityEngine.UI.Extensions
     {
         private bool updated = true;
 
-        void Start()
+        public override void Init()
         {
+            base.Init();
             _isVertical = false;
             _childAnchorPoint = new Vector2(0, 0.5f);
             _currentPage = StartingScreen;
             panelDimensions = gameObject.GetComponent<RectTransform>().rect;
             UpdateLayout();
+
+            OnEnable_Page();
         }
 
         void Update()
@@ -228,7 +231,7 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        private void OnEnable()
+        public void OnEnable_Page()
         {
             InitialiseChildObjectsFromScene();
             DistributePages();

@@ -37,6 +37,7 @@ public class RollDice_Action : Action
 
     private void OnFinishRollingDice(int _totalDice)
     {
+        Debug.Log("[RollDice_Action] OnFinishRollingDice: " + _totalDice);
         turnBaseController.EndAction();
     }
 

@@ -6,18 +6,18 @@ using BountyKind;
 public class UserActionLocalManager : IPlayer
 {
     public delegate void OnEventTriggered<T>(T data);
-    public OnEventTriggered<int> OnStartRollingDice;
+    public OnEventTriggered<bool> OnStartRollingDice;
     public OnEventTriggered<int> OnEndRollingDice;
     public OnEventTriggered<int> OnStartMoving;
     public OnEventTriggered<int> OnEndMoving;
-    public OnEventTriggered<int> OnStartLuckyDraw;
+    public OnEventTriggered<bool> OnStartLuckyDraw;
     public OnEventTriggered<int> OnEndLuckyDraw;
-    public OnEventTriggered<int> OnStartChance;
+    public OnEventTriggered<bool> OnStartChance;
     public OnEventTriggered<int> OnEndChance;
-    public OnEventTriggered<int> OnStartCombat;
+    public OnEventTriggered<bool> OnStartCombat;
     public OnEventTriggered<int> OnEndCombat;
 
-    [Header ("Turn Action")]
+    [Header("Turn Action")]
     [SerializeField]
     private Action EndTurnAction;
     [SerializeField]
@@ -33,7 +33,7 @@ public class UserActionLocalManager : IPlayer
 
     private TurnBaseController TurnBaseController;
 
-    [Header ("Users Anim Action Control")]
+    [Header("Users Anim Action Control")]
     [SerializeField]
     private List<UserAnimationController> UserAnim;
 
@@ -68,7 +68,7 @@ public class UserActionLocalManager : IPlayer
         CombatAction.StartAction += StartCombat;
         CombatAction.EndAction += EndCombat;
 
-        for(int i = 0; i < UserAnim.Count; i++)
+        for (int i = 0; i < UserAnim.Count; i++)
         {
             UserAnim[i].Walking(CONSTS.ANIM_SPEED_IDLE);
         }
@@ -92,7 +92,7 @@ public class UserActionLocalManager : IPlayer
     #endregion
 
     public override void StartTurn()
-    {        
+    {
         Debug.Log("StartTurn: id: " + id);
     }
 
@@ -102,13 +102,21 @@ public class UserActionLocalManager : IPlayer
     }
 
     #region Event Action Trigger
+    public bool skipRollDice { get; private set; }
+    public void SetSkipRollDice(bool _Skip)
+    {
+        skipRollDice = _Skip;
+    }
+
     private void StartRollDice()
     {
-        OnStartRollingDice?.Invoke(id);
+        Debug.Log("[UserActionLocalManager] StartRollDice.");
+        OnStartRollingDice?.Invoke(skipRollDice);
     }
 
     private void EndRollDice()
     {
+        Debug.Log("[UserActionLocalManager] EndRollDice.");
         OnEndRollingDice?.Invoke(id);
     }
 
@@ -124,9 +132,14 @@ public class UserActionLocalManager : IPlayer
         UserAnim[id].Walking(CONSTS.ANIM_SPEED_IDLE);
     }
 
+    public bool skipLuckyDraw { get; private set; }
+    public void SetSkipLuckyDraw(bool _Skip)
+    {
+        skipRollDice = _Skip;
+    }
     private void StartLuckyDraw()
     {
-        OnStartLuckyDraw?.Invoke(id);
+        OnStartLuckyDraw?.Invoke(skipLuckyDraw);
     }
 
     private void EndLuckyDraw()
@@ -134,9 +147,14 @@ public class UserActionLocalManager : IPlayer
         OnEndLuckyDraw?.Invoke(id);
     }
 
+    public bool skipChance { get; private set; }
+    public void SetSkipChance(bool _Skip)
+    {
+        skipChance = _Skip;
+    }
     private void StartChance()
     {
-        OnStartChance?.Invoke(id);
+        OnStartChance?.Invoke(skipChance);
     }
 
     private void EndChance()
@@ -144,11 +162,15 @@ public class UserActionLocalManager : IPlayer
         OnEndChance?.Invoke(id);
     }
 
-    private void StartCombat()
+    public bool skipCombat {get; private set; }
+    public void SetSkipCombat(bool _Skip)
     {
-        OnStartCombat?.Invoke(id);
+        skipCombat = _Skip;
     }
-
+    private void StartCombat()
+    {        
+        OnStartCombat?.Invoke(skipCombat);
+    }
     private void EndCombat()
     {
         OnEndCombat?.Invoke(id);

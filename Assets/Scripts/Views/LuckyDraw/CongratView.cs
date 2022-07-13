@@ -6,24 +6,91 @@ using UnityEngine.UI;
 
 public class CongratView : MonoBehaviour
 {
-    private UIObject3D ItemPrefab;
+    public delegate void OnEventTrigger();
+    public OnEventTrigger OnOpenPopupFinish;
+    public OnEventTrigger OnClosePopupFinish;
+
+    [Header ("Popup Component")]
+    [SerializeField]
+    private GameObject overlay;
+    [SerializeField]
+    private GameObject viewRoot;
+    [SerializeField]
+    private Animator animator;
     [SerializeField]
     private Button CloseBtn;
 
-    public void OpenPopup(GameObject _itemPrefab)
+    [Header ("3D Item Render")]
+    [SerializeField]
+    private UIObject3D ItemPrefab;
+    [SerializeField]
+    private UIObject3DImage ItemImg3D;
+    public void Init(GameObject _itemPrefab = null)
     {
-        CloseBtn.onClick.RemoveAllListeners();
-        CloseBtn.onClick.AddListener(ClosePopup);
-
-        if(_itemPrefab != null)
+        if (_itemPrefab != null)
         {
             ItemPrefab.ObjectPrefab = _itemPrefab.transform;
-            gameObject.SetActive(true);
+            ItemImg3D.color = Color.white;
+            viewRoot.SetActive(true);
+        }
+        CloseBtn.onClick.RemoveAllListeners();
+        CloseBtn.onClick.AddListener(() => ClosePopup());
+    }
+
+    /// <summary>
+    /// Open the COngratulation popup with 3d Prize Show.
+    /// </summary>
+    /// <param name="_itemPrefab"></param>
+    public void OpenPopup(bool _instant = false)
+    {
+        Debug.Log("[CongratView] OpenPopup...");
+
+        if(_instant)
+        {
+            viewRoot.SetActive(true);
+            OnOpenPopupFinish?.Invoke();
+        }
+        else
+        {
+            overlay.SetActive(false);
+            StartCoroutine(OpenPopup_Anim());
+        }
+        CloseBtn.onClick.RemoveAllListeners();
+        CloseBtn.onClick.AddListener(() => ClosePopup(false));
+    }
+
+    /// <summary>
+    /// Play the close popup anim, then close this popup
+    /// </summary>
+    public void ClosePopup(bool _instant = false)
+    {
+        if(_instant)
+        {
+            viewRoot.SetActive(false);
+            OnClosePopupFinish?.Invoke();
+        }
+        else
+        {
+            overlay.SetActive(true);
+            StartCoroutine(ClosePopup_Anim());
         }        
     }
 
-    public void ClosePopup()
+    IEnumerator OpenPopup_Anim()
     {
-        gameObject.SetActive(false);
+        viewRoot.SetActive(true);
+        animator.SetTrigger(CONSTS.ANIM_POPUP_APPEAR_TR);
+        yield return new WaitForSeconds(CONSTS.ANIM_POPUP_SPEED);
+
+        OnOpenPopupFinish?.Invoke();
+    }
+
+    IEnumerator ClosePopup_Anim()
+    {
+        animator.SetTrigger(CONSTS.ANIM_POPUP_DISAPPEAR_TR);
+        yield return new WaitForSeconds(CONSTS.ANIM_POPUP_SPEED);
+        viewRoot.SetActive(false);
+
+        OnClosePopupFinish?.Invoke();
     }
 }

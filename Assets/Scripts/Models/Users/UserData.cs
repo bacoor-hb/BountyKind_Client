@@ -21,15 +21,15 @@ public class UserData
     /// <returns></returns>
     public void GenerateFakeData()
     {
-        //address = "0x64470e5f5dd38e497194bbcaf8daa7ca578926f6";
-        address = "0xF451a9c913D8Cb04F0f70A12e40B50d8C3DbfE15";
+        //address = "0x0Cf58ca29fd808Bf9559C07CC7D2A4cc83008229";
+        address = "0x64470e5f5dd38e497194bbcaf8daa7ca578926f6";        
         username = "Test Fake User";
-        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHhmNDUxYTljOTEzZDhjYjA0ZjBmNzBhMTJlNDBiNTBkOGMzZGJmZTE1IiwidXNlcm5hbWUiOiIweGY0NTFhOWM5MTNkOGNiMDRmMGY3MGExMmU0MGI1MGQ4YzNkYmZlMTUiLCJpYXQiOjE2NTYwMzc5ODksImV4cCI6MTk3MTYxMzk4OX0.eBxza-5nbhFLou9vGxUZfNy4vxXf4dCH6m7NvXtV-uU";
-        //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHg2NDQ3MGU1ZjVkZDM4ZTQ5NzE5NGJiY2FmOGRhYTdjYTU3ODkyNmY2IiwidXNlcm5hbWUiOiJuYW1lZSIsImltYWdlIjoiUW1XTTdrdkh5aHRuVEdkMk1lSDVmTFk3TWY0OWNLZ1hSd3NzTjFWdUxnSHVldiIsImlhdCI6MTY1NDg0NTgxOSwiZXhwIjoxOTcwNDIxODE5fQ.xvZ-3ZB-HEENh7s6scjDjsqcFVV524l3neCNirE67r4";
+        //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHgwY2Y1OGNhMjlmZDgwOGJmOTU1OWMwN2NjN2QyYTRjYzgzMDA4MjI5IiwidXNlcm5hbWUiOiJsYWxhIiwiaXNSZWNlaXZlZCI6dHJ1ZSwiaW1hZ2UiOiJRbVhnVFlreUdTRnhhV0pvdk5aalpnRzdiTWZaZEVmMlNmUFhQN3J2OXBKNFcxIiwiaXNOZXdVc2VyIjpmYWxzZSwiaWF0IjoxNjU2NDc2NzM5LCJleHAiOjE5NzIwNTI3Mzl9.OuMFJRylYlPS-I2OA57jSS8r3oSH-kddPxzUSW2pq3I";
+        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHg2NDQ3MGU1ZjVkZDM4ZTQ5NzE5NGJiY2FmOGRhYTdjYTU3ODkyNmY2IiwidXNlcm5hbWUiOiJuYW1lZSIsImltYWdlIjoiUW1XTTdrdkh5aHRuVEdkMk1lSDVmTFk3TWY0OWNLZ1hSd3NzTjFWdUxnSHVldiIsImlhdCI6MTY1NDg0NTgxOSwiZXhwIjoxOTcwNDIxODE5fQ.xvZ-3ZB-HEENh7s6scjDjsqcFVV524l3neCNirE67r4";
         _id = "61ee1891d1949c6bc79425a8";
         BWP = 0;
         currentGameId = -1;
-        ranking = 1;       
+        ranking = 1;
 
         TokenBalance tokenBalance = new TokenBalance()
         {
@@ -45,7 +45,7 @@ public class UserData
 
     }
 
-    public void  SetUserData_API (UserData_API userData)
+    public void SetUserData_API(UserData_API userData)
     {
         address = userData.address;
         username = userData.username;
@@ -60,7 +60,7 @@ public class UserData
         };
         _id = userData._id;
     }
-    
+
     public void SetUserData_FromWeb(UserData_WebLogin webLogin)
     {
         address = webLogin.address;
@@ -99,3 +99,9 @@ public class UserData_WebLogin
     public string token;
 }
 
+[Serializable]
+public class UserCharactersResponse
+{
+    public UserCharacters_API data;
+    public string message;
+}

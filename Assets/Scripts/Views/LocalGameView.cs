@@ -6,15 +6,6 @@ using UnityEngine.UI;
 
 public class LocalGameView : MonoBehaviour
 {
-    [Header("Action Popup")]
-    public Button RollDice_Btn;
-    public Button Move_Btn;
-    public Button LuckyDraw_Btn;
-    public Button Combat_Btn;
-    public Button Chance_Btn;
-    public Button EndTurn_Btn;
-    public Button Exit_Btn;
-
     [Header ("Feature Popup")]
     public LuckyDrawView LuckyDrawPopup;
     public CombatGameView CombatGameView;
@@ -25,50 +16,72 @@ public class LocalGameView : MonoBehaviour
     public TextMeshProUGUI userNameTxt;
     public TextMeshProUGUI userAddressTxt;
     public TextMeshProUGUI energyTxt;
+    public TextMeshProUGUI energyEarnedTxt;
     public TextMeshProUGUI yuPointTxt;
+    public TextMeshProUGUI yuEarnedTxt;
+   
 
     /// <summary>
     /// Reset all Button Event and Clear all the Text
     /// </summary>
     public void Init()
     {
-        LuckyDrawPopup.Init();
         CombatGameView.Init();
         ChanceView.Init();
         RollDiceView.Init();
-
-        DeactiveAllPopup();
+        LuckyDrawPopup.Init_Phase1();
     }
 
-    /// <summary>
-    /// Switch the Button State
-    /// </summary>
-    /// <param name="actionType">The Button to be interract with</param>
-    /// <param name="_state">true: enable the Button</param>
-    public void SetBtn_State(ACTION_TYPE actionType, bool _state)
+    public void SetState_RollDicePopup(bool _state)
     {
-        switch (actionType)
+        Debug.Log("[LocalGameView] Open_RollDicePopup: " + _state);        
+        if (_state)
         {
-            case ACTION_TYPE.MOVE:
-                Move_Btn.interactable = _state;
-                break;
-            case ACTION_TYPE.ROLL_DICE:
-                RollDice_Btn.interactable = _state;
-                break;
-            case ACTION_TYPE.END_TURN:
-                EndTurn_Btn.interactable = _state;
-                break;
-            case ACTION_TYPE.LUCKY_DRAW:
-                LuckyDraw_Btn.interactable = _state;
-                break;
-            case ACTION_TYPE.CHANCE:
-                Chance_Btn.interactable = _state;
-                break;
-            case ACTION_TYPE.COMBAT:
-                Combat_Btn.interactable = _state;
-                break;
-            default:
-                break;
+            RollDiceView.OpenPopup();
+        }
+        else
+        {
+            RollDiceView.ClosePopup();
+        }        
+    }
+
+    public void SetState_LuckyDrawPopup(bool _state)
+    {
+        Debug.Log("[LocalGameView] Open_LuckyDrawPopup");
+        
+        if(_state)
+        {
+            LuckyDrawPopup.OpenPopup(LUCKYDRAW_POPUP.INVITATION);
+        }
+        else
+        {
+            LuckyDrawPopup.CloseAllPopup();
+        }        
+    }
+
+    public void SetState_ChanceView(bool _state)
+    {
+        Debug.Log("[LocalGameView] Open_ChanceView");        
+        if (_state)
+        {
+            ChanceView.OpenPopup();
+        }
+        else
+        {
+            ChanceView.ClosePopup();
+        }        
+    }
+
+    public void SetState_BattleView(bool _state)
+    {
+        Debug.Log("[LocalGameView] Open_BattleView");        
+        if (_state)
+        {
+            CombatGameView.OpenPopup();
+        }
+        else
+        {
+            CombatGameView.ClosePopup();
         }
     }
 
@@ -77,14 +90,16 @@ public class LocalGameView : MonoBehaviour
     /// </summary>
     public void DeactiveAllPopup()
     {
-        SetBtn_State(ACTION_TYPE.ROLL_DICE, false);
-        SetBtn_State(ACTION_TYPE.MOVE, false);
-        SetBtn_State(ACTION_TYPE.CHANCE, false);
-        SetBtn_State(ACTION_TYPE.COMBAT, false);
-        SetBtn_State(ACTION_TYPE.LUCKY_DRAW, false);
-        SetBtn_State(ACTION_TYPE.END_TURN, false);
+        LuckyDrawPopup.CloseAllPopup();
+        CombatGameView.SetPopup_State(false);
+        ChanceView.SetPopup_State(false);
+        RollDiceView.SetPopup_State(false);
     }
 
+    /// <summary>
+    /// Update the User UI
+    /// </summary>
+    /// <param name="userData"></param>
     public void UpdateUserData(UserData userData)
     {
         userNameTxt.text = STRING_EXT.STRING_FORMAT(userData.username);
@@ -93,9 +108,15 @@ public class LocalGameView : MonoBehaviour
         UpdateBalance(userData.tokenBalance);
     }
 
+    /// <summary>
+    /// Update the Balance UI
+    /// </summary>
+    /// <param name="tokenBalance"></param>
     public void UpdateBalance(TokenBalance tokenBalance)
     {
         energyTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.energy);
         yuPointTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.yuPoint);
+        energyEarnedTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.energyEarned);
+        yuEarnedTxt.text = STRING_EXT.NUMBER_FORMAT_DOT(tokenBalance.yuEarned);
     }
 }

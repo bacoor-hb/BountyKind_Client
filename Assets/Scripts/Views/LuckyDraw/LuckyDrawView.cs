@@ -10,10 +10,18 @@ public enum LUCKYDRAW_POPUP
     INVITATION,
 }
 
-public class LuckyDrawView : InvitationPopupView
+public class LuckyDrawView : MonoBehaviour
 {
     public delegate void OnEventTrigger<T>(T data);
-    public OnEventTrigger<int> OnLuckyDraw_EndDraw;
+    public delegate void OnEventTrigger();
+    public OnEventTrigger<bool> OnLuckyDraw_Engage;
+    public OnEventTrigger<bool> OnLuckyDraw_CloseInvPopupEnd;
+    public OnEventTrigger<bool> OnLuckyDraw_OpenInvPopupEnd;
+    public OnEventTrigger<bool> OnLuckyDraw_CloseRollPopupEnd;
+    public OnEventTrigger<bool> OnLuckyDraw_CloseCongratPopupEnd;
+
+    public OnEventTrigger OnLuckyDraw_EndDraw;
+    public OnEventTrigger<int> OnLuckyDraw_StartDraw;
 
     [Header("Roll Popup")]
     [SerializeField]
@@ -23,62 +31,100 @@ public class LuckyDrawView : InvitationPopupView
     private CongratView CongratView;
     [Header("Invitation Popup")]
     [SerializeField]
-    private Transform InvitationPopup;
+    private InvitationPopupView InvitationPopup;
 
-    #region Invitation Popup
-    public override void Init()
+    [Header("Data Input")]
+    [SerializeField]
+    private List<Sprite> rollingSprite;
+    [SerializeField]
+    private GameObject winningObj;
+
+    #region Init Popup
+    /// <summary>
+    /// Init the Engage Event
+    /// </summary>
+    public void Init_Phase1()
     {
-        base.Init();
+        InvitationPopup.Init();
 
-        OnLuckyDraw_EndDraw = null;
-        OnLuckyDraw_EndDraw += LuckyDraw_EndDraw;
+        InvitationPopup.OnEngageBtnPressed = null;
+        InvitationPopup.OnEngageBtnPressed +=
+            (engage) =>
+            {
+                OnLuckyDraw_Engage?.Invoke(engage);
+            };
 
-        CloseAllPopup();
+        
     }
 
-    public override void SetMessage(string _msg)
+    /// <summary>
+    /// Init the Lucky draw UI
+    /// </summary>
+    /// <param name="_skip"></param>
+    public void Init_Phase2(bool _skip)
     {
-        Debug.Log("[LuckyDrawView] SetMessage: " + _msg);
-        base.SetMessage(_msg);
+        if(_skip)
+        {
+            
+        }
+        else
+        {
+            RollUI.Init(rollingSprite);
+            RollUI.RollBtn.onClick.AddListener(LuckyDraw_StartRolling);
+
+            RollUI.OnClosePopupFinish = null;
+            RollUI.OnClosePopupFinish += () => OnLuckyDraw_CloseRollPopupEnd?.Invoke(_skip);
+        }
+
+        InvitationPopup.OnClosePopupFinish = null;
+        InvitationPopup.OnClosePopupFinish += () => OnLuckyDraw_CloseInvPopupEnd?.Invoke(_skip);        
     }
 
-    public override void TriggerEngage()
+    public void Init_Phase3()
     {
-        Debug.Log("[LuckyDrawView] TriggerEngage");
-        base.TriggerEngage();
+        CongratView.Init(winningObj);
+
+        CongratView.OnClosePopupFinish = null;
+        CongratView.OnClosePopupFinish += () => OnLuckyDraw_CloseCongratPopupEnd?.Invoke(true);
+    }
+    #endregion  
+
+    public void LuckyDraw_StartRolling()
+    {
+        OnLuckyDraw_StartDraw?.Invoke(0);
     }
 
-    public override void TriggerDecline()
-    {
-        Debug.Log("[LuckyDrawView] TriggerDecline");
-        base.TriggerDecline();
-    }
-    #endregion
-
+    /// <summary>
+    /// Trigger end rolling in the Lucky Draw popup
+    /// </summary>
+    /// <param name="result"></param>
     public void LuckyDraw_EndDraw(int result)
     {
         Debug.Log("[LuckyDrawView] End Draw:" + result);
         RollUI.StopRolling(result);
 
-        SwitchPopup(LUCKYDRAW_POPUP.CONGRAT);
-        GameObject _itemPrefab;
-
-        //CongratView.OpenPopup(_itemPrefab);
+        StartCoroutine(WaitForEndDraw());
     }
 
-    public void SwitchPopup(LUCKYDRAW_POPUP popup)
+    IEnumerator WaitForEndDraw()
     {
-        CloseAllPopup();
+        yield return new WaitForSeconds(CONSTS.ANIM_DRAW_SPEED);
+        OnLuckyDraw_EndDraw?.Invoke();
+    }
+
+    public void OpenPopup(LUCKYDRAW_POPUP popup, bool _instant = false)
+    {
+        //CloseAllPopup();
         switch (popup)
         {
             case LUCKYDRAW_POPUP.ROLL:
-                RollUI.gameObject.SetActive(true);
+                RollUI.Open_Popup(_instant);
                 break;
             case LUCKYDRAW_POPUP.CONGRAT:
-                CongratView.gameObject.SetActive(true);
+                CongratView.OpenPopup(_instant);
                 break;
             case LUCKYDRAW_POPUP.INVITATION:
-                InvitationPopup.gameObject.SetActive(true);
+                InvitationPopup.OpenPopup(_instant);
                 break;
         }
     }
@@ -89,8 +135,29 @@ public class LuckyDrawView : InvitationPopupView
     public void CloseAllPopup()
     {
         Debug.Log("[LuckyDrawView] CloseAllPopup...");
-        RollUI.gameObject.SetActive(false);
-        CongratView.gameObject.SetActive(false);    
-        InvitationPopup.gameObject.SetActive(false);
+        RollUI.ClosePopup(true);
+        CongratView.ClosePopup(true);
+        InvitationPopup.ClosePopup(true);
+    }
+
+    /// <summary>
+    /// Close specific popup
+    /// </summary>
+    /// <param name="popup">Popup to close</param>
+    /// <param name="_instant">instant = false: Play Close Popup animation</param>
+    public void ClosePopup(LUCKYDRAW_POPUP popup, bool _instant = false)
+    {
+        switch (popup)
+        {
+            case LUCKYDRAW_POPUP.ROLL:
+                RollUI.ClosePopup(_instant);
+                break;
+            case LUCKYDRAW_POPUP.CONGRAT:
+                CongratView.ClosePopup(_instant);
+                break;
+            case LUCKYDRAW_POPUP.INVITATION:
+                InvitationPopup.ClosePopup(_instant);
+                break;
+        }
     }
 }

@@ -10,21 +10,15 @@ public class ChanceView : InvitationPopupView
         base.Init();
     }
 
-    public override void SetMessage(string _msg)
+    protected override void SetMessage(string _msg)
     {
         Debug.Log("[ChanceView] SetMessage: " + _msg);
         base.SetMessage(_msg);
     }
 
-    public override void TriggerEngage()
+    protected override void TriggerEngage(bool _skip)
     {
-        Debug.Log("[ChanceView] TriggerEngage");
-        base.TriggerEngage();
-    }
-
-    public override void TriggerDecline()
-    {
-        Debug.Log("[ChanceView] TriggerDecline");
-        base.TriggerDecline();
+        Debug.Log("[ChanceView] TriggerEngage: " + _skip);
+        base.TriggerEngage(_skip);
     }
 }

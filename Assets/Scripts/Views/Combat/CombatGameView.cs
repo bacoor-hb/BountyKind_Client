@@ -9,21 +9,15 @@ public class CombatGameView : InvitationPopupView
         base.Init();
     }
 
-    public override void SetMessage(string _msg)
+    protected override void SetMessage(string _msg)
     {
         Debug.Log("[CombatGameView] SetMessage: " + _msg);
         base.SetMessage(_msg);
     }
 
-    public override void TriggerEngage()
+    protected override void TriggerEngage(bool _skip)
     {
-        Debug.Log("[CombatGameView] TriggerEngage");
-        base.TriggerEngage();
-    }
-
-    public override void TriggerDecline()
-    {
-        Debug.Log("[CombatGameView] TriggerDecline");
-        base.TriggerDecline();
+        Debug.Log("[CombatGameView] TriggerEngage: " + _skip);
+        base.TriggerEngage(_skip);
     }
 }

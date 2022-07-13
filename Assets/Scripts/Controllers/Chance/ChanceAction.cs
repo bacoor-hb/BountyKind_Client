@@ -19,17 +19,5 @@ public class ChanceAction : Action
     public override void OnStartAction()
     {
         base.OnStartAction();
-        StartCoroutine(Chance_Process());
-    }
-
-    /// <summary>
-    /// TO DO: Implement Chance Process.
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator Chance_Process()
-    {
-        Debug.Log("[ChanceAction] Processing...");
-        yield return new WaitForSeconds(1.0f);
-        turnBaseController.EndAction();
     }
 }

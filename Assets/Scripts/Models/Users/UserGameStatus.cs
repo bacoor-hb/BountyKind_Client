@@ -12,7 +12,7 @@ public class UserGameStatus
     public int totalRoll;
 
     public List<Character> Characters;
-    public List<FormationCharacter> FormationList;
+    public List<FormationCharacters> FormationList;
 
     public UserGameStatus()
     {
@@ -21,7 +21,7 @@ public class UserGameStatus
         totalRoll = -1;
 
         Characters = new List<Character>();
-        FormationList = new List<FormationCharacter>();
+        FormationList = new List<FormationCharacters>();
     }
 
     /// <summary>

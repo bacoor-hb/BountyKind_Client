@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
 public enum CharacterStatus
 {
     active,
@@ -110,8 +110,88 @@ public class Character_MSG : Status_MSG
     public float level;
 }
 
-public class FormationCharacter
+#region Character formation
+[Serializable]
+public class CharacterWithPosition
 {
     public string characterId;
     public int position;
+    public CharacterWithPosition(string _characterId, int _position)
+    {
+        characterId = _characterId;
+        position = _position;
+    }
 }
+
+[Serializable]
+public class FormationCharacters
+{
+    public string _id;
+    public string key;
+    public string baseKey;
+    public string status;
+    public string[] itemList;
+    public int atk;
+    public int def;
+    public int speed;
+    public int hp;
+    public int level;
+    public string contractAddress;
+    public string nftId;
+    public int position;
+}
+
+[Serializable]
+public class SetFormationResponse
+{
+    public string message;
+}
+
+[Serializable]
+public class UserFormationResponse
+{
+    public string message;
+    public FormationCharacters[] data;
+}
+
+[Serializable]
+public class CharacterWithPositionList
+{
+    public List<CharacterWithPosition> data;
+    public CharacterWithPositionList()
+    {
+        data = new List<CharacterWithPosition>();
+    }
+}
+#endregion
+
+
+#region User Character
+[Serializable]
+public class UserCharacters_API
+{
+    public UserCharacter[] data;
+    public int limit;
+    public int page;
+    public int total;
+    public int pages;
+}
+
+[Serializable]
+public class UserCharacter
+{
+    public string _id;
+    public string key;
+    public string baseKey;
+    public string name;
+    public string status;
+    public int level;
+    public string race;
+    public string element;
+    public string type;
+    public string contractAddress;
+    public string nftId;
+    public string ownerAddress;
+    public string image;
+}
+#endregion

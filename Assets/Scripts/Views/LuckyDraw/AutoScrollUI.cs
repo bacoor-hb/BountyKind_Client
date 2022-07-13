@@ -6,6 +6,19 @@ using UnityEngine.UI.Extensions;
 
 public class AutoScrollUI : MonoBehaviour
 {
+    public delegate void OnEventTrigger();
+    public OnEventTrigger OnOpenPopupFinish;
+    public OnEventTrigger OnClosePopupFinish;
+
+    [Header("Popup Component")]
+    [SerializeField]
+    private GameObject overlay;
+    [SerializeField]
+    private GameObject popupRoot;
+    [SerializeField]
+    private Animator animator;
+    public Button RollBtn;
+
     [Header ("Setting")]
     [SerializeField]
     private ScrollSnapBase snapBase;
@@ -19,9 +32,7 @@ public class AutoScrollUI : MonoBehaviour
     private float StopSpeed = 7f;
     [SerializeField]
     [Tooltip("The minimum item count in the list")]
-    private int MIN_ITEM = 10;
-    
-    public Button RollBtn;
+    private int MIN_ITEM = 10;   
     
     [SerializeField]
     [Tooltip ("The result when stop rolling")]
@@ -37,6 +48,15 @@ public class AutoScrollUI : MonoBehaviour
     private bool ToggleScroll;
     private int currentPage;
 
+    //private void Start()
+    //{        
+    //    Init();        
+
+    //    RollBtn.onClick.RemoveAllListeners();
+    //    RollBtn.onClick.AddListener(ToggleRolling);
+    //}
+
+    #region Popup Manage
     public void Init(List<Sprite> newItem = null)
     {
         if(newItem != null)
@@ -66,19 +86,62 @@ public class AutoScrollUI : MonoBehaviour
 
         //Initialize the infinite UI
         infUI.Init();
+        snapBase.Init();
 
-        Open_Popup();
-    }
-
-    public void Open_Popup()
-    {
-        currentPage = snapBase.CurrentPage;
-
-        RollBtn.enabled = true;
         RollBtn.onClick.RemoveAllListeners();
         RollBtn.onClick.AddListener(StartRolling);
     }
 
+    public void Open_Popup(bool _instant = false)
+    {
+        currentPage = snapBase.CurrentPage;
+        if (_instant)
+        {
+            popupRoot.SetActive(true);
+            OnOpenPopupFinish?.Invoke();
+        }
+        else
+        {
+            RollBtn.enabled = true;
+            StartCoroutine(OpenPopup_Anim());
+        }
+    }
+
+    /// <summary>
+    /// Play the close popup anim, then close this popup
+    /// </summary>
+    public void ClosePopup(bool _instant)
+    {
+        if(!_instant)
+        {
+            overlay.SetActive(true);
+            StartCoroutine(ClosePopup_Anim());
+        }
+        else
+        {
+            popupRoot.SetActive(false);
+            OnClosePopupFinish?.Invoke();
+        }
+    }
+
+    IEnumerator OpenPopup_Anim()
+    {
+        popupRoot.SetActive(true);
+        animator.SetTrigger(CONSTS.ANIM_POPUP_APPEAR_TR);
+        yield return new WaitForSeconds(CONSTS.ANIM_POPUP_SPEED);
+
+        OnOpenPopupFinish?.Invoke();
+    }
+
+    IEnumerator ClosePopup_Anim()
+    {
+        animator.SetTrigger(CONSTS.ANIM_POPUP_DISAPPEAR_TR);
+        yield return new WaitForSeconds(CONSTS.ANIM_POPUP_SPEED);
+        popupRoot.SetActive(false);
+
+        OnClosePopupFinish?.Invoke();
+    }
+    #endregion
     /// <summary>
     /// Toggle the scroll for testing
     /// </summary>
@@ -86,11 +149,11 @@ public class AutoScrollUI : MonoBehaviour
     {
         ToggleScroll = !ToggleScroll;
 
-        if(ToggleScroll)
+        if (ToggleScroll)
         {
             snapBase.transitionSpeed = ScrollSpeed;
             StartCoroutine(StartAutoScroll());
-        }            
+        }
         else
         {
             snapBase.transitionSpeed = StopSpeed;
@@ -98,32 +161,16 @@ public class AutoScrollUI : MonoBehaviour
         }
     }
 
-    IEnumerator StartAutoScroll()
-    {
-        while (ToggleScroll)
-        {
-            ChangePage();
-            yield return new WaitForUpdate();
-        }        
-    }
-
-    IEnumerator StopAutoScrolling()
-    {
-        if (!ToggleScroll)
-        {
-            while (currentPage != result)
-            {
-                ChangePage();
-                yield return new WaitForUpdate();
-            }
-        }
-    }
-
+    /// <summary>
+    /// Scroll to the next item in the list
+    /// </summary>
     private void ChangePage()
     {
         snapBase.PreviousScreen();
         currentPage = snapBase.CurrentPage;
     }
+
+    #region Scrolling Item Manage
 
     /// <summary>
     /// Trigger the Roll
@@ -152,4 +199,25 @@ public class AutoScrollUI : MonoBehaviour
             StartCoroutine(StopAutoScrolling());
         }
     }
+    IEnumerator StartAutoScroll()
+    {
+        while (ToggleScroll)
+        {
+            ChangePage();
+            yield return new WaitForUpdate();
+        }
+    }
+
+    IEnumerator StopAutoScrolling()
+    {
+        if (!ToggleScroll)
+        {
+            while (currentPage != result)
+            {
+                ChangePage();
+                yield return new WaitForUpdate();
+            }
+        }
+    }
+    #endregion
 }

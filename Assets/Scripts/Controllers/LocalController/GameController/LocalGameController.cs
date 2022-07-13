@@ -60,6 +60,24 @@ public partial class LocalGameController : MonoBehaviour
         DicesController.Init();
 
         //Init the Board
+        Init_Board();
+
+        //Init Game Event Controller
+        GameEventController.Init();
+
+        //Init the Multiplayer Game Event Controller
+        Init_GameEvent();
+
+        //Update the User Data View
+        Init_LocalView();
+        Multiplayer_GameEvent.HandleUpdateBalance();
+    }
+
+    /// <summary>
+    /// Init the Board
+    /// </summary>
+    private void Init_Board()
+    {
         board.Init();
         board.GenerateBoard(nodeList);
 
@@ -77,30 +95,47 @@ public partial class LocalGameController : MonoBehaviour
             GraphNode userPos = board.GetNode(currentNodeId);
             graphNodes[i] = userPos;
 
-            MovementController.Teleport(userPos.transform);           
+            MovementController.Teleport(userPos.transform);
         }
         board.InitUserNodeList(usersAddress, graphNodes);
+    }
 
-
-        //Init Game Event Controller
-        GameEventController.Init();
-
-        //Init the Multiplayer Game Event Controller
+    /// <summary>
+    /// Init the Multiplayer Game Event Controller
+    /// </summary>
+    private void Init_GameEvent()
+    {
         Multiplayer_GameEvent.OnRollResultReturn = null;
         Multiplayer_GameEvent.OnRollResultReturn += RollDice;
         Multiplayer_GameEvent.OnBalanceReturn = null;
         Multiplayer_GameEvent.OnBalanceReturn += LocalGameView.UpdateBalance;
+        Multiplayer_GameEvent.OnChanceReturn = null;
+        Multiplayer_GameEvent.OnChanceReturn += Chance_GetReward;
+        Multiplayer_GameEvent.OnLuckyDrawReturn = null;
+        Multiplayer_GameEvent.OnLuckyDrawReturn += GetReward_LuckyDraw;
+        Multiplayer_GameEvent.OnBattleReturn = null;
+        Multiplayer_GameEvent.OnBattleReturn += Combat_GetData;
+    }
 
-        //Update the User Data View
+    /// <summary>
+    /// Update the User Data View
+    /// </summary>
+    private void Init_LocalView()
+    {
         LocalGameView.UpdateUserData(UserDataManager.UserData);
 
         LocalGameView.Init();
-        LocalGameView.RollDice_Btn.onClick.AddListener(RollDice_Action);
-        LocalGameView.Move_Btn.onClick.AddListener(Move_Action);
-        LocalGameView.Chance_Btn.onClick.AddListener(Chance_Action);
-        LocalGameView.LuckyDraw_Btn.onClick.AddListener(LuckyDraw_Action);
-        LocalGameView.Combat_Btn.onClick.AddListener(Combat_Action);
-        LocalGameView.EndTurn_Btn.onClick.AddListener(EndTurn_Action);
+        LocalGameView.RollDiceView.OnEngageBtnPressed = null;
+        LocalGameView.RollDiceView.OnEngageBtnPressed += RollDice_Action;
+
+        LocalGameView.ChanceView.OnEngageBtnPressed = null;
+        LocalGameView.ChanceView.OnEngageBtnPressed += Chance_Action;
+
+        LocalGameView.LuckyDrawPopup.OnLuckyDraw_Engage = null;
+        LocalGameView.LuckyDrawPopup.OnLuckyDraw_Engage += LuckyDraw_Action;
+
+        LocalGameView.CombatGameView.OnEngageBtnPressed = null;
+        LocalGameView.CombatGameView.OnEngageBtnPressed += Combat_Action;
     }
     #endregion
     //-------------------------------------------------------------------------------------------
@@ -145,22 +180,22 @@ public partial class LocalGameController : MonoBehaviour
         }
         else
         {
-            LocalGameView.SetBtn_State(ACTION_TYPE.ROLL_DICE, true);
+            LocalGameView.SetState_RollDicePopup(true);
         }
     }
 
     /// <summary>
     /// Add Roll Dice Action to Queue.
     /// </summary>
-    void RollDice_Action()
+    void RollDice_Action(bool _skip)
     {
-        Debug.Log("[LocalGameController][RollDice_Action] rollNumber: " + rollNumber);
-        if (rollNumber > 0)
-        {
-            rollNumber--;
-            TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.ROLL_DICE));
-        }
+        Debug.Log("[LocalGameController][RollDice_Action] RollDice_Action: " + _skip);
+        finishRollPopupAnim = false;
+
+        currentPlayer.SetSkipRollDice(_skip);
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.ROLL_DICE));       
     }
+
     /// <summary>
     /// Add Action Move to the Queue
     /// </summary>
@@ -168,35 +203,34 @@ public partial class LocalGameController : MonoBehaviour
     {
         TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.MOVE));
     }
+
     /// <summary>
     /// Add Action trigger Chance to the Queue
     /// </summary>
-    private void Chance_Action()
+    private void Chance_Action(bool _skip)
     {
         Debug.Log("[LocalGameController] Accept Chance...");
-        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.CHANCE));
+
+        currentPlayer.SetSkipChance(_skip);
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.CHANCE));             
     }
+
     /// <summary>
     /// Add Lucky Draw Action to the Queue
     /// </summary>
-    private void LuckyDraw_Action()
+    private void LuckyDraw_Action(bool _skip)
     {
-        Debug.Log("[LocalGameController] Accept Lucky Draw...");
-        var action = currentPlayer.GetAction(ACTION_TYPE.LUCKY_DRAW) as LuckyDrawAction;
-        if(action != null)
-        {
-            Multiplayer_GameEvent.OnLuckyDrawReturn = null;
-            Multiplayer_GameEvent.OnLuckyDrawReturn += action.OnLuckyDraw_Return;
-            Debug.Log("[LocalGameController] Set Lucky Draw event ...");
-        }
-        TurnBaseController.AddAction(currentPlayer, action);
+        Debug.Log("[LocalGameController] Accept Lucky Draw..." + _skip);
+        currentPlayer.SetSkipLuckyDraw(_skip);
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.LUCKY_DRAW));        
     }
     /// <summary>
     /// Add Combat Action to the Queue
     /// </summary>
-    private void Combat_Action()
+    private void Combat_Action(bool _skipCombat)
     {
-        Debug.Log("[LocalGameController] Accept combat...");
+        Debug.Log("[LocalGameController] Accept combat..." + _skipCombat);
+        currentPlayer.SetSkipCombat(_skipCombat);
         TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.COMBAT));
     }
 
@@ -262,7 +296,7 @@ public partial class LocalGameController : MonoBehaviour
             players[i].OnEndChance += (x) => End_Chance();
 
             players[i].OnStartCombat = null;
-            players[i].OnStartCombat += (x) => Start_Combat();
+            players[i].OnStartCombat +=  Start_Combat;
 
             players[i].OnEndCombat = null;
             players[i].OnEndCombat += (x) => End_Combat();
@@ -278,18 +312,21 @@ public partial class LocalGameController : MonoBehaviour
         switch (actionType)
         {
             case ACTION_TYPE.LUCKY_DRAW:
-                LocalGameView.SetBtn_State(ACTION_TYPE.LUCKY_DRAW, true);
+                //LocalGameView.SetBtn_State(ACTION_TYPE.LUCKY_DRAW, true);
+                LocalGameView.SetState_LuckyDrawPopup(true);
                 break;
             case ACTION_TYPE.CHANCE:
-                LocalGameView.SetBtn_State(ACTION_TYPE.CHANCE, true);
+                //LocalGameView.SetBtn_State(ACTION_TYPE.CHANCE, true);
+                LocalGameView.SetState_ChanceView(true);
                 break;
             case ACTION_TYPE.COMBAT:
-                LocalGameView.SetBtn_State(ACTION_TYPE.COMBAT, true);
+                //LocalGameView.SetBtn_State(ACTION_TYPE.COMBAT, true);
+                LocalGameView.SetState_BattleView(true);
                 break;
             case ACTION_TYPE.END_TURN:
                 Multiplayer_GameEvent.Handle_Other_Default();
-                //EndTurn_Action();
-                LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
+                EndTurn_Action();
+                //LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
                 break;
             case ACTION_TYPE.INVALID_ACTION:
                 Debug.LogError("[LocalGameController] OnTriggerMathEffect ERROR: INVALID ACTION.");

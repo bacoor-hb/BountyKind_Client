@@ -61,7 +61,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
             lobbyRoom = task.Result;
             AssignLobbyEvent();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError("[BountyColyseusManager] JoinLobby Error: " + ex.Message);
         }
@@ -75,7 +75,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     {
         return lobbyRoom != null;
     }
-    
+
     /// <summary>
     /// Create a room with room Type, Map Key and User Token
     /// </summary>
@@ -110,12 +110,12 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         lobbyRoom.OnMessage<string>(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT.ToString(), (message) =>
         {
             MapShortList_MSG data = JsonUtility.FromJson<MapShortList_MSG>(message);
-            onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT, data);
+            onLobbyReceiveMsg?.Invoke(LOBBY_RECEIVE_EVENTS.MAP_LIST_RESULT, data);
         });
         lobbyRoom.OnMessage<string>(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT.ToString(), (message) =>
         {
             Map_MSG data = JsonUtility.FromJson<Map_MSG>(message);
-            onLobbyReceiveMsg(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT, data);
+            onLobbyReceiveMsg?.Invoke(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT, data);
         });
         OnJoinLobbySuccess?.Invoke();
         Debug.Log("[BountyColyseusManager] AssignLobbyEvent success.");
@@ -128,18 +128,28 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     {
         gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT.ToString(), (message) =>
         {
-            onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT, message);
+            onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT, message);
         });
-        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.FIGHT_RESULT.ToString(), (message) => {
-            onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.FIGHT_RESULT, message);
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.FIGHT_RESULT.ToString(), (message) =>
+        {
+            onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.FIGHT_RESULT, message);
         });
-        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT.ToString(), (message) => {
-            onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT, message);
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT.ToString(), (message) =>
+        {
+            onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT, message);
         });
-        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.BALANCE_RESULT.ToString(), (message) => {
-            onGameReceiveMsg(GAMEROOM_RECEIVE_EVENTS.BALANCE_RESULT, message);
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.BALANCE_RESULT.ToString(), (message) =>
+        {
+            onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.BALANCE_RESULT, message);
         });
-
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.CHANCE_RESULT.ToString(), (message) =>
+        {
+            onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.CHANCE_RESULT, message);
+        });
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.DEFAULT_RESULT.ToString(), (message) =>
+        {
+            onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.DEFAULT_RESULT, message);
+        });
         OnJoinRoomSuccess?.Invoke();
         Debug.Log("[BountyColyseusManager] AssignRoomEvent success.");
     }
@@ -169,16 +179,16 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
             case SEND_TYPE.GAMEROOM_SEND:
                 if (gameRoom.colyseusConnection.IsOpen)
                 {
-                    if(message != null)
+                    if (message != null)
                     {
-                        Debug.Log("[BountyColyseusManager] Send: "+ sendChannel.ToString() + " | " + _data);
+                        Debug.Log("[BountyColyseusManager] Send: " + sendChannel.ToString() + " | " + _data);
                         gameRoom.Send(_data, message);
-                    }                        
+                    }
                     else
                     {
                         Debug.Log("[BountyColyseusManager] Send no data: " + sendChannel.ToString() + " | " + _data);
                         gameRoom.Send(_data);
-                    }                        
+                    }
                 }
                 else
                 {
@@ -189,12 +199,12 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
                 Debug.LogError("[BountyColyseusManager] [Send] Channel not supported...");
                 break;
         }
-        
+
     }
 
     public LobbySchema GetLobbyData()
     {
-        if(lobbyRoom != null)
+        if (lobbyRoom != null)
         {
             return lobbyRoom.State;
         }

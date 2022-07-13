@@ -11,6 +11,7 @@ public class CONSTS
     public const string ANIM_POPUP_APPEAR_TR = "Popup_Appear_Tr";
     public const string ANIM_POPUP_DISAPPEAR_TR = "Popup_Disappear_Tr";
     public const float ANIM_POPUP_SPEED = 1f;
+    public const float ANIM_DRAW_SPEED = 3f;
     #endregion
 
     #region DICE CONST
@@ -95,13 +96,14 @@ public class ROOM_TYPE
 #region SERVER EVENT
 public enum GAMEROOM_SENT_EVENTS
 {
+    OTHER,
     ROLL_DICE,
     LUCKY_DRAW,
     FIGHT,
     BALANCE,
     GAME_EXIT,
     CHANCE,
-    DEFAULT,
+    DEFAULT
 }
 
 public enum GAMEROOM_RECEIVE_EVENTS
@@ -111,6 +113,7 @@ public enum GAMEROOM_RECEIVE_EVENTS
     FIGHT_RESULT,
     BALANCE_RESULT,
     CHANCE_RESULT,
+    DEFAULT_RESULT,
 }
 
 public enum LOBBY_SENT_EVENTS

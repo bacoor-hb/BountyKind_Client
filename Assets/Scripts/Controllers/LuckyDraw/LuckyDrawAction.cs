@@ -25,7 +25,5 @@ public class LuckyDrawAction : Action
     {
         string result = JsonUtility.ToJson(msg);
         Debug.Log("[LuckyDrawAction][OnLuckyDraw_Return] " + result);
-
-        turnBaseController.EndAction();
     }
 }

@@ -54,11 +54,12 @@ public class Multiplayer_GameEventController : MonoBehaviour
                     OnBalanceUpdate(tokenBalance);
                     break;
                 case GAMEROOM_RECEIVE_EVENTS.CHANCE_RESULT:
-                    Debug.Log("[GameEventController] CHANCE_RESULT");
+                    Debug.Log("[GameEventController] CHANCE_RESULT: " + message.ToString());
                     Reward_MSG chance_msg = JsonUtility.FromJson<Reward_MSG>(message.ToString());
                     OnChanceEnd(chance_msg);
                     break;
                 default:
+                    Debug.Log("[GameEventController] Default.");
                     OnDefaultEnd();
                     break;
             }
@@ -69,6 +70,11 @@ public class Multiplayer_GameEventController : MonoBehaviour
         }        
     }
 
+    public void HandleUpdateBalance()
+    {
+        Debug.Log("[Multiplayer_GameEventController] Send Update Balance event...");
+        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.BALANCE.ToString());
+    }
 
     /// <summary>
     /// Handle the Roll Dice Event with the Server.
@@ -83,6 +89,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
         else
         {
             //Call external Refill feature.
+            Debug.Log("[Multiplayer_GameEventController] Not enough Energy...");
             NetworkManager.Refill_External();
         }
     }
@@ -97,10 +104,11 @@ public class Multiplayer_GameEventController : MonoBehaviour
     /// <summary>
     /// Send Lucky Draw to Server
     /// </summary>
-    public void HandleLuckyDraw()
+    /// <param name="_skip">true: skip lucky Draw</param>
+    public void HandleLuckyDraw(bool _skip)
     {
         Debug.Log("[Multiplayer_GameEventController] Send Lucky Draw...");
-        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.LUCKY_DRAW.ToString());
+        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.LUCKY_DRAW.ToString(), _skip);
     }
 
     /// <summary>
@@ -116,13 +124,13 @@ public class Multiplayer_GameEventController : MonoBehaviour
     /// <summary>
     /// Handle Combat data.
     /// </summary>
-    public void Handle_Combat()
+    public void Handle_Combat(bool _skip = true)
     {
         Debug.Log("[Multiplayer_GameEventController] Send Combat...");
         //Only for test: deny the battle
         Battle_MSG msg = new Battle_MSG()
         {
-            skip = false,
+            skip = _skip,
             status = 1,
             battleProgress = new AttackResult_MSG[0],
         };
@@ -145,10 +153,10 @@ public class Multiplayer_GameEventController : MonoBehaviour
     /// <summary>
     /// Send Chance Message from Server
     /// </summary>
-    public void Handle_Chance()
+    public void Handle_Chance(bool _skip)
     {
         Debug.Log("[Multiplayer_GameEventController] Send Chance...");
-        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.CHANCE.ToString());
+        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.CHANCE.ToString(), _skip);
     }
 
     public void OnChanceEnd(Reward_MSG chance_MSG)
@@ -174,10 +182,6 @@ public class Multiplayer_GameEventController : MonoBehaviour
         Debug.Log("[Multiplayer_GameEventController] On Balance Update: " + jsonMsg);
         TokenBalance balance = new TokenBalance(tokenBalance);
         OnBalanceReturn?.Invoke(balance);
-    }
-    void HandleExitGame()
-    {
-        NetworkManager.Disconnect();
     }
     #endregion
 }

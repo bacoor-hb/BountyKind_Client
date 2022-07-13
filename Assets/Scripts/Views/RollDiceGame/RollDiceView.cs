@@ -10,21 +10,15 @@ public class RollDiceView : InvitationPopupView
         base.Init();
     }
 
-    public override void SetMessage(string _msg)
+    protected override void SetMessage(string _msg)
     {
         Debug.Log("[RollDiceView] SetMessage: " + _msg);
         base.SetMessage(_msg);
     }
 
-    public override void TriggerEngage()
+    protected override void TriggerEngage(bool _skip)
     {
-        Debug.Log("[RollDiceView] TriggerEngage");
-        base.TriggerEngage();
-    }
-
-    public override void TriggerDecline()
-    {
-        Debug.Log("[RollDiceView] TriggerDecline");
-        base.TriggerDecline();
+        Debug.Log("[RollDiceView] TriggerEngage: " + _skip);
+        base.TriggerEngage(_skip);
     }
 }

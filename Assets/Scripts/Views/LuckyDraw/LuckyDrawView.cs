@@ -52,32 +52,33 @@ public class LuckyDrawView : MonoBehaviour
             (engage) =>
             {
                 OnLuckyDraw_Engage?.Invoke(engage);
-            };
-
-        
+                InvitationPopup.OnEngageBtnPressed = null;
+            };        
     }
 
     /// <summary>
-    /// Init the Lucky draw UI
+    /// Init the Lucky draw UI.
+    /// 
     /// </summary>
-    /// <param name="_skip"></param>
-    public void Init_Phase2(bool _skip)
+    public void Init_Phase2()
     {
-        if(_skip)
-        {
-            
-        }
-        else
-        {
-            RollUI.Init(rollingSprite);
-            RollUI.RollBtn.onClick.AddListener(LuckyDraw_StartRolling);
+        RollUI.Init(rollingSprite);
+        RollUI.RollBtn.onClick.AddListener(LuckyDraw_StartRolling);
 
+        RollUI.OnClosePopupFinish = null;
+        RollUI.OnClosePopupFinish += () =>
+        {
+            OnLuckyDraw_CloseRollPopupEnd?.Invoke(false);
             RollUI.OnClosePopupFinish = null;
-            RollUI.OnClosePopupFinish += () => OnLuckyDraw_CloseRollPopupEnd?.Invoke(_skip);
-        }
+        };
+        
 
         InvitationPopup.OnClosePopupFinish = null;
-        InvitationPopup.OnClosePopupFinish += () => OnLuckyDraw_CloseInvPopupEnd?.Invoke(_skip);        
+        InvitationPopup.OnClosePopupFinish += () =>
+        {
+            OnLuckyDraw_CloseInvPopupEnd?.Invoke(false);
+            InvitationPopup.OnClosePopupFinish = null;
+        };                
     }
 
     public void Init_Phase3()
@@ -85,7 +86,11 @@ public class LuckyDrawView : MonoBehaviour
         CongratView.Init(winningObj);
 
         CongratView.OnClosePopupFinish = null;
-        CongratView.OnClosePopupFinish += () => OnLuckyDraw_CloseCongratPopupEnd?.Invoke(true);
+        CongratView.OnClosePopupFinish += () =>
+        {
+            OnLuckyDraw_CloseCongratPopupEnd?.Invoke(true);
+            CongratView.OnClosePopupFinish = null;
+        };
     }
     #endregion  
 
@@ -103,18 +108,23 @@ public class LuckyDrawView : MonoBehaviour
         Debug.Log("[LuckyDrawView] End Draw:" + result);
         RollUI.StopRolling(result);
 
-        StartCoroutine(WaitForEndDraw());
+        RollUI.OnRollFinish = null;
+        RollUI.OnRollFinish += () =>
+        {
+            StartCoroutine(WaitForEndDraw());
+            RollUI.OnRollFinish = null;
+        };        
     }
 
     IEnumerator WaitForEndDraw()
     {
-        yield return new WaitForSeconds(CONSTS.ANIM_DRAW_SPEED);
+        yield return new WaitForSeconds(CONSTS.ANIM_DRAW_TIME);
         OnLuckyDraw_EndDraw?.Invoke();
     }
 
     public void OpenPopup(LUCKYDRAW_POPUP popup, bool _instant = false)
     {
-        //CloseAllPopup();
+        Debug.Log("[LuckyDrawView] OpenPopup: " + popup.ToString());
         switch (popup)
         {
             case LUCKYDRAW_POPUP.ROLL:

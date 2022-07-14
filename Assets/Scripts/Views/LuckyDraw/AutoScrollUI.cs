@@ -8,6 +8,7 @@ public class AutoScrollUI : MonoBehaviour
 {
     public delegate void OnEventTrigger();
     public OnEventTrigger OnOpenPopupFinish;
+    public OnEventTrigger OnRollFinish;
     public OnEventTrigger OnClosePopupFinish;
 
     [Header("Popup Component")]
@@ -49,11 +50,11 @@ public class AutoScrollUI : MonoBehaviour
     private int currentPage;
 
     //private void Start()
-    //{        
-    //    Init();        
+    //{
+    //    Init();
 
     //    RollBtn.onClick.RemoveAllListeners();
-    //    RollBtn.onClick.AddListener(ToggleRolling);
+    //    RollBtn.onClick.AddListener(() => Init(null));
     //}
 
     #region Popup Manage
@@ -62,31 +63,35 @@ public class AutoScrollUI : MonoBehaviour
         if(newItem != null)
             rollingSprite = newItem;
 
-        var childObj = itemContainer.GetComponentsInChildren<Transform>();
-        if(childObj != null)
+        var childObj = snapBase.ChildObjects;
+        if (childObj != null && childObj.Length > 0)
         {
-            for(int i = 1; i < childObj.Length; i++)
+            //for (int i = 0; i < childObj.Length; i++)
+            //{
+            //    Destroy(childObj[i]);
+            //}
+            return;
+        }
+        else
+        {
+            HorizontalLayoutGroup layout = itemContainer.GetComponent<HorizontalLayoutGroup>();
+            layout.enabled = true;
+
+            int totalItem = (rollingSprite.Count < MIN_ITEM) ? MIN_ITEM : rollingSprite.Count;
+            for (int i = 0; i < totalItem; i++)
             {
-                Destroy(childObj[i].gameObject);
+                GameObject item = Instantiate(itemPrefab);
+                item.transform.SetParent(itemContainer, false);
+
+                Image image = item.GetComponent<Image>();
+                image.sprite = rollingSprite[i % rollingSprite.Count];
             }
+
+            //Initialize the infinite UI
+            infUI.Init();
+            snapBase.Init();            
         }
-      
-        HorizontalLayoutGroup layout = itemContainer.GetComponent<HorizontalLayoutGroup>();
-        layout.enabled = true;
-
-        int totalItem = (rollingSprite.Count < MIN_ITEM) ? MIN_ITEM : rollingSprite.Count;
-        for (int i = 0; i < totalItem; i++)
-        {
-            GameObject item = Instantiate(itemPrefab);
-            item.transform.SetParent(itemContainer, false);
-
-            Image image = item.GetComponent<Image>();
-            image.sprite = rollingSprite[i % rollingSprite.Count];
-        }
-
-        //Initialize the infinite UI
-        infUI.Init();
-        snapBase.Init();
+        snapBase.GoToScreen(0);
 
         RollBtn.onClick.RemoveAllListeners();
         RollBtn.onClick.AddListener(StartRolling);
@@ -97,6 +102,7 @@ public class AutoScrollUI : MonoBehaviour
         currentPage = snapBase.CurrentPage;
         if (_instant)
         {
+            overlay.SetActive(false);
             popupRoot.SetActive(true);
             OnOpenPopupFinish?.Invoke();
         }
@@ -131,6 +137,7 @@ public class AutoScrollUI : MonoBehaviour
         yield return new WaitForSeconds(CONSTS.ANIM_POPUP_SPEED);
 
         OnOpenPopupFinish?.Invoke();
+        overlay.SetActive(false);
     }
 
     IEnumerator ClosePopup_Anim()
@@ -192,8 +199,10 @@ public class AutoScrollUI : MonoBehaviour
     /// <param name="_result"></param>
     public void StopRolling(int _result)
     {
-        if (!ToggleScroll)
+        if (ToggleScroll)
         {
+            ToggleScroll = false;
+            Debug.Log("[AutoScrollUI] StopRolling: " + _result);
             result = _result;
             snapBase.transitionSpeed = StopSpeed;
             StartCoroutine(StopAutoScrolling());
@@ -217,6 +226,7 @@ public class AutoScrollUI : MonoBehaviour
                 ChangePage();
                 yield return new WaitForUpdate();
             }
+            OnRollFinish?.Invoke(); 
         }
     }
     #endregion

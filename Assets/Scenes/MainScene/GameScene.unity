@@ -5316,7 +5316,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e5e3bf39570b8f74cad47bb5430b0e1b, type: 3}
   - {fileID: 21300000, guid: 4c3f2554d919be14ca8b8b307ad17eb1, type: 3}
   - {fileID: 21300000, guid: 1fe23950beed17641a33b3ab16a07bf6, type: 3}
-  winningObj: {fileID: 0}
+  winningObj: {fileID: 179986, guid: dac252c475c8b964db95416c970cfe87, type: 3}
 --- !u!1001 &1413155667
 PrefabInstance:
   m_ObjectHideFlags: 0

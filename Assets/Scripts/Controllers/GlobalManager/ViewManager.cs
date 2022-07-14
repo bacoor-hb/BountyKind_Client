@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class ViewManager : GlobalSingleton<ViewManager>
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GlobalErrorView GlobalErrorView { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    // Start is called before the first frame update
+    public void Init()
     {
-        
+        GlobalErrorView = GetComponentInChildren<GlobalErrorView>();
+        GlobalErrorView.Init();
     }
 }

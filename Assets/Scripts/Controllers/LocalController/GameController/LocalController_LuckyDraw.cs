@@ -22,6 +22,7 @@ public partial class LocalGameController
             {
                 GameEventController.HandleLuckyDraw(true);
                 TurnBaseController.EndAction();
+                luckyDrawView.OnLuckyDraw_CloseInvPopupEnd = null;
             };
         }
         else
@@ -31,14 +32,16 @@ public partial class LocalGameController
             luckyDrawView.OnLuckyDraw_CloseInvPopupEnd += (x) =>
             {
                 luckyDrawView.OpenPopup(LUCKYDRAW_POPUP.ROLL);
+                luckyDrawView.OnLuckyDraw_CloseInvPopupEnd = null;
             };
 
-            LocalGameView.LuckyDrawPopup.Init_Phase2(_skip);
+            LocalGameView.LuckyDrawPopup.Init_Phase2();
             //Handle Lucky draw while clicking the Roll Button
             luckyDrawView.OnLuckyDraw_StartDraw = null;
             luckyDrawView.OnLuckyDraw_StartDraw += (x) =>
             {
                 GameEventController.HandleLuckyDraw(false);
+                luckyDrawView.OnLuckyDraw_StartDraw = null;
             };
 
             Multiplayer_GameEvent.OnLuckyDrawReturn = null;
@@ -53,19 +56,23 @@ public partial class LocalGameController
                 {
                     LocalGameView.LuckyDrawPopup.Init_Phase3();
                     luckyDrawView.ClosePopup(LUCKYDRAW_POPUP.ROLL);
+                    luckyDrawView.OnLuckyDraw_EndDraw = null;
                 };                
                 
                 luckyDrawView.OnLuckyDraw_CloseRollPopupEnd = null;
                 luckyDrawView.OnLuckyDraw_CloseRollPopupEnd += (x) =>
                 {                    
                     luckyDrawView.OpenPopup(LUCKYDRAW_POPUP.CONGRAT);
+                    luckyDrawView.OnLuckyDraw_CloseRollPopupEnd = null;
                 };
+                Multiplayer_GameEvent.OnLuckyDrawReturn = null;
             };
 
             luckyDrawView.OnLuckyDraw_CloseCongratPopupEnd = null;
             luckyDrawView.OnLuckyDraw_CloseCongratPopupEnd += (x) =>
             {
                 TurnBaseController.EndAction();
+                luckyDrawView.OnLuckyDraw_CloseCongratPopupEnd = null;
             };
         }        
     }

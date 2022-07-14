@@ -73,7 +73,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// <returns>true = Connected to a lobby</returns>
     public bool LobbyStatus()
     {
-        return lobbyRoom != null;
+        return (lobbyRoom != null) && (lobbyRoom != null) && (lobbyRoom.colyseusConnection.IsOpen);
     }
 
     /// <summary>

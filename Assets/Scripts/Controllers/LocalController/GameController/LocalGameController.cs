@@ -136,6 +136,9 @@ public partial class LocalGameController : MonoBehaviour
 
         LocalGameView.CombatGameView.OnEngageBtnPressed = null;
         LocalGameView.CombatGameView.OnEngageBtnPressed += Combat_Action;
+
+        LocalGameView.QuitBoard_Btn.onClick.RemoveAllListeners();
+        LocalGameView.QuitBoard_Btn.onClick.AddListener(Multiplayer_GameEvent.HandleQuitBoard);
     }
     #endregion
     //-------------------------------------------------------------------------------------------

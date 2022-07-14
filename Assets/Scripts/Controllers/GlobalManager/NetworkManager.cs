@@ -52,7 +52,14 @@ public class NetworkManager : MonoBehaviour
     private void JoinLobby()
     {
         if (!socketManager.LobbyStatus())
+        {
             StartCoroutine(socketManager.JoinLobby(UserDataManager.UserData.token));
+        }            
+        else
+        {
+            Debug.Log("[NetworkManager] Joined Lobby, Open Lobby View.");
+            socketManager.OnJoinLobbySuccess();
+        }
     }
 
     /// <summary>

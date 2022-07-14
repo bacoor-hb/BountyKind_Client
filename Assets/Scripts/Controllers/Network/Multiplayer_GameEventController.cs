@@ -14,14 +14,16 @@ public class Multiplayer_GameEventController : MonoBehaviour
 
     private UserDataManager UserDataManager;
     private NetworkManager NetworkManager;
+    private LoadingManager LoadingManager;
 
     // Start is called before the first frame update
     public void Init()
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
         NetworkManager = GlobalManager.Instance.NetworkManager;
+        LoadingManager = GlobalManager.Instance.LoadingManager; 
 
-        
+
         BountyColyseusManager.Instance.onGameReceiveMsg = null;
         BountyColyseusManager.Instance.onGameReceiveMsg += HandleGameMessage;
     }
@@ -182,6 +184,12 @@ public class Multiplayer_GameEventController : MonoBehaviour
         Debug.Log("[Multiplayer_GameEventController] On Balance Update: " + jsonMsg);
         TokenBalance balance = new TokenBalance(tokenBalance);
         OnBalanceReturn?.Invoke(balance);
+    }
+
+    public void HandleQuitBoard()
+    {
+        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.GAME_EXIT.ToString());
+        LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
     }
     #endregion
 }

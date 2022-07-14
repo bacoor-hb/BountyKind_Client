@@ -19,7 +19,9 @@ public class LocalGameView : MonoBehaviour
     public TextMeshProUGUI energyEarnedTxt;
     public TextMeshProUGUI yuPointTxt;
     public TextMeshProUGUI yuEarnedTxt;
-   
+
+    [Header("Other Button")]
+    public Button QuitBoard_Btn;
 
     /// <summary>
     /// Reset all Button Event and Clear all the Text

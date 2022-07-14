@@ -18,15 +18,16 @@ public class FightProcess : MonoBehaviour
     {
 
     }
-    public void AnimateFight(BattleData battleData, int userId)
+    public void AnimateFight(BattleProgess battleData, int userId)
     {
         GameObject currentGameObj;
         GameObject targetGameObj;
-        currentGameObj = localTestFightController.players[userId].characters[battleData.currentUnit.id];
-        targetGameObj = localTestFightController.players[userId].characters[battleData.targetUnit.id];
+        PlayerTestFightController playerController = localTestFightController.players[userId].GetComponent<PlayerTestFightController>();
+        currentGameObj = playerController.characters[battleData.attacker._id];
+        targetGameObj = playerController.characters[battleData.target._id];
         UnitController prefabController = currentGameObj.GetComponent<UnitController>();
-        Vector3 targetPos = targetGameObj.GetComponent<Transform>().position;
-        prefabController.HandleMove(targetPos, "Crouch_b");
+        Vector3 targetPos = targetGameObj.transform.position;
+        prefabController.HandleMove(targetPos, battleData);
 
     }
 }

@@ -104,6 +104,7 @@ public class Status_MSG
 [Serializable]
 public class Character_MSG : Status_MSG
 {
+    public string _id;
     public string key;
     public string name;
     public float position;

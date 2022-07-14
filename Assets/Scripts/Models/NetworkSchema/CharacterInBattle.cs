@@ -7,11 +7,11 @@
 
 using Colyseus.Schema;
 
-public partial class CharacterInBattle : StatusSchema {
-	[Type(4, "string")]
-	public string _id = default(string);
+public partial class CharacterInBattle : StatusSchema
+{
+    [Type(4, "string")]
+    public string _id = default(string);
 
-	[Type(5, "string")]
-	public string faction = default(string);
+    [Type(5, "string")]
+    public string faction = default(string);
 }
-

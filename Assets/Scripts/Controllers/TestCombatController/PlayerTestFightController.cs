@@ -5,6 +5,8 @@ using BountyKind;
 
 public class PlayerTestFightController : IPlayer
 {
+    public delegate void OnClearCharacterEvent(GameObject characterObj);
+    public static event OnClearCharacterEvent OnClearCharacter;
     [SerializeField]
     private FightActionTest FightAction;
     [SerializeField]
@@ -19,14 +21,13 @@ public class PlayerTestFightController : IPlayer
     /// </summary>
     /// <param name="_id"></param>
     /// 
+    private void Awake()
+    {
+        UnitController.OnUpdateHealth += HandleUpdateHealth;
+    }
     public void AddUnit(GameObject unit, string unitId)
     {
         characters.Add(unitId, unit);
-    }
-
-    public GameObject RenderUnit(GameObject prefab, Vector3 pos, Transform parent)
-    {
-        return Instantiate(prefab, pos, Quaternion.identity, parent);
     }
     public void InitPlayer(int _id, TurnBaseController _controller)
     {
@@ -77,5 +78,10 @@ public class PlayerTestFightController : IPlayer
     public void OnFightEnd()
     {
         Debug.Log("[OnFightEnd] OnFightEnd on PLayer | id: " + id);
+    }
+
+    void HandleUpdateHealth(string characterId, int newHealth)
+    {
+        characters[characterId].GetComponent<UnitController>().currentHealth = newHealth;
     }
 }

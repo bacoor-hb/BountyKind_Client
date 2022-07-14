@@ -7,17 +7,20 @@
 
 using Colyseus.Schema;
 
-public partial class CharacterSchema : StatusSchema {
-	[Type(4, "string")]
-	public string key = default(string);
+public partial class CharacterSchema : StatusSchema
+{
+    [Type(4, "string")]
+    public string _id = default(string);
 
-	[Type(5, "string")]
-	public string name = default(string);
+    [Type(5, "string")]
+    public string key = default(string);
 
-	[Type(6, "number")]
-	public float position = default(float);
+    [Type(6, "string")]
+    public string name = default(string);
 
-	[Type(7, "number")]
-	public float level = default(float);
+    [Type(7, "number")]
+    public float position = default(float);
+
+    [Type(8, "number")]
+    public float level = default(float);
 }
-

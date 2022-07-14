@@ -163,6 +163,22 @@ public class UserCharacter
     public string nftId;
     public string ownerAddress;
     public string image;
+    public UserCharacter()
+    {
+        _id = null;
+        key = null;
+        baseKey = null;
+        name = null;
+        status = null;
+        level = 0;
+        race = null;
+        element = null;
+        type = null;
+        contractAddress = null;
+        nftId = null;
+        ownerAddress = null;
+        image = null;
+    }
 }
 
 [Serializable]
@@ -188,6 +204,24 @@ public class FormationCharacters
     public string contractAddress;
     public string nftId;
     public int position;
+
+    public FormationCharacters() { }
+    public FormationCharacters(string __id, string _key, string _baseKey, string _status, string[] _itemList, int _atk, int _def, int _speed, int _hp, int _level, string _contractAddress, string _nftId, int _position)
+    {
+        _id = __id;
+        key = _key;
+        baseKey = _baseKey;
+        status = _status;
+        itemList = _itemList;
+        atk = _atk;
+        def = _def;
+        speed = _speed;
+        hp = _hp;
+        level = _level;
+        contractAddress = _contractAddress;
+        nftId = _nftId;
+        position = _position;
+    }
 }
 [Serializable]
 public class CharacterWithPositionList

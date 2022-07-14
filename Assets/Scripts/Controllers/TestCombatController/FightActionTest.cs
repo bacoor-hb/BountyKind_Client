@@ -3,45 +3,79 @@ using System.Collections.Generic;
 using UnityEngine;
 using BountyKind;
 
-public class BattleUnit
-{
-    public string id;
-    public int health;
-    public BattleUnit(string _id, int _health)
-    {
-        id = _id;
-        health = _health;
-    }
-}
+[SerializeField]
 public class BattleData
 {
-    public BattleUnit currentUnit;
-    public BattleUnit targetUnit;
-    public int turn;
-    public BattleData(BattleUnit _currentUnit, BattleUnit _targetUnit, int _turn)
+    public bool skip;
+    public int status;
+    public List<BattleProgess> battleProgress;
+
+    public BattleData() { }
+    public BattleData(bool _skip, int _status, List<BattleProgess> _battleProgress)
     {
-        currentUnit = _currentUnit;
-        targetUnit = _targetUnit;
+        skip = _skip;
+        status = _status;
+        battleProgress = _battleProgress;
+    }
+}
+[SerializeField]
+public class BattleProgess
+{
+    public BattleUnit attacker;
+    public BattleUnit target;
+    public int turn;
+    public int order;
+    public string type;
+
+    public BattleProgess() { }
+    public BattleProgess(BattleUnit _attacker, BattleUnit _target, int _turn, int _order, string _type)
+    {
+        attacker = _attacker;
+        target = _target;
         turn = _turn;
+        order = _order;
+        type = _type;
+    }
+}
+[SerializeField]
+public class BattleUnit
+{
+    public int atk;
+    public int def;
+    public int speed;
+    public int hp;
+    public string _id;
+    public string faction;
+    public BattleUnit(int _atk, int _def, int _speed, int _hp, string __id, string _faction)
+    {
+        atk = _atk;
+        def = _def;
+        speed = _speed;
+        hp = _hp;
+        _id = __id;
+        faction = _faction;
     }
 }
 public class FightActionTest : Action
 {
     public delegate void OnEndTurnFights();
     public static event OnEndTurnFights onEndTurnFights;
-    public delegate void InFight(BattleData battleData, int userId);
+    public delegate void InFight(BattleProgess battleData, int userId);
     public static event InFight inFight;
     public delegate void OnStartFight(string unitId, int turn);
     public static event OnStartFight startFight;
     public delegate void EndFight(int userId);
     public static event EndFight endFight;
-    public List<BattleData> battleDatas;
+    public List<BattleProgess> battleData;
 
+    private void Awake()
+    {
+        LocalTestFightController.OnReceiveBattleDatas += HandleReceiveBattleDatas;
+        UnitController.onEndFight += HandleOnEndFight;
+        UnitQueueController.OnEndQueue += OnFightAction;
+    }
     public void Start()
     {
-        LocalTestFightController.onReceiveBattleDatas += HandleReceiveBattleDatas;
-        UnitController.onEndFight += HandleOnEndFight;
-        UnitQueueController.onEndQueue += OnFightAction;
 
     }
     public override void InitAction(int _userId, TurnBaseController _controller)
@@ -58,7 +92,7 @@ public class FightActionTest : Action
     public override void OnStartAction()
     {
         base.OnStartAction();
-        startFight(battleDatas[currentAction].currentUnit.id, battleDatas[currentAction].turn);
+        startFight(battleData[currentAction].attacker._id, battleData[currentAction].turn);
     }
 
     public void OnFightAction()
@@ -66,23 +100,23 @@ public class FightActionTest : Action
         OnFight();
     }
 
-    void HandleReceiveBattleDatas(List<BattleData> _battleDatas, int playerId)
+    void HandleReceiveBattleDatas(List<BattleProgess> _battleData, int playerId)
     {
         if (playerId == base.userId)
         {
             currentAction = 0;
-            battleDatas = _battleDatas;
+            battleData = _battleData;
         }
     }
 
     public void OnFight()
     {
-        inFight(battleDatas[currentAction], base.userId);
+        inFight(battleData[currentAction], base.userId);
     }
 
     void HandleOnEndFight()
     {
-        if (currentAction != battleDatas.Count - 1)
+        if (currentAction != battleData.Count - 1)
         {
             currentAction++;
             turnBaseController.EndAction();
@@ -92,6 +126,7 @@ public class FightActionTest : Action
             currentAction = 0;
             turnBaseController.EndAction();
             turnBaseController.EndTurn();
+            onEndTurnFights?.Invoke();
         }
     }
 }

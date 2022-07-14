@@ -5,6 +5,7 @@ using System;
 
 public class Enemy
 {
+    public string _id { get; set; }
     public string name { get; set; }
     public string key { get; set; }
     public int atk { get; set; }
@@ -16,6 +17,7 @@ public class Enemy
 
     public Enemy(Character_MSG character)
     {
+        _id = character._id;
         name = character.name;
         key = character.key;
         atk = Mathf.RoundToInt(character.atk);

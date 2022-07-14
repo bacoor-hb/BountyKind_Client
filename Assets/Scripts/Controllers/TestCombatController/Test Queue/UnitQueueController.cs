@@ -5,6 +5,8 @@ using UnityEngine;
 public class UnitQueueController : MonoBehaviour
 {
     // Start is called before the first frame update
+    public delegate void OnEnqueueEvent();
+    public static OnEnqueueEvent OnEndQueue;
     [SerializeField]
     private Vector3 unitInitPosition;
     public float speed = 5f;
@@ -15,8 +17,6 @@ public class UnitQueueController : MonoBehaviour
     public int turn;
     [SerializeField]
     private Vector3 endPositon = Vector3.zero;
-    public delegate void OnEndQueue();
-    public static event OnEndQueue onEndQueue;
 
     private bool isCurrentTarget;
 
@@ -55,10 +55,10 @@ public class UnitQueueController : MonoBehaviour
                 if (isCurrentTarget)
                 {
                     float d = Vector3.SqrMagnitude(endPositon - transform.position);
-                    if (d < 130000f)
+                    if (d < 1f)
                     {
                         isCurrentTarget = false;
-                        onEndQueue?.Invoke();
+                        OnEndQueue?.Invoke();
                     }
                 }
             }

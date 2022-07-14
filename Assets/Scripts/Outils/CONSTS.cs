@@ -51,7 +51,8 @@ public enum SCENE_NAME
     GameScene,
     LoadingScene,
     CreditScene,
-    Test_GetData
+    Test_GetData,
+    Test_Fight_Scene,
 }
 
 public enum CYCLE_TURN

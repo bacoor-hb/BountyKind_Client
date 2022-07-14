@@ -8,7 +8,7 @@ public class TurnBaseController : MonoBehaviour
     public delegate void Event<T>(T data);
     public Event<int> OnStartGame;
     public Event<int> OnEndGame;
-    public Event<int> OnStartTurn;
+    public static Event<int> OnStartTurn;
     public Event<int> OnEndTurn;
     public Event<int> OnChangePlayer;
 
@@ -83,7 +83,7 @@ public class TurnBaseController : MonoBehaviour
     /// </summary>
     private void OnAction()
     {
-        isWaiting = true;        
+        isWaiting = true;
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public class TurnBaseController : MonoBehaviour
             currentAction = queueActionList.Dequeue();
 
             Debug.Log("[TurnbaseController][CheckActionInQueue] Start Action: " + currentAction.GetAction().ToString());
-            
+
             currentAction.OnStartAction();
 
             NextStep();
@@ -239,7 +239,7 @@ public class TurnBaseController : MonoBehaviour
     /// <returns></returns>
     private bool CheckChangePlayer()
     {
-       return true;
+        return true;
     }
 
     /// <summary>

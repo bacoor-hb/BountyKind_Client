@@ -25,7 +25,6 @@ public class SquareController : MonoBehaviour
     {
         if (position == _position)
         {
-            Debug.Log(_position);
             selectPlane.SetActive(true);
         }
         else

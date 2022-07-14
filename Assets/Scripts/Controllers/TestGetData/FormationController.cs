@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class FormationController : MonoBehaviour
 {
     public delegate void OnEventTriggered<T>(T data);
-    public static OnEventTriggered<int> OnAvatarSelected;
-    public static OnEventTriggered<string> OnFormationCharatecterReceived;
-    public static OnEventTriggered<int> OnSelectedSquare;
+    public static event OnEventTriggered<int> OnAvatarSelected;
+    public static event OnEventTriggered<string> OnFormationCharatecterReceived;
+    public static event OnEventTriggered<int> OnSelectedSquare;
     // Start is called before the first frame update
     [SerializeField]
     private APIManager apiManager;
@@ -24,7 +24,7 @@ public class FormationController : MonoBehaviour
     [SerializeField]
     private List<GameObject> characterPrefabs;
     [SerializeField]
-    private UserCharacter selectedCharacter = null;
+    private UserCharacter selectedCharacter;
     [SerializeField]
     private GameObject selectedSquare;
     [SerializeField]
@@ -34,14 +34,22 @@ public class FormationController : MonoBehaviour
     [SerializeField]
     private int selectedAvatarIndex = -1;
     private UserDataManager userDataManager;
+    [SerializeField]
+    private List<GameObject> avatars;
+    private bool canRemove;
     void Start()
     {
+        canRemove = false;
+        selectedCharacter = new UserCharacter();
+        avatars = new List<GameObject>();
         userDataManager = GlobalManager.Instance.UserDataManager;
         apiManager.OnGetUserCharactersFinished += HandleGetUserCharactersFinished;
         apiManager.OnGetFormationFinished += HandleGetFormationFinished;
         apiManager.OnGetUserItemsFinished += HandleGetUserItemsFinished;
         viewManager.buttonViewManager.SetFormationButton.onClick.AddListener(HandleSetFormation);
         viewManager.buttonViewManager.ResetFormationButton.onClick.AddListener(ResetFormation);
+        viewManager.buttonViewManager.RemoveCharacterButton.onClick.AddListener(RemoveCharacter);
+        viewManager.buttonViewManager.BackButton.onClick.AddListener(HandleGoBack);
         ScrollViewManager.OnInstantiate += HandleOnInstantiate;
         GetUserCharacters();
         GetUserFormation();
@@ -87,6 +95,22 @@ public class FormationController : MonoBehaviour
     void HandleGetUserItemsFinished(UserItems_API _userItems)
     {
         userItems = _userItems.data;
+    }
+
+    void RemoveCharacter()
+    {
+        if (canRemove)
+        {
+            int index = characterWithPositions.FindIndex(characterWithPosition => characterWithPosition.characterId == selectedCharacter._id);
+            characterWithPositions.RemoveAt(index);
+            viewManager.boardViewManager.Clear(selectedCharacter._id);
+            selectedCharacter = new UserCharacter();
+            selectedSquare = null;
+            OnSelectedSquare?.Invoke(-1);
+            OnAvatarSelected?.Invoke(-1);
+            selectedAvatarIndex = -1;
+            canRemove = false;
+        }
     }
 
     void HandleGetFormationFinished(FormationCharacters[] _formationCharacters)
@@ -138,6 +162,7 @@ public class FormationController : MonoBehaviour
 
     void HandleOnInstantiate(GameObject obj, int index)
     {
+        avatars.Add(obj);
         EventTrigger trigger = obj.GetComponent<EventTrigger>();
         EventTrigger.Entry entry = new EventTrigger.Entry();
         entry.eventID = EventTriggerType.PointerDown;
@@ -153,7 +178,15 @@ public class FormationController : MonoBehaviour
         int[] result = CheckIfCharacterExisted(userCharacter);
         if (result.Length > 0)
         {
+            selectedSquare = viewManager.boardViewManager.boardSquares[result[1]];
             OnSelectedSquare?.Invoke(result[1]);
+            canRemove = true;
+        }
+        else
+        {
+            selectedSquare = null;
+            OnSelectedSquare?.Invoke(-1);
+            canRemove = false;
         }
         selectedCharacter = userCharacter;
         if (selectedAvatarIndex != index)
@@ -164,10 +197,11 @@ public class FormationController : MonoBehaviour
         else
         {
             selectedAvatarIndex = -1;
-            selectedCharacter = null;
+            selectedCharacter = new UserCharacter();
             selectedSquare = null;
             OnAvatarSelected(-1);
             OnSelectedSquare(-1);
+            canRemove = false;
         }
     }
 
@@ -219,7 +253,7 @@ public class FormationController : MonoBehaviour
     void OnClickSquare(PointerEventData eventData, GameObject boardSquare)
     {
         selectedSquare = boardSquare;
-        if (selectedCharacter != null && selectedCharacter.baseKey != "")
+        if (selectedCharacter.baseKey != null)
         {
             GameObject characterPrefab = GetCharacterPrefabByName(selectedCharacter.baseKey);
             int position = selectedSquare.GetComponent<SquareController>().position;
@@ -229,27 +263,42 @@ public class FormationController : MonoBehaviour
             {
                 characterWithPositions[existedPositionIndex].position = position;
                 viewManager.boardViewManager.Move(selectedCharacter._id, selectedSquare.transform);
+                OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
             }
             if (result.Length > 0 && existedPositionIndex == -1)
             {
                 characterWithPositions[result[0]].position = position;
                 viewManager.boardViewManager.Move(selectedCharacter._id, selectedSquare.transform);
+                OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
             }
             if (existedPositionIndex == -1 && result.Length == 0)
             {
                 viewManager.boardViewManager.RenderCharacterModelToSquare(characterPrefab, position, selectedCharacter._id);
                 characterWithPositions.Add(new CharacterWithPosition(selectedCharacter._id, position));
+                OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
             }
             if (existedPositionIndex != -1 && result.Length > 0)
             {
-                Transform tempTransform = viewManager.boardViewManager.boardSquares[result[1]].transform;
-                int tempPosition = result[1];
-                characterWithPositions[result[0]].position = position;
-                characterWithPositions[existedPositionIndex].position = tempPosition;
-                viewManager.boardViewManager.Move(selectedCharacter._id, selectedSquare.transform);
-                viewManager.boardViewManager.Move(characterWithPositions[existedPositionIndex].characterId, tempTransform);
+                if (position != result[1])
+                {
+                    Transform tempTransform = viewManager.boardViewManager.boardSquares[result[1]].transform;
+                    int tempPosition = result[1];
+                    characterWithPositions[result[0]].position = position;
+                    characterWithPositions[existedPositionIndex].position = tempPosition;
+                    viewManager.boardViewManager.Move(selectedCharacter._id, selectedSquare.transform);
+                    viewManager.boardViewManager.Move(characterWithPositions[existedPositionIndex].characterId, tempTransform);
+                    OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                }
+                else
+                {
+                    selectedAvatarIndex = -1;
+                    selectedCharacter = new UserCharacter();
+                    selectedSquare = null;
+                    OnAvatarSelected(-1);
+                    OnSelectedSquare(-1);
+                    canRemove = false;
+                }
             }
-            OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
         }
         else
         {
@@ -258,13 +307,23 @@ public class FormationController : MonoBehaviour
             if (existedPositionIndex != -1)
             {
                 OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
-                if (eventData.clickCount == 2)
+                string characterId = characterWithPositions[existedPositionIndex].characterId;
+                for (int i = 0; i < avatars.Count; i++)
                 {
-                    viewManager.boardViewManager.Clear(characterWithPositions[existedPositionIndex].characterId);
-                    characterWithPositions.RemoveAt(existedPositionIndex);
-                    OnSelectedSquare(-1);
+                    if (avatars[i].GetComponent<AvatarController>().GetUserCharacter()._id == characterId)
+                    {
+                        selectedAvatarIndex = i;
+                        OnAvatarSelected?.Invoke(i);
+                        selectedCharacter = avatars[i].GetComponent<AvatarController>().GetUserCharacter();
+                        canRemove = true;
+                    }
                 }
             }
         }
+    }
+
+    void HandleGoBack()
+    {
+        GlobalManager.Instance.LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
     }
 }

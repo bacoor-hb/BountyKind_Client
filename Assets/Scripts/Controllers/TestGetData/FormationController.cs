@@ -207,6 +207,7 @@ public class FormationController : MonoBehaviour
 
     void SetEventToSquare()
     {
+        Debug.Log("Set events to square");
         List<GameObject> boardSquares = viewManager.boardViewManager.boardSquares;
         for (int i = 0; i < boardSquares.Count; i++)
         {
@@ -325,5 +326,10 @@ public class FormationController : MonoBehaviour
     void HandleGoBack()
     {
         GlobalManager.Instance.LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("Destroyed");
     }
 }

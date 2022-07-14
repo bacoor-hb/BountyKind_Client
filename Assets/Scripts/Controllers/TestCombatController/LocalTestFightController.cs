@@ -101,6 +101,29 @@ public class LocalTestFightController : MonoBehaviour
     }
     public void GetOpponentsFormation()
     {
+        //BountyMap currentMap = GlobalManager.Instance.UserDataManager.GetCurrentMap();
+        //int currentNodeIndex = GlobalManager.Instance.UserDataManager.UserGameStatus.currentNode;
+        //MapNode currentNode = currentMap.nodes[currentNodeIndex];
+        //List<Enemy> enemies = currentNode.enemies;
+        //for (int i = 0; i < enemies.Count; i++)
+        //{
+        //    FormationCharacters character = new();
+        //    character._id = enemies[i]._id;
+        //    character.baseKey = "default_character_3";
+        //    character.position = enemies[i].position;
+        //    character.hp = enemies[i].hp;
+        //    character.atk = enemies[i].atk;
+        //    character.speed = enemies[i].speed;
+        //    character.def = enemies[i].def;
+        //    character.level = enemies[i].level;
+        //    opponentCharacters.Add(character);
+        //}
+        GetFakeOpponentData();
+        OnSetOpponentInfomationCompleted?.Invoke();
+    }
+
+    void GetFakeOpponentData()
+    {
         FormationCharacters character3 = new();
         character3._id = "627a348d2a246f967f142ebd";
         character3.baseKey = "default_character_3";
@@ -120,7 +143,6 @@ public class LocalTestFightController : MonoBehaviour
         character4.def = 44;
         character4.level = 4;
         opponentCharacters.Add(character3);
-        OnSetOpponentInfomationCompleted?.Invoke();
     }
     void Start()
     {

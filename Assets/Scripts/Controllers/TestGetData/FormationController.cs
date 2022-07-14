@@ -262,9 +262,26 @@ public class FormationController : MonoBehaviour
             int[] result = CheckIfCharacterExisted(selectedCharacter);
             if (existedPositionIndex != -1 && result.Length == 0)
             {
-                characterWithPositions[existedPositionIndex].position = position;
-                viewManager.boardViewManager.Move(selectedCharacter._id, selectedSquare.transform);
-                OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                if (selectedCharacter._id != characterWithPositions[existedPositionIndex].characterId)
+                {
+                    viewManager.boardViewManager.Clear(characterWithPositions[existedPositionIndex].characterId);
+                    characterWithPositions.RemoveAt(existedPositionIndex);
+                    viewManager.boardViewManager.RenderCharacterModelToSquare(characterPrefab, position, selectedCharacter._id);
+                    characterWithPositions.Add(new CharacterWithPosition(selectedCharacter._id, position));
+                    OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                    canRemove = false;
+                    selectedCharacter = new UserCharacter();
+                    selectedSquare = null;
+                    OnSelectedSquare?.Invoke(-1);
+                    OnAvatarSelected?.Invoke(-1);
+                    selectedAvatarIndex = -1;
+                }
+                else
+                {
+                    characterWithPositions[existedPositionIndex].position = position;
+                    viewManager.boardViewManager.Move(selectedCharacter._id, selectedSquare.transform);
+                    OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                }
             }
             if (result.Length > 0 && existedPositionIndex == -1)
             {

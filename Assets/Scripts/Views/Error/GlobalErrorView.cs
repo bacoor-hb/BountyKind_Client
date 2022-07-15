@@ -37,5 +37,6 @@ public class GlobalErrorView : MonoBehaviour
     public void OpenPopup(string msg)
     {
         CanvasRoot.SetActive(true);
+        MessageTxt.text = msg;
     }
 }

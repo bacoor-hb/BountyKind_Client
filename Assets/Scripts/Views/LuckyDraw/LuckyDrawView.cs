@@ -41,7 +41,8 @@ public class LuckyDrawView : MonoBehaviour
 
     #region Init Popup
     /// <summary>
-    /// Init the Engage Event
+    /// Init the Engage Event.
+    /// Only call Once.
     /// </summary>
     public void Init_Phase1()
     {
@@ -52,7 +53,7 @@ public class LuckyDrawView : MonoBehaviour
             (engage) =>
             {
                 OnLuckyDraw_Engage?.Invoke(engage);
-                InvitationPopup.OnEngageBtnPressed = null;
+                //InvitationPopup.OnEngageBtnPressed = null;
             };        
     }
 

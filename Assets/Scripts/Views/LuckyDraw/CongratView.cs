@@ -31,7 +31,6 @@ public class CongratView : MonoBehaviour
         {
             ItemPrefab.ObjectPrefab = _itemPrefab.transform;
             ItemImg3D.color = Color.white;
-            viewRoot.SetActive(true);
         }
         CloseBtn.onClick.RemoveAllListeners();
         CloseBtn.onClick.AddListener(() => ClosePopup());
@@ -48,11 +47,12 @@ public class CongratView : MonoBehaviour
         if(_instant)
         {
             viewRoot.SetActive(true);
+            overlay.SetActive(false);
             OnOpenPopupFinish?.Invoke();
         }
         else
         {
-            overlay.SetActive(false);
+            overlay.SetActive(true);
             StartCoroutine(OpenPopup_Anim());
         }
         CloseBtn.onClick.RemoveAllListeners();
@@ -82,6 +82,7 @@ public class CongratView : MonoBehaviour
         animator.SetTrigger(CONSTS.ANIM_POPUP_APPEAR_TR);
         yield return new WaitForSeconds(CONSTS.ANIM_POPUP_SPEED);
 
+        overlay.SetActive(false);
         OnOpenPopupFinish?.Invoke();
     }
 

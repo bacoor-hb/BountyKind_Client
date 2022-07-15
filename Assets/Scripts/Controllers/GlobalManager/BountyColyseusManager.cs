@@ -73,7 +73,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// <returns>true = Connected to a lobby</returns>
     public bool LobbyStatus()
     {
-        return (lobbyRoom != null) && (lobbyRoom != null) && (lobbyRoom.colyseusConnection.IsOpen);
+        return (lobbyRoom != null) && (lobbyRoom.colyseusConnection.IsOpen);
     }
 
     /// <summary>
@@ -117,6 +117,16 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
             Map_MSG data = JsonUtility.FromJson<Map_MSG>(message);
             onLobbyReceiveMsg?.Invoke(LOBBY_RECEIVE_EVENTS.MAP_NODE_RESULT, data);
         });
+
+        #region Game ERROR
+        lobbyRoom.OnError += (code, message) => ViewManager.Instance.GlobalErrorView.OpenPopup("LOBBY ERROR.\nCode =>" + code + ", message => " + message);
+        #endregion
+
+        lobbyRoom.OnLeave += (code) =>
+        {
+            Debug.Log("[BountyColyseusManager] Leave lobby: " + code);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("Lobby Close, Code " + code);
+        };
         OnJoinLobbySuccess?.Invoke();
         Debug.Log("[BountyColyseusManager] AssignLobbyEvent success.");
     }
@@ -126,6 +136,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
     /// </summary>
     private void AssignRoomEvent()
     {
+        #region Game Event
         gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT.ToString(), (message) =>
         {
             onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.ROLL_RESULT, message);
@@ -150,6 +161,18 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         {
             onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.DEFAULT_RESULT, message);
         });
+        #endregion
+
+        #region Game ERROR
+        gameRoom.OnError += (code, message) => ViewManager.Instance.GlobalErrorView.OpenPopup("Room ERROR.\nCode =>" + code + ", message => " + message);
+        #endregion
+
+        gameRoom.OnLeave += (code) =>
+        {
+            Debug.Log("[BountyColyseusManager] Leave game: " + code);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("Room Close, Code " + code);
+        };
+
         OnJoinRoomSuccess?.Invoke();
         Debug.Log("[BountyColyseusManager] AssignRoomEvent success.");
     }

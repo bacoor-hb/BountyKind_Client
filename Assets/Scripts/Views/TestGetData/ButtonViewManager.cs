@@ -9,6 +9,8 @@ public class ButtonViewManager : MonoBehaviour
     public Button ResetFormationButton;
     public Button RemoveCharacterButton;
     public Button BackButton;
+    public Button RotateCamRightButton;
+    public Button RotateCamLeftButton;
     // Start is called before the first frame update
     void Start()
     {

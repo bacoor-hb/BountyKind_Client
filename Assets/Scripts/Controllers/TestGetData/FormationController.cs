@@ -50,6 +50,8 @@ public class FormationController : MonoBehaviour
         viewManager.buttonViewManager.ResetFormationButton.onClick.AddListener(ResetFormation);
         viewManager.buttonViewManager.RemoveCharacterButton.onClick.AddListener(RemoveCharacter);
         viewManager.buttonViewManager.BackButton.onClick.AddListener(HandleGoBack);
+        viewManager.buttonViewManager.RotateCamRightButton.onClick.AddListener(() => HandleRotateCamera(true));
+        viewManager.buttonViewManager.RotateCamLeftButton.onClick.AddListener(() => HandleRotateCamera(false));
         ScrollViewManager.OnInstantiate += HandleOnInstantiate;
         GetUserCharacters();
         GetUserFormation();
@@ -343,6 +345,11 @@ public class FormationController : MonoBehaviour
     void HandleGoBack()
     {
         GlobalManager.Instance.LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
+    }
+
+    void HandleRotateCamera(bool isClockWise)
+    {
+        viewManager.boardViewManager.RotateCamera(isClockWise);
     }
 
     private void OnDestroy()

@@ -50,6 +50,8 @@ public class FormationController : MonoBehaviour
         viewManager.buttonViewManager.ResetFormationButton.onClick.AddListener(ResetFormation);
         viewManager.buttonViewManager.RemoveCharacterButton.onClick.AddListener(RemoveCharacter);
         viewManager.buttonViewManager.BackButton.onClick.AddListener(HandleGoBack);
+        viewManager.buttonViewManager.RotateCamRightButton.onClick.AddListener(() => HandleRotateCamera(true));
+        viewManager.buttonViewManager.RotateCamLeftButton.onClick.AddListener(() => HandleRotateCamera(false));
         ScrollViewManager.OnInstantiate += HandleOnInstantiate;
         GetUserCharacters();
         GetUserFormation();
@@ -207,6 +209,7 @@ public class FormationController : MonoBehaviour
 
     void SetEventToSquare()
     {
+        Debug.Log("Set events to square");
         List<GameObject> boardSquares = viewManager.boardViewManager.boardSquares;
         for (int i = 0; i < boardSquares.Count; i++)
         {
@@ -261,9 +264,26 @@ public class FormationController : MonoBehaviour
             int[] result = CheckIfCharacterExisted(selectedCharacter);
             if (existedPositionIndex != -1 && result.Length == 0)
             {
-                characterWithPositions[existedPositionIndex].position = position;
-                viewManager.boardViewManager.Move(selectedCharacter._id, selectedSquare.transform);
-                OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                if (selectedCharacter._id != characterWithPositions[existedPositionIndex].characterId)
+                {
+                    viewManager.boardViewManager.Clear(characterWithPositions[existedPositionIndex].characterId);
+                    characterWithPositions.RemoveAt(existedPositionIndex);
+                    viewManager.boardViewManager.RenderCharacterModelToSquare(characterPrefab, position, selectedCharacter._id);
+                    characterWithPositions.Add(new CharacterWithPosition(selectedCharacter._id, position));
+                    OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                    canRemove = false;
+                    selectedCharacter = new UserCharacter();
+                    selectedSquare = null;
+                    OnSelectedSquare?.Invoke(-1);
+                    OnAvatarSelected?.Invoke(-1);
+                    selectedAvatarIndex = -1;
+                }
+                else
+                {
+                    characterWithPositions[existedPositionIndex].position = position;
+                    viewManager.boardViewManager.Move(selectedCharacter._id, selectedSquare.transform);
+                    OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                }
             }
             if (result.Length > 0 && existedPositionIndex == -1)
             {
@@ -325,5 +345,15 @@ public class FormationController : MonoBehaviour
     void HandleGoBack()
     {
         GlobalManager.Instance.LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
+    }
+
+    void HandleRotateCamera(bool isClockWise)
+    {
+        viewManager.boardViewManager.RotateCamera(isClockWise);
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("Destroyed");
     }
 }

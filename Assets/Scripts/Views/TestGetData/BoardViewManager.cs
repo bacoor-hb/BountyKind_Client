@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BoardViewManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject board;
     public List<GameObject> boardSquares;
     [SerializeField]
     private Dictionary<string, GameObject> cloneCharacters;
@@ -32,5 +34,17 @@ public class BoardViewManager : MonoBehaviour
     public void Move(string characterId, Transform parentTransform)
     {
         cloneCharacters[characterId].GetComponent<Transform>().SetParent(parentTransform, false);
+    }
+
+    public void RotateCamera(bool isClockWise)
+    {
+        if (isClockWise)
+        {
+            board.transform.Rotate(0f, 45.0f, 0.0f, Space.World);
+        }
+        else
+        {
+            board.transform.Rotate(0f, -45.0f, 0.0f, Space.World);
+        }
     }
 }

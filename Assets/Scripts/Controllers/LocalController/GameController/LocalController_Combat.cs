@@ -7,32 +7,47 @@ public partial class LocalGameController
     #region Combat Control
     public void Start_Combat(bool _skip)
     {
-        if(_skip)
+        Debug.Log("[LocalGameController] Start_Combat: " + _skip);
+        GameEventController.Handle_Combat(_skip);
+        LocalGameView.CombatGameView.ClosePopup();
+    }
+
+    private void CombatStart(BattleData battle_MSG)
+    {
+        if (battle_MSG != null && !battle_MSG.skip)
         {
-            Debug.Log("[LocalGameController] Start Combat...");            
+            Debug.Log("[LocalGameController] Start Combat...");
+            fightController.OnBattleEnded = null;
+            fightController.OnBattleEnded += CombatEnd;
+
+            Debug.Log("[LocalGameController] CombatStart");
+            SwitchCamera(1);
+            LocalGameView.SetCanvasRootState(false);
+
+            fightController.localViewManager.SetViewState(true);
+            fightController.InsertBattleData(battle_MSG);
+            fightController.ProcessCharactersPosition();
         }
         else
         {
             Debug.Log("[LocalGameController] Deny Combat...");
+            LocalGameView.CombatGameView.OnClosePopupFinish = null;
+            LocalGameView.CombatGameView.OnClosePopupFinish += () => TurnBaseController.EndAction();
         }
-        GameEventController.Handle_Combat(_skip);
     }
 
-    public void Deny_Combat()
+    private void CombatEnd()
     {
-        
+        SwitchCamera(0);
+        LocalGameView.SetCanvasRootState(true);
+
+        TurnBaseController.EndAction();
     }
 
-    public void End_Combat()
+    public void EndTurnCombat()
     {
         Debug.Log("[LocalGameController] End Combat...");
-        //LocalGameView.SetBtn_State(ACTION_TYPE.END_TURN, true);
         EndTurn_Action();
-    }
-
-    private void Combat_GetData(Battle_MSG battleData)
-    {
-
     }
     #endregion
 }

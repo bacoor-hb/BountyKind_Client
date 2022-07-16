@@ -13,12 +13,15 @@ public class AvatarViewManager : MonoBehaviour
     public int index;
     public string id;
     // Start is called before the first frame update
-    void Start()
+    public void Init(int _index, string _id)
     {
         blockBG.SetActive(false);
         border.SetActive(false);
-        FormationController.OnAvatarSelected += HandleOnAvatarSelected;
-        FormationController.OnFormationCharatecterReceived += HandleOnFormationCharatecterReceived;
+        index = _index;
+        id = _id;
+        FormationController.Instance.OnAvatarSelected = null;
+        FormationController.Instance.OnAvatarSelected += HandleOnAvatarSelected;
+        FormationController.Instance.OnFormationCharatecterReceived += HandleOnFormationCharatecterReceived;
     }
 
     public void SetIndex(int _index)
@@ -44,6 +47,7 @@ public class AvatarViewManager : MonoBehaviour
 
     public void HandleOnAvatarSelected(int selectedIndex)
     {
+        Debug.Log("OnAvatarSelected: " + index);
         if (index == selectedIndex)
         {
             border.SetActive(true);

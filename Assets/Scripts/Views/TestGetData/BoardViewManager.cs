@@ -10,7 +10,7 @@ public class BoardViewManager : MonoBehaviour
     [SerializeField]
     private Dictionary<string, GameObject> cloneCharacters;
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         cloneCharacters = new Dictionary<string, GameObject>();
     }

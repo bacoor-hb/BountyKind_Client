@@ -10,6 +10,8 @@ public class LocalViewManager : MonoBehaviour
     public CurrentUnitView currentUnitViewManager;
     public ResultViewManager resultViewManager;
     public TurnViewManager turnViewManager;
+    [SerializeField]
+    private GameObject canvasRoot;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,5 +21,10 @@ public class LocalViewManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void SetViewState(bool state)
+    {
+        canvasRoot.SetActive(state);
     }
 }

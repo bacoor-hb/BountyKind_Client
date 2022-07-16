@@ -16,21 +16,14 @@ public class PlayerTestFightController : IPlayer
 
     private TurnBaseController TurnBaseController;
 
-    /// <summary>
-    /// Initialize the Player and all of his 
-    /// </summary>
-    /// <param name="_id"></param>
-    /// 
-    private void Awake()
-    {
-        UnitController.OnUpdateHealth += HandleUpdateHealth;
-    }
     public void AddUnit(GameObject unit, string unitId)
     {
         characters.Add(unitId, unit);
     }
     public void InitPlayer(int _id, TurnBaseController _controller)
     {
+        DestroyAllCharacters();
+        UnitController.OnUpdateHealth += HandleUpdateHealth;
         id = _id;
         InitPlayerAction(_controller);
     }
@@ -83,5 +76,18 @@ public class PlayerTestFightController : IPlayer
     void HandleUpdateHealth(string characterId, int newHealth)
     {
         characters[characterId].GetComponent<UnitController>().currentHealth = newHealth;
+    }
+
+    void DestroyAllCharacters()
+    {
+        if (characters != null && characters.Count > 0)
+        {
+            foreach (var character in characters)
+            {
+                Destroy(character.Value);
+            }
+            characters = new Dictionary<string, GameObject>();
+        }
+
     }
 }

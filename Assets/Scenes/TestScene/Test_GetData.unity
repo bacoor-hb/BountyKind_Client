@@ -540,10 +540,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 422083119}
-  - component: {fileID: 422083121}
   - component: {fileID: 422083120}
   m_Layer: 0
-  m_Name: LocalManager
+  m_Name: FormationLocalManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -576,7 +575,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8219b3f38cb776b46b2eb429691013c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiManager: {fileID: 422083121}
   userCharacters: []
   formationCharacters: []
   userItems: []
@@ -606,18 +604,6 @@ MonoBehaviour:
   viewManager: {fileID: 1040174933}
   selectedAvatarIndex: -1
   avatars: []
---- !u!114 &422083121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 422083118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cad40bc9ba87c3844aca9f5de2bef7c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &482854893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,7 +1429,7 @@ GameObject:
   - component: {fileID: 1040174932}
   - component: {fileID: 1040174933}
   m_Layer: 0
-  m_Name: ViewManager
+  m_Name: FormationViewManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

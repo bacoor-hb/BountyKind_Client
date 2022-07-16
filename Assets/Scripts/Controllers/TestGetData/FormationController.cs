@@ -4,14 +4,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class FormationController : MonoBehaviour
+public class FormationController : LocalSingleton<FormationController>
 {
     public delegate void OnEventTriggered<T>(T data);
-    public static event OnEventTriggered<int> OnAvatarSelected;
-    public static event OnEventTriggered<string> OnFormationCharatecterReceived;
-    public static event OnEventTriggered<int> OnSelectedSquare;
+    public delegate void OnEventTriggered();
+    public OnEventTriggered<int> OnAvatarSelected;
+    public OnEventTriggered<string> OnFormationCharatecterReceived;
+    public OnEventTriggered<int> OnSelectedSquare;
+    public OnEventTriggered OnBackLobbyView;
     // Start is called before the first frame update
-    [SerializeField]
     private APIManager apiManager;
     [SerializeField]
     private UserCharacter[] userCharacters;
@@ -37,13 +38,16 @@ public class FormationController : MonoBehaviour
     [SerializeField]
     private List<GameObject> avatars;
     private bool canRemove;
-    void Start()
+    public void Init()
     {
+        selectedAvatarIndex = -1;
         canRemove = false;
         selectedCharacter = new UserCharacter();
         avatars = new List<GameObject>();
         userDataManager = GlobalManager.Instance.UserDataManager;
+        apiManager = GlobalManager.Instance.NetworkManager.APIManager;
         apiManager.OnGetUserCharactersFinished += HandleGetUserCharactersFinished;
+        apiManager.OnGetFormationFinished = null;
         apiManager.OnGetFormationFinished += HandleGetFormationFinished;
         apiManager.OnGetUserItemsFinished += HandleGetUserItemsFinished;
         viewManager.buttonViewManager.SetFormationButton.onClick.AddListener(HandleSetFormation);
@@ -53,10 +57,17 @@ public class FormationController : MonoBehaviour
         viewManager.buttonViewManager.RotateCamRightButton.onClick.AddListener(() => HandleRotateCamera(true));
         viewManager.buttonViewManager.RotateCamLeftButton.onClick.AddListener(() => HandleRotateCamera(false));
         ScrollViewManager.OnInstantiate += HandleOnInstantiate;
+        SetEventToSquare();
+    }
+
+    /// <summary>
+    /// Get user formation
+    /// </summary>
+    public void GetUserFormationData()
+    {
         GetUserCharacters();
         GetUserFormation();
         GetUserItems();
-        SetEventToSquare();
     }
 
     // Update is called once per frame
@@ -87,10 +98,12 @@ public class FormationController : MonoBehaviour
     void HandleGetUserCharactersFinished(UserCharacters_API _userCharacters)
     {
         userCharacters = _userCharacters.data;
-        for (var i = 0; i < userCharacters.Length; i++)
+        for (int i = 0; i < userCharacters.Length; i++)
         {
-            avatarPrefab.GetComponent<AvatarController>().SetUserCharacter(userCharacters[i]);
-            viewManager.scrollViewManager.RenderAvatar(avatarPrefab, i, userCharacters[i]._id);
+            int index = i;
+            Debug.Log("HandleGetUserCharactersFinished: " + index);
+            avatarPrefab.GetComponent<AvatarController>().SetUserCharacter(userCharacters[index]);
+            viewManager.scrollViewManager.RenderAvatar(avatarPrefab, index, userCharacters[index]._id);
         }
     }
 
@@ -164,12 +177,14 @@ public class FormationController : MonoBehaviour
 
     void HandleOnInstantiate(GameObject obj, int index)
     {
+        Debug.Log("HandleOnInstantiate: " + index);
         avatars.Add(obj);
         EventTrigger trigger = obj.GetComponent<EventTrigger>();
         EventTrigger.Entry entry = new EventTrigger.Entry();
         entry.eventID = EventTriggerType.PointerDown;
         entry.callback.AddListener((data) =>
         {
+            Debug.Log("HandleOnInstantiate callback: " + index);
             OnClickAvatar(obj.GetComponent<AvatarController>().GetUserCharacter(), index);
         });
         trigger.triggers.Add(entry);
@@ -177,6 +192,7 @@ public class FormationController : MonoBehaviour
 
     void OnClickAvatar(UserCharacter userCharacter, int index)
     {
+        Debug.Log("OnClickAvatar: " + index);
         int[] result = CheckIfCharacterExisted(userCharacter);
         if (result.Length > 0)
         {
@@ -344,7 +360,7 @@ public class FormationController : MonoBehaviour
 
     void HandleGoBack()
     {
-        GlobalManager.Instance.LoadingManager.LoadWithLoadingScene(SCENE_NAME.MainMenu);
+        OnBackLobbyView?.Invoke();
     }
 
     void HandleRotateCamera(bool isClockWise)

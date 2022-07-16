@@ -7,11 +7,11 @@ public partial class LocalGameController : MonoBehaviour
     [SerializeField]
     private List<UserActionLocalManager> players;
 
-    [Header ("Event Controller")]
+    [Header("Event Controller")]
     [SerializeField]
     private Multiplayer_GameEventController GameEventController;
 
-    [Header ("Controller Modules")]
+    [Header("Controller Modules")]
     [SerializeField]
     private MovementController MovementController;
     [SerializeField]
@@ -32,6 +32,18 @@ public partial class LocalGameController : MonoBehaviour
     [Header("Network Event Control")]
     [SerializeField]
     private Multiplayer_GameEventController Multiplayer_GameEvent;
+
+    [Header("Combat component")]
+    [SerializeField]
+    private LocalTestFightController fightController;
+
+    [Header("Camera controller")]
+    [SerializeField]
+    private Camera currentCamera;
+    [SerializeField]
+    private Transform boardCameraPosition;
+    [SerializeField]
+    private Transform combatCameraPosition;
 
     private UserDataManager UserDataManager;
     private NetworkManager NetworkManager;
@@ -71,6 +83,9 @@ public partial class LocalGameController : MonoBehaviour
         //Update the User Data View
         Init_LocalView();
         Multiplayer_GameEvent.HandleUpdateBalance();
+
+        //Init combat
+        InitCombat();
     }
 
     /// <summary>
@@ -114,9 +129,13 @@ public partial class LocalGameController : MonoBehaviour
         Multiplayer_GameEvent.OnLuckyDrawReturn = null;
         Multiplayer_GameEvent.OnLuckyDrawReturn += GetReward_LuckyDraw;
         Multiplayer_GameEvent.OnBattleReturn = null;
-        Multiplayer_GameEvent.OnBattleReturn += Combat_GetData;
+        Multiplayer_GameEvent.OnBattleReturn += CombatStart;
     }
 
+    private void InitCombat()
+    {
+        fightController.Init();
+    }
     /// <summary>
     /// Update the User Data View
     /// </summary>
@@ -167,14 +186,14 @@ public partial class LocalGameController : MonoBehaviour
         UserDataManager.UserGameStatus.currentNode = Mathf.RoundToInt(currentRoom.players[currentPlayerId].currentNode);
         var actionType = UserDataManager.UserGameStatus.Get_MapActionType();
         Debug.Log("[LocalGameController] [OnStartTurn] Current Math status: " + currentRoom.players[currentPlayerId].isInteracted);
-        
+
         //Face the Avatar to the right direction
         Vector3 currentPos = nodeList[UserDataManager.UserGameStatus.currentNode].transform.position;
         var nextNodeList = UserDataManager.GetNextNodes(UserDataManager.UserGameStatus.currentNode);
         Vector3 nextPos = nodeList[nextNodeList[0]].transform.position;
         Vector3 dir = nextPos - currentPos;
         MovementController.FaceToDir(dir);
-        Debug.Log("CurrentPos: "+ currentPos + " | Next Pos:" + nextPos);
+        Debug.Log("CurrentPos: " + currentPos + " | Next Pos:" + nextPos);
 
         //If the current player is not yet interracted with the current node.
         if (!currentRoom.players[currentPlayerId].isInteracted)
@@ -196,7 +215,7 @@ public partial class LocalGameController : MonoBehaviour
         finishRollPopupAnim = false;
 
         currentPlayer.SetSkipRollDice(_skip);
-        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.ROLL_DICE));       
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.ROLL_DICE));
     }
 
     /// <summary>
@@ -215,7 +234,7 @@ public partial class LocalGameController : MonoBehaviour
         Debug.Log("[LocalGameController] Accept Chance...");
 
         currentPlayer.SetSkipChance(_skip);
-        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.CHANCE));             
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.CHANCE));
     }
 
     /// <summary>
@@ -225,7 +244,7 @@ public partial class LocalGameController : MonoBehaviour
     {
         Debug.Log("[LocalGameController] Accept Lucky Draw..." + _skip);
         currentPlayer.SetSkipLuckyDraw(_skip);
-        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.LUCKY_DRAW));        
+        TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.LUCKY_DRAW));
     }
     /// <summary>
     /// Add Combat Action to the Queue
@@ -251,7 +270,7 @@ public partial class LocalGameController : MonoBehaviour
     #region User Controller
     public string GetUserAddress(int _userLocalId)
     {
-        if(_userLocalId >= 0 
+        if (_userLocalId >= 0
             && _userLocalId < players.Count
             && players[_userLocalId] != null)
         {
@@ -299,10 +318,10 @@ public partial class LocalGameController : MonoBehaviour
             players[i].OnEndChance += (x) => End_Chance();
 
             players[i].OnStartCombat = null;
-            players[i].OnStartCombat +=  Start_Combat;
+            players[i].OnStartCombat += Start_Combat;
 
             players[i].OnEndCombat = null;
-            players[i].OnEndCombat += (x) => End_Combat();
+            players[i].OnEndCombat += (x) => EndTurnCombat();
         }
     }
 
@@ -336,6 +355,25 @@ public partial class LocalGameController : MonoBehaviour
                 break;
             default:
                 Debug.LogError("[LocalGameController] OnTriggerMathEffect ERROR: STRANGE ACTION: " + actionType.ToString());
+                break;
+        }
+    }
+    #endregion
+    #region camera controller
+
+    /// <summary>
+    /// switch camera view
+    /// </summary>
+    /// <param name="type">0: board, 1: combat</param>
+    private void SwitchCamera(int type)
+    {
+        switch (type)
+        {
+            case 0:
+                currentCamera.transform.SetParent(boardCameraPosition, false);
+                break;
+            case 1:
+                currentCamera.transform.SetParent(combatCameraPosition, false);
                 break;
         }
     }

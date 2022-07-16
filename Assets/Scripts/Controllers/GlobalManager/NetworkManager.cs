@@ -22,7 +22,7 @@ public class NetworkManager : MonoBehaviour
     [SerializeField]
     private BountyColyseusManager socketManager;
     [SerializeField]
-    private APIManager APIManager;
+    public APIManager APIManager { get; private set; }
     private UserDataManager UserDataManager;
     private MapNodeDataManager MapNodeDataManager;
     private LoadingManager LoadingManager;
@@ -34,6 +34,7 @@ public class NetworkManager : MonoBehaviour
         MapNodeDataManager = GlobalManager.Instance.MapNodeDataManager;
         LoadingManager = GlobalManager.Instance.LoadingManager;
 
+        APIManager = GetComponentInChildren<APIManager>();
         APIManager.Init();
         host_EndPoint = CONSTS.HOST_ENDPOINT_SOCKET;
 
@@ -54,7 +55,7 @@ public class NetworkManager : MonoBehaviour
         if (!socketManager.LobbyStatus())
         {
             StartCoroutine(socketManager.JoinLobby(UserDataManager.UserData.token));
-        }            
+        }
         else
         {
             Debug.Log("[NetworkManager] Joined Lobby, Open Lobby View.");

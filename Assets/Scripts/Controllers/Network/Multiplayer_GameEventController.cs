@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class Multiplayer_GameEventController : MonoBehaviour
 {
@@ -9,8 +10,8 @@ public class Multiplayer_GameEventController : MonoBehaviour
     public OnEventReturn<RollResult_MSG> OnRollResultReturn;
     public OnEventReturn<Reward_MSG> OnLuckyDrawReturn;
     public OnEventReturn<Reward_MSG> OnChanceReturn;
-    public OnEventReturn<Battle_MSG> OnBattleReturn;
-    public OnEventReturn <TokenBalance> OnBalanceReturn;
+    public OnEventReturn<BattleData> OnBattleReturn;
+    public OnEventReturn<TokenBalance> OnBalanceReturn;
 
     private UserDataManager UserDataManager;
     private NetworkManager NetworkManager;
@@ -21,7 +22,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
     {
         UserDataManager = GlobalManager.Instance.UserDataManager;
         NetworkManager = GlobalManager.Instance.NetworkManager;
-        LoadingManager = GlobalManager.Instance.LoadingManager; 
+        LoadingManager = GlobalManager.Instance.LoadingManager;
 
 
         BountyColyseusManager.Instance.onGameReceiveMsg = null;
@@ -41,8 +42,8 @@ public class Multiplayer_GameEventController : MonoBehaviour
                     OnRollSuccess(rollMessage);
                     break;
                 case GAMEROOM_RECEIVE_EVENTS.FIGHT_RESULT:
-                    Debug.Log("[GameEventController] FIGHT_RESULT");
-                    Battle_MSG battle_msg = JsonUtility.FromJson<Battle_MSG>(message.ToString());
+                    //Debug.Log("[GameEventController] FIGHT_RESULT: " + message.ToString());
+                    BattleData battle_msg = JsonConvert.DeserializeObject<BattleData>(message.ToString());
                     OnBattleEnd(battle_msg);
                     break;
                 case GAMEROOM_RECEIVE_EVENTS.LUCKY_DRAW_RESULT:
@@ -69,7 +70,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogError("[HandleGameMessage] ERROR:" + ex.Message);
-        }        
+        }
     }
 
     public void HandleUpdateBalance()
@@ -129,22 +130,14 @@ public class Multiplayer_GameEventController : MonoBehaviour
     public void Handle_Combat(bool _skip = true)
     {
         Debug.Log("[Multiplayer_GameEventController] Send Combat...");
-        //Only for test: deny the battle
-        Battle_MSG msg = new Battle_MSG()
-        {
-            skip = _skip,
-            status = 1,
-            battleProgress = new AttackResult_MSG[0],
-        };
-        string jsonMsg = JsonUtility.ToJson(msg);
-        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.FIGHT.ToString(), jsonMsg);
+        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.FIGHT.ToString(), _skip);
     }
 
     /// <summary>
     /// Send Battle Message from Server
     /// </summary>
     /// <param name="battle_MSG"></param>
-    public void OnBattleEnd(Battle_MSG battle_MSG)
+    public void OnBattleEnd(BattleData battle_MSG)
     {
         //Debug.Log("[Multiplayer_GameEventController] OnBattleEnd");
         string jsonMsg = JsonUtility.ToJson(battle_MSG);

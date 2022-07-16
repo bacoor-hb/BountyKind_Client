@@ -8,9 +8,11 @@ public class FormationViewManager : MonoBehaviour
     public ButtonViewManager buttonViewManager;
     public ScrollViewManager scrollViewManager;
     public BoardViewManager boardViewManager;
-    void Start()
+    public void Init()
     {
-
+        buttonViewManager.Init();
+        scrollViewManager.Init();
+        boardViewManager.Init();
     }
 
     // Update is called once per frame

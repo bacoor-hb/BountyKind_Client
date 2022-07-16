@@ -8,10 +8,11 @@ public class BattleData
 {
     public bool skip;
     public int status;
-    public List<BattleProgess> battleProgress;
+    public BattleProgess[] battleProgress;
+    public Reward_MSG[] rewards;
 
     public BattleData() { }
-    public BattleData(bool _skip, int _status, List<BattleProgess> _battleProgress)
+    public BattleData(bool _skip, int _status, BattleProgess[] _battleProgress)
     {
         skip = _skip;
         status = _status;
@@ -66,7 +67,7 @@ public class FightActionTest : Action
     public static event OnStartFight startFight;
     public delegate void EndFight(int userId);
     public static event EndFight endFight;
-    public List<BattleProgess> battleData;
+    public BattleProgess[] battleData;
 
     private void Awake()
     {
@@ -100,7 +101,7 @@ public class FightActionTest : Action
         OnFight();
     }
 
-    void HandleReceiveBattleDatas(List<BattleProgess> _battleData, int playerId)
+    void HandleReceiveBattleDatas(BattleProgess[] _battleData, int playerId)
     {
         if (playerId == base.userId)
         {
@@ -116,7 +117,7 @@ public class FightActionTest : Action
 
     void HandleOnEndFight()
     {
-        if (currentAction != battleData.Count - 1)
+        if (currentAction != battleData.Length - 1)
         {
             currentAction++;
             turnBaseController.EndAction();

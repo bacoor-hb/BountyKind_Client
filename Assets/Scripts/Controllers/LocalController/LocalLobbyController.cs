@@ -7,6 +7,12 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
 {
     [SerializeField]
     private LobbyView LobbyView;
+    [SerializeField]
+    private FormationViewManager formationViewManager;
+    [SerializeField]
+    private FormationController formationController;
+    [SerializeField]
+    private GameObject formationRoot;
 
     private List<MapShort_MSG> bountyMaps;
 
@@ -37,6 +43,13 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
 
         //Lobby View Setting
         InitLobbyView();
+
+        //Formation init
+        formationController.Init();
+        formationViewManager.Init();
+        formationRoot.SetActive(false);
+        formationController.OnBackLobbyView = null;
+        formationController.OnBackLobbyView += HandleBackLobbyView;
     }
 
     /// <summary>
@@ -209,6 +222,14 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     void HandleOpenFormation()
     {
         Debug.Log("HandleOpenFormation");
-        GlobalManager.Instance.LoadingManager.LoadWithLoadingScene(SCENE_NAME.Test_GetData);
+        formationRoot.SetActive(true);
+        formationController.GetUserFormationData();
+        LobbyView.SetLobbyViewState(false);
+    }
+
+    void HandleBackLobbyView()
+    {
+        formationRoot.SetActive(false);
+        LobbyView.SetLobbyViewState(true);
     }
 }

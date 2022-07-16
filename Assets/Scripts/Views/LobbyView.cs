@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class LobbyView : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject lobbyViewRoot;
     [Header("Login Form")]
     [SerializeField]
     private GameObject LoginForm_Root;
@@ -41,6 +43,15 @@ public class LobbyView : MonoBehaviour
 
         SetLoobyFormStatus(false);
         SetLoginFormStatus(true);
+    }
+
+    /// <summary>
+    /// set state open/close lobby view
+    /// </summary>
+    /// <param name="state">true: open, false: close</param>
+    public void SetLobbyViewState(bool state)
+    {
+        lobbyViewRoot.SetActive(state);
     }
 
     /// <summary>

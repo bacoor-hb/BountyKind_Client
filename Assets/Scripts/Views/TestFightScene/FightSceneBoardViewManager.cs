@@ -38,4 +38,9 @@ public class FightSceneBoardViewManager : MonoBehaviour
     {
         Destroy(characterObj);
     }
+
+    public void DestroyAllCharacters()
+    {
+
+    }
 }

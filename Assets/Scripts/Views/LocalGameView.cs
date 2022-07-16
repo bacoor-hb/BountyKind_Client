@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LocalGameView : MonoBehaviour
 {
-    [Header ("Feature Popup")]
+    [Header("Feature Popup")]
     public LuckyDrawView LuckyDrawPopup;
     public CombatGameView CombatGameView;
     public ChanceView ChanceView;
@@ -23,6 +23,8 @@ public class LocalGameView : MonoBehaviour
     [Header("Other Button")]
     public Button QuitBoard_Btn;
 
+    [SerializeField]
+    private GameObject canvasRoot;
     /// <summary>
     /// Reset all Button Event and Clear all the Text
     /// </summary>
@@ -36,7 +38,7 @@ public class LocalGameView : MonoBehaviour
 
     public void SetState_RollDicePopup(bool _state)
     {
-        Debug.Log("[LocalGameView] Open_RollDicePopup: " + _state);        
+        Debug.Log("[LocalGameView] Open_RollDicePopup: " + _state);
         if (_state)
         {
             RollDiceView.OpenPopup();
@@ -44,26 +46,26 @@ public class LocalGameView : MonoBehaviour
         else
         {
             RollDiceView.ClosePopup();
-        }        
+        }
     }
 
     public void SetState_LuckyDrawPopup(bool _state)
     {
         Debug.Log("[LocalGameView] Open_LuckyDrawPopup");
-        
-        if(_state)
+
+        if (_state)
         {
             LuckyDrawPopup.OpenPopup(LUCKYDRAW_POPUP.INVITATION);
         }
         else
         {
             LuckyDrawPopup.CloseAllPopup();
-        }        
+        }
     }
 
     public void SetState_ChanceView(bool _state)
     {
-        Debug.Log("[LocalGameView] Open_ChanceView");        
+        Debug.Log("[LocalGameView] Open_ChanceView");
         if (_state)
         {
             ChanceView.OpenPopup();
@@ -71,12 +73,12 @@ public class LocalGameView : MonoBehaviour
         else
         {
             ChanceView.ClosePopup();
-        }        
+        }
     }
 
     public void SetState_BattleView(bool _state)
     {
-        Debug.Log("[LocalGameView] Open_BattleView");        
+        Debug.Log("[LocalGameView] Open_BattleView");
         if (_state)
         {
             CombatGameView.OpenPopup();
@@ -96,6 +98,11 @@ public class LocalGameView : MonoBehaviour
         CombatGameView.SetPopup_State(false);
         ChanceView.SetPopup_State(false);
         RollDiceView.SetPopup_State(false);
+    }
+
+    public void SetCanvasRootState(bool state)
+    {
+        canvasRoot.SetActive(state);
     }
 
     /// <summary>

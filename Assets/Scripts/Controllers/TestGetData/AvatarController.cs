@@ -10,9 +10,10 @@ public class AvatarController : MonoBehaviour
     private UserCharacter userCharacter;
     [SerializeField]
     private AvatarViewManager avatarViewManager;
-    void Start()
+    public void Init(int index, string id)
     {
         GenerateSprite();
+        avatarViewManager.Init(index, id);
     }
 
     void GenerateSprite()

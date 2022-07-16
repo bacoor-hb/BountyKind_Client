@@ -32,15 +32,16 @@ class CharacterPosition
 
 public class LocalTestFightController : MonoBehaviour
 {
-    public APIManager apiManager;
+    private APIManager apiManager;
     public delegate void OnEventTriggered();
     public static event OnEventTriggered OnSetUserInfomationCompleted;
     public static event OnEventTriggered OnSetOpponentInfomationCompleted;
     public static event OnEventTriggered OnSetAllCharactersPositionCompleted;
     public static event OnEventTriggered OnSetBattleDataCompleted;
+    public OnEventTriggered OnBattleEnded;
     public delegate void OnRenderQueue(List<UnitQueue> arr);
     public static event OnRenderQueue onRenderQueue;
-    public delegate void OnReceiveBattleDatasEvent(List<BattleProgess> battleData, int playerId);
+    public delegate void OnReceiveBattleDatasEvent(BattleProgess[] battleData, int playerId);
     public static event OnReceiveBattleDatasEvent OnReceiveBattleDatas;
     [SerializeField]
     private GameObject playerPrefab;
@@ -54,8 +55,7 @@ public class LocalTestFightController : MonoBehaviour
     private TurnBaseController turnBaseController;
     [SerializeField]
     private BattleData battleData;
-    [SerializeField]
-    private LocalViewManager localViewManager;
+    public LocalViewManager localViewManager;
     [SerializeField]
     private QueueController queueController;
     [SerializeField]
@@ -66,8 +66,12 @@ public class LocalTestFightController : MonoBehaviour
     // Start is called before the first frame update
     public void Init()
     {
-        yourCharacters = new();
-        opponentCharacters = new();
+        localViewManager.SetViewState(false);
+        apiManager = GlobalManager.Instance.NetworkManager.APIManager;
+        yourCharacters = new List<FormationCharacters>();
+        opponentCharacters = new List<FormationCharacters>();
+        battleData = new BattleData();
+
         localViewManager.buttonViewManager.FightButton.onClick.AddListener(() => { GetFakeData(); });
         QueueViewManager.OnRenderQueueCompleted += HandleOnRenderQueueCompleted;
         FightActionTest.onEndTurnFights += HandleEndTurnFights;
@@ -80,8 +84,29 @@ public class LocalTestFightController : MonoBehaviour
         OnSetAllCharactersPositionCompleted += HandleOnSetAllCharactersPositionCompleted;
         OnSetBattleDataCompleted += HandleOnSetBattleDataCompleted;
         localViewManager.resultViewManager.continueButton.onClick.AddListener(() => { HandleContinue(); });
+        apiManager.OnGetFormationFinished = null;
         apiManager.OnGetFormationFinished += HandleGetFormationFinished;
+
         turnBaseController.Init();
+        InitPlayers();
+        turnBaseController.StartGame();
+    }
+    public void ProcessCharactersPosition()
+    {
+        string uri = "https://dev-game-api.w3w.app/api/users/formation";
+        string token = GlobalManager.Instance.UserDataManager.UserData.token;
+        StartCoroutine(apiManager.GetFormation(uri, token));
+    }
+
+    public void InitPlayers()
+    {
+        if (players != null && players.Count > 0)
+        {
+            players.ForEach(player =>
+            {
+                Destroy(player);
+            });
+        }
         players = new List<GameObject>();
         GameObject player = Instantiate(playerPrefab, transform);
         players.Add(player);
@@ -91,34 +116,27 @@ public class LocalTestFightController : MonoBehaviour
             playerController.InitPlayer(playerController.id, turnBaseController);
             turnBaseController.Register(playerController);
         }
-        turnBaseController.StartGame();
-    }
-    public void ProcessCharactersPosition()
-    {
-        string uri = "https://dev-game-api.w3w.app/api/users/formation";
-        string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWVhNjhiMjk2YjJkMTNjMGVlZTcxYTMiLCJhZGRyZXNzIjoiMHg2NDQ3MGU1ZjVkZDM4ZTQ5NzE5NGJiY2FmOGRhYTdjYTU3ODkyNmY2IiwidXNlcm5hbWUiOiJDw7RuZyBTVVBFUiBWSVAgUFJPIiwiaW1hZ2UiOiJRbWFwU2ZERXlUUlAzZ3Q4bTd3UkdrQVhyRWE3eUpRZnI2b2FZem9pMnphb01iIiwiaXNSZWNlaXZlZCI6dHJ1ZSwiaXNOZXdVc2VyIjpmYWxzZSwiaWF0IjoxNjU3MTY4MTQ0LCJleHAiOjE5NzI3NDQxNDR9.c4mqy9ygQJHuJ7J1ZB0FhVe6SXwjYGjHfqgQ095mwYk";
-        StartCoroutine(apiManager.GetFormation(uri, token));
     }
     public void GetOpponentsFormation()
     {
-        //BountyMap currentMap = GlobalManager.Instance.UserDataManager.GetCurrentMap();
-        //int currentNodeIndex = GlobalManager.Instance.UserDataManager.UserGameStatus.currentNode;
-        //MapNode currentNode = currentMap.nodes[currentNodeIndex];
-        //List<Enemy> enemies = currentNode.enemies;
-        //for (int i = 0; i < enemies.Count; i++)
-        //{
-        //    FormationCharacters character = new();
-        //    character._id = enemies[i]._id;
-        //    character.baseKey = "default_character_3";
-        //    character.position = enemies[i].position;
-        //    character.hp = enemies[i].hp;
-        //    character.atk = enemies[i].atk;
-        //    character.speed = enemies[i].speed;
-        //    character.def = enemies[i].def;
-        //    character.level = enemies[i].level;
-        //    opponentCharacters.Add(character);
-        //}
-        GetFakeOpponentData();
+        BountyMap currentMap = GlobalManager.Instance.UserDataManager.GetCurrentMap();
+        int currentNodeIndex = GlobalManager.Instance.UserDataManager.UserGameStatus.currentNode;
+        MapNode currentNode = currentMap.nodes[currentNodeIndex];
+        List<Enemy> enemies = currentNode.enemies;
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            FormationCharacters character = new();
+            character._id = enemies[i]._id;
+            character.baseKey = "default_character_3";
+            character.position = enemies[i].position;
+            character.hp = enemies[i].hp;
+            character.atk = enemies[i].atk;
+            character.speed = enemies[i].speed;
+            character.def = enemies[i].def;
+            character.level = enemies[i].level;
+            opponentCharacters.Add(character);
+        }
+        //GetFakeOpponentData();
         OnSetOpponentInfomationCompleted?.Invoke();
     }
 
@@ -144,11 +162,20 @@ public class LocalTestFightController : MonoBehaviour
         character4.level = 4;
         opponentCharacters.Add(character3);
     }
-    void Start()
+    //void Start()
+    //{
+    //    Init();
+    //    InsertBattleData(GetFakeData());
+    //    ProcessCharactersPosition();
+    //}
+
+    public void ResetData()
     {
-        Init();
-        InsertBattleData(GetFakeData());
-        ProcessCharactersPosition();
+
+        yourCharacters = new List<FormationCharacters>();
+        opponentCharacters = new List<FormationCharacters>();
+        players = new List<GameObject>();
+        battleData = new BattleData();
     }
 
     void HandleStartTurn(int currentPlayer)
@@ -158,11 +185,14 @@ public class LocalTestFightController : MonoBehaviour
 
     void HandleContinue()
     {
-        GlobalManager.Instance.LoadingManager.LoadWithLoadingScene(SCENE_NAME.GameScene);
+        localViewManager.resultViewManager.HideResultPanel();
+        localViewManager.SetViewState(false);
+        OnBattleEnded?.Invoke();
     }
 
     void HandleGetFormationFinished(FormationCharacters[] userCharacters)
     {
+        Debug.Log(userCharacters.Length);
         for (int i = 0; i < userCharacters.Length; i++)
         {
             yourCharacters.Add(userCharacters[i]);
@@ -268,33 +298,33 @@ public class LocalTestFightController : MonoBehaviour
     BattleData GetFakeData()
     {
         BattleData _battleData = new BattleData();
-        _battleData.skip = false;
-        _battleData.status = 1;
-        _battleData.battleProgress = new List<BattleProgess>();
+        //_battleData.skip = false;
+        //_battleData.status = 1;
+        //_battleData.battleProgress = new List<BattleProgess>();
 
-        BattleProgess battleProgess1 = new BattleProgess();
-        battleProgess1.turn = 1;
-        battleProgess1.order = 1;
-        battleProgess1.type = "Attack";
-        battleProgess1.attacker = new BattleUnit(30, 30, 30, 30, "62bc7e36d47e20163c0447ad", "OurSide");
-        battleProgess1.target = new BattleUnit(10, 10, 0, 20, "627a348d2a246f967f142ebd", "OpposingSide");
+        //BattleProgess battleProgess1 = new BattleProgess();
+        //battleProgess1.turn = 1;
+        //battleProgess1.order = 1;
+        //battleProgess1.type = "Attack";
+        //battleProgess1.attacker = new BattleUnit(30, 30, 30, 30, "62bc7e36d47e20163c0447ad", "OurSide");
+        //battleProgess1.target = new BattleUnit(10, 10, 0, 20, "627a348d2a246f967f142ebd", "OpposingSide");
 
-        BattleProgess battleProgess2 = new BattleProgess();
-        battleProgess2.turn = 1;
-        battleProgess2.order = 2;
-        battleProgess2.type = "Attack";
-        battleProgess2.attacker = new BattleUnit(15, 15, 15, 15, "62bbf94f59aa4666f6d19b33", "OurSide");
-        battleProgess2.target = new BattleUnit(10, 10, 0, 15, "627a348d2a246f967f142ebd", "OpposingSide");
+        //BattleProgess battleProgess2 = new BattleProgess();
+        //battleProgess2.turn = 1;
+        //battleProgess2.order = 2;
+        //battleProgess2.type = "Attack";
+        //battleProgess2.attacker = new BattleUnit(15, 15, 15, 15, "62bbf94f59aa4666f6d19b33", "OurSide");
+        //battleProgess2.target = new BattleUnit(10, 10, 0, 15, "627a348d2a246f967f142ebd", "OpposingSide");
 
-        BattleProgess battleProgess3 = new BattleProgess();
-        battleProgess3.turn = 2;
-        battleProgess3.order = 1;
-        battleProgess3.type = "Attack";
-        battleProgess3.attacker = new BattleUnit(12, 14, 13, 10, "62bbf90659aa4666f6d19b1a", "OurSide");
-        battleProgess3.target = new BattleUnit(10, 10, 0, 0, "627a348d2a246f967f142ebd", "OpposingSide");
-        _battleData.battleProgress.Add(battleProgess1);
-        _battleData.battleProgress.Add(battleProgess2);
-        _battleData.battleProgress.Add(battleProgess3);
+        //BattleProgess battleProgess3 = new BattleProgess();
+        //battleProgess3.turn = 2;
+        //battleProgess3.order = 1;
+        //battleProgess3.type = "Attack";
+        //battleProgess3.attacker = new BattleUnit(12, 14, 13, 10, "62bbf90659aa4666f6d19b1a", "OurSide");
+        //battleProgess3.target = new BattleUnit(10, 10, 0, 0, "627a348d2a246f967f142ebd", "OpposingSide");
+        //_battleData.battleProgress.Add(battleProgess1);
+        //_battleData.battleProgress.Add(battleProgess2);
+        //_battleData.battleProgress.Add(battleProgess3);
         return _battleData;
     }
 
@@ -306,9 +336,8 @@ public class LocalTestFightController : MonoBehaviour
     void ProcessBattleData()
     {
         List<UnitQueue> unitQueues = new();
-        Debug.Log(battleData.battleProgress.Count);
         PlayerTestFightController playerController = players[0].GetComponent<PlayerTestFightController>();
-        for (var i = 0; i < battleData.battleProgress.Count; i++)
+        for (var i = 0; i < battleData.battleProgress.Length; i++)
         {
             string id = battleData.battleProgress[i].attacker._id;
             int turn = battleData.battleProgress[i].turn;
@@ -318,7 +347,7 @@ public class LocalTestFightController : MonoBehaviour
         InitTurn(unitQueues);
         OnReceiveBattleDatas?.Invoke(battleData.battleProgress, turnBaseController.CurrentPlayer);
         var currentPlayer = players[turnBaseController.CurrentPlayer].GetComponent<PlayerTestFightController>();
-        for (var i = 0; i < battleData.battleProgress.Count; i++)
+        for (var i = 0; i < battleData.battleProgress.Length; i++)
         {
             turnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.COMBAT));
         }

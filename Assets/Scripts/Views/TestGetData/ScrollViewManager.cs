@@ -11,7 +11,7 @@ public class ScrollViewManager : MonoBehaviour
     public static event OnInstantiateEvent OnInstantiate;
     public GameObject charactersHolder;
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
 
     }
@@ -24,8 +24,8 @@ public class ScrollViewManager : MonoBehaviour
 
     public void RenderAvatar(GameObject avatarPrefab, int index, string id)
     {
-        avatarPrefab.GetComponent<AvatarViewManager>().SetIndex(index);
-        avatarPrefab.GetComponent<AvatarViewManager>().SetId(id);
+        Debug.Log("RenderAvatar: " + index);
+        avatarPrefab.GetComponent<AvatarController>().Init(index, id);
         GameObject obj = Instantiate(avatarPrefab, new Vector3(0, 0, 0), Quaternion.identity, charactersHolder.transform);
         OnInstantiate?.Invoke(obj, index);
     }

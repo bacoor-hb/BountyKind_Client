@@ -12,7 +12,7 @@ public class SquareController : MonoBehaviour
     void Start()
     {
         selectPlane.SetActive(false);
-        FormationController.OnSelectedSquare += HandleOnSelectedSquare;
+        FormationController.Instance.OnSelectedSquare += HandleOnSelectedSquare;
     }
 
     // Update is called once per frame

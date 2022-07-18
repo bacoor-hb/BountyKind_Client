@@ -32,7 +32,6 @@ public class FightSceneBoardViewManager : MonoBehaviour
             GameObject targetSpawn = spawnPosEnemies[index];
             obj = Instantiate(_obj, targetSpawn.transform.position, Quaternion.identity, targetSpawn.transform);
         }
-        characterObjs.Add(obj);
         return obj;
     }
 

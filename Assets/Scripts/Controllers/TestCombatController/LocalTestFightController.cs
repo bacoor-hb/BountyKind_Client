@@ -62,10 +62,13 @@ public class LocalTestFightController : MonoBehaviour
     private List<FormationCharacters> yourCharacters;
     [SerializeField]
     private List<FormationCharacters> opponentCharacters;
+    [SerializeField]
+    private List<GameObject> charactersObjects;
 
     // Start is called before the first frame update
     public void Init()
     {
+        charactersObjects = new();
         localViewManager.SetViewState(false);
         apiManager = GlobalManager.Instance.NetworkManager.APIManager;
         yourCharacters = new List<FormationCharacters>();
@@ -79,17 +82,16 @@ public class LocalTestFightController : MonoBehaviour
         PlayerTestFightController.OnClearCharacter += HandleOnClearCharacter;
         UnitQueueController.OnEndQueue += HandleEndQueue;
         TurnBaseController.OnStartTurn += HandleStartTurn;
+        OnSetUserInfomationCompleted = null;
         OnSetUserInfomationCompleted += GetOpponentsFormation;
+        OnSetOpponentInfomationCompleted = null;
         OnSetOpponentInfomationCompleted += SetAllCharactersPosition;
+        OnSetAllCharactersPositionCompleted = null;
         OnSetAllCharactersPositionCompleted += HandleOnSetAllCharactersPositionCompleted;
         OnSetBattleDataCompleted += HandleOnSetBattleDataCompleted;
         localViewManager.resultViewManager.continueButton.onClick.AddListener(() => { HandleContinue(); });
         apiManager.OnGetFormationFinished = null;
         apiManager.OnGetFormationFinished += HandleGetFormationFinished;
-
-        turnBaseController.Init();
-        InitPlayers();
-        turnBaseController.StartGame();
     }
     public void ProcessCharactersPosition()
     {
@@ -100,14 +102,7 @@ public class LocalTestFightController : MonoBehaviour
 
     public void InitPlayers()
     {
-        if (players != null && players.Count > 0)
-        {
-            players.ForEach(player =>
-            {
-                Destroy(player);
-            });
-        }
-        players = new List<GameObject>();
+        turnBaseController.Init();
         GameObject player = Instantiate(playerPrefab, transform);
         players.Add(player);
         for (int i = 0; i < players.Count; i++)
@@ -116,6 +111,11 @@ public class LocalTestFightController : MonoBehaviour
             playerController.InitPlayer(playerController.id, turnBaseController);
             turnBaseController.Register(playerController);
         }
+    }
+
+    public void StartGame()
+    {
+        turnBaseController.StartGame();
     }
     public void GetOpponentsFormation()
     {
@@ -176,10 +176,18 @@ public class LocalTestFightController : MonoBehaviour
 
     void ResetScene()
     {
+        Destroy(players[0]);
+        players = new List<GameObject>();
+        yourCharacters = new();
+        opponentCharacters = new();
         queueController.ResetQueue();
         localViewManager.queueViewManager.ResetCurrentUnit();
         localViewManager.currentUnitViewManager.ResetCurrentUnitView();
-        localViewManager.boardViewManager.DestroyAllCharacterObjs();
+        charactersObjects.ForEach(charObj =>
+        {
+            Destroy(charObj);
+        });
+        charactersObjects = new List<GameObject>();
         localViewManager.turnViewManager.ClearTurnText();
         localViewManager.SetViewState(false);
         yourCharacters = new List<FormationCharacters>();
@@ -196,7 +204,7 @@ public class LocalTestFightController : MonoBehaviour
 
     void HandleGetFormationFinished(FormationCharacters[] userCharacters)
     {
-        Debug.Log(userCharacters.Length);
+        Debug.Log("TestData:HandleGetFormationFinished");
         for (int i = 0; i < userCharacters.Length; i++)
         {
             yourCharacters.Add(userCharacters[i]);
@@ -207,6 +215,7 @@ public class LocalTestFightController : MonoBehaviour
     void HandleOnSetAllCharactersPositionCompleted()
     {
         //StartCoroutine(GetData());
+        Debug.Log("TestData:HandleOnSetAllCharactersPositionCompleted");
         ProcessBattleData();
     }
 
@@ -223,24 +232,46 @@ public class LocalTestFightController : MonoBehaviour
         List<GameObject> spawnPosEnemies = localViewManager.boardViewManager.spawnPosEnemies;
         for (var i = 0; i < yourCharacters.Count; i++)
         {
+            Debug.Log("[SetAllCharactersPosition] SetAllCharactersPositionYourCharacters:" + yourCharacters[i]._id);
             int characterPosition = yourCharacters[i].position;
             string characterId = yourCharacters[i]._id;
             string characterBaseKey = yourCharacters[i].baseKey;
             GameObject myGameObj = characterPrefabs.Find(prefab => prefab.name == characterBaseKey);
             GameObject instantiateObj = localViewManager.boardViewManager.RenderUnitToBoard(myGameObj, characterPosition, "pet");
-            instantiateObj.GetComponent<UnitController>().characterInfo = yourCharacters[i];
-            playerController.AddUnit(instantiateObj, characterId);
+
+            UnitController unitInstace = instantiateObj.GetComponent<UnitController>();
+            if (unitInstace != null)
+            {
+                unitInstace.characterInfo = yourCharacters[i];
+                playerController.AddUnit(instantiateObj, characterId);
+                charactersObjects.Add(instantiateObj);
+            }
+            else
+            {
+                Debug.Log("[SetAllCharactersPosition] SetAllCharactersPositionYourCharacters: Error");
+            }
         }
 
         for (var z = 0; z < opponentCharacters.Count; z++)
         {
+            Debug.Log("[SetAllCharactersPosition] SetAllCharactersPositionOpponents:" + opponentCharacters[z]._id);
             int characterPosition = opponentCharacters[z].position;
             string characterId = opponentCharacters[z]._id;
             string characterBaseKey = opponentCharacters[z].baseKey;
             GameObject myGameObj = characterPrefabs.Find(prefab => prefab.name == characterBaseKey);
             GameObject instantiateObj = localViewManager.boardViewManager.RenderUnitToBoard(myGameObj, characterPosition, "enemy");
-            instantiateObj.GetComponent<UnitController>().characterInfo = opponentCharacters[z];
-            playerController.AddUnit(instantiateObj, characterId);
+
+            UnitController unitInstace = instantiateObj.GetComponent<UnitController>();
+            if (unitInstace != null)
+            {
+                instantiateObj.GetComponent<UnitController>().characterInfo = opponentCharacters[z];
+                playerController.AddUnit(instantiateObj, characterId);
+                charactersObjects.Add(instantiateObj);
+            }
+            else
+            {
+                Debug.Log("[SetAllCharactersPosition] SetAllCharactersPositionOpponents: Error");
+            }
         }
         OnSetAllCharactersPositionCompleted?.Invoke();
     }
@@ -258,7 +289,7 @@ public class LocalTestFightController : MonoBehaviour
 
     void HandleEndTurnFights()
     {
-        turnBaseController.EndTurn();
+        turnBaseController.EndGame();
         int batteStatus = battleData.status;
         StartCoroutine(localViewManager.resultViewManager.DisplayResultPanel(batteStatus));
     }
@@ -339,6 +370,7 @@ public class LocalTestFightController : MonoBehaviour
 
     void ProcessBattleData()
     {
+        Debug.Log("TestData:ProcessBattleData");
         List<UnitQueue> unitQueues = new();
         PlayerTestFightController playerController = players[0].GetComponent<PlayerTestFightController>();
         for (var i = 0; i < battleData.battleProgress.Length; i++)
@@ -353,6 +385,7 @@ public class LocalTestFightController : MonoBehaviour
         var currentPlayer = players[turnBaseController.CurrentPlayer].GetComponent<PlayerTestFightController>();
         for (var i = 0; i < battleData.battleProgress.Length; i++)
         {
+            Debug.Log("AddAction");
             turnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.COMBAT));
         }
     }

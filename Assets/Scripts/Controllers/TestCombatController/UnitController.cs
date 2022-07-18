@@ -11,7 +11,7 @@ enum UnitState
 public class UnitController : MonoBehaviour
 {
     public delegate void OnUpdateHealthEvent(string characterId, int newHealth);
-    public static event OnUpdateHealthEvent OnUpdateHealth;
+    public OnUpdateHealthEvent OnUpdateHealth;
     public delegate void OnEventEnded();
     private OnEventEnded onEndFightAnimation;
     public static OnEventEnded onEndFight;
@@ -38,20 +38,27 @@ public class UnitController : MonoBehaviour
     private Vector3 rootPos;
     private UnitState state;
     private Vector3 targetPos;
-    private void Start()
+    public void Start()
     {
         currentHealth = characterInfo.hp;
         timeToTarget = 1f;
+        Debug.Log("[UnitController]: Start (45)");
         animator = GetComponentInChildren<Animator>();
         animator.SetInteger("MeleeType_int", 0);
         state = UnitState.STAND_STILL;
         rootPos = transform.position;
         movementController.SetObjectToMove(gameObject);
+        movementController.OnStartMoving = null;
         movementController.OnStartMoving += HandleStartMoving;
+        movementController.OnEndMoving = null;
         movementController.OnEndMoving += HandEndMoving;
+        onEndFightAnimation = null;
         onEndFightAnimation += HandleEndFightAnimation;
+        OnBeingAttacked = null;
         OnBeingAttacked += HandleOnBeingAttacked;
+        OnFinishBeingAttacked = null;
         OnFinishBeingAttacked += HandleFinishOnBeingAttacked;
+        Debug.Log("[UnitController]: Start (56)");
     }
 
     private void Update()

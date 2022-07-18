@@ -115,7 +115,6 @@ public class APIManager : MonoBehaviour
                     UserCharactersResponse getUserCharactersData = JsonUtility.FromJson<UserCharactersResponse>(responseData);
                     Debug.Log("[APIManager] GetUserCharacters Success: " + responseData);
                     OnGetUserCharactersFinished?.Invoke(getUserCharactersData.data);
-                    OnGetUserCharactersFinished = null;
                     break;
             }
         }
@@ -144,7 +143,6 @@ public class APIManager : MonoBehaviour
                     UserItemsResponse getUserItems = JsonUtility.FromJson<UserItemsResponse>(responseData);
                     Debug.Log("[APIManager] GetUserItems Success: " + responseData);
                     OnGetUserItemsFinished?.Invoke(getUserItems.data);
-                    OnGetUserItemsFinished = null;
                     break;
             }
         }
@@ -175,7 +173,6 @@ public class APIManager : MonoBehaviour
                     UserFormationResponse getUserFormation = JsonUtility.FromJson<UserFormationResponse>(responseData);
                     Debug.Log("[APIManager] GetFormation Success: " + responseData);
                     OnGetFormationFinished?.Invoke(getUserFormation.data);
-                    OnGetFormationFinished = null;
                     break;
             }
         }

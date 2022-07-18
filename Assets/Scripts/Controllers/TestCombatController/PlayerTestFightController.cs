@@ -18,11 +18,12 @@ public class PlayerTestFightController : IPlayer
 
     public void AddUnit(GameObject unit, string unitId)
     {
+        unit.GetComponent<UnitController>().OnUpdateHealth = null;
+        unit.GetComponent<UnitController>().OnUpdateHealth += HandleUpdateHealth;
         characters.Add(unitId, unit);
     }
     public void InitPlayer(int _id, TurnBaseController _controller)
     {
-        UnitController.OnUpdateHealth += HandleUpdateHealth;
         id = _id;
         InitPlayerAction(_controller);
     }

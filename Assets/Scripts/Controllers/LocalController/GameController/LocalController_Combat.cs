@@ -8,11 +8,11 @@ public partial class LocalGameController
     public void StartTurnbase_Combat(bool _skip)
     {
         Debug.Log("[LocalGameController] Start_Combat: " + _skip);
-        
+
         LocalGameView.CombatGameView.ClosePopup();
         LocalGameView.CombatGameView.OnClosePopupFinish = null;
         LocalGameView.CombatGameView.OnClosePopupFinish += () =>
-        { 
+        {
             GameEventController.Handle_Combat(_skip);
             LocalGameView.CombatGameView.OnClosePopupFinish = null;
         };
@@ -29,11 +29,13 @@ public partial class LocalGameController
                 CombatEnd();
                 fightController.OnBattleEnded = null;
             };
-            
+
             SwitchCamera(1);
 
             LocalGameView.SetCanvasRootState(false);
             fightController.localViewManager.SetViewState(true);
+            fightController.InitPlayers();
+            fightController.StartGame();
             fightController.InsertBattleData(battle_MSG);
             fightController.ProcessCharactersPosition();
         }

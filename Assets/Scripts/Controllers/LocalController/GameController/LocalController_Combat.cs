@@ -22,8 +22,8 @@ public partial class LocalGameController
 
             Debug.Log("[LocalGameController] CombatStart");
             SwitchCamera(1);
-            LocalGameView.SetCanvasRootState(false);
 
+            LocalGameView.SetCanvasRootState(false);
             fightController.localViewManager.SetViewState(true);
             fightController.InsertBattleData(battle_MSG);
             fightController.ProcessCharactersPosition();

@@ -169,24 +169,28 @@ public class LocalTestFightController : MonoBehaviour
     //    ProcessCharactersPosition();
     //}
 
-    public void ResetData()
-    {
-
-        yourCharacters = new List<FormationCharacters>();
-        opponentCharacters = new List<FormationCharacters>();
-        players = new List<GameObject>();
-        battleData = new BattleData();
-    }
-
     void HandleStartTurn(int currentPlayer)
     {
 
     }
 
+    void ResetScene()
+    {
+        queueController.ResetQueue();
+        localViewManager.queueViewManager.ResetCurrentUnit();
+        localViewManager.currentUnitViewManager.ResetCurrentUnitView();
+        localViewManager.boardViewManager.DestroyAllCharacterObjs();
+        localViewManager.turnViewManager.ClearTurnText();
+        localViewManager.SetViewState(false);
+        yourCharacters = new List<FormationCharacters>();
+        opponentCharacters = new List<FormationCharacters>();
+        battleData = new BattleData();
+    }
+
     void HandleContinue()
     {
         localViewManager.resultViewManager.HideResultPanel();
-        localViewManager.SetViewState(false);
+        ResetScene();
         OnBattleEnded?.Invoke();
     }
 

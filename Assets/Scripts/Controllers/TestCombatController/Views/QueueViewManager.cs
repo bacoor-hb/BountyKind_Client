@@ -51,6 +51,11 @@ public class QueueViewManager : MonoBehaviour
         currentUnit.transform.Find("Avatar").GetComponent<Image>().sprite = unitsOutQueue[unitsOutQueue.Count - 1].transform.Find("Background").transform.Find("Avatar").GetComponent<Image>().sprite;
     }
 
+    public void ResetCurrentUnit()
+    {
+        currentUnit.transform.Find("Avatar").GetComponent<Image>().sprite = null;
+    }
+
     public void ScrollToLeft()
     {
         Vector3 oldPos = scrollviewContent.GetComponent<RectTransform>().localPosition;

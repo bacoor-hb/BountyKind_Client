@@ -22,4 +22,9 @@ public class TurnViewManager : MonoBehaviour
     {
         turnText.GetComponent<TextMeshProUGUI>().text = "Turn: " + turn;
     }
+
+    public void ClearTurnText()
+    {
+        turnText.GetComponent<TextMeshProUGUI>().text = "";
+    }
 }

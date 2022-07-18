@@ -130,6 +130,8 @@ public partial class LocalGameController : MonoBehaviour
         Multiplayer_GameEvent.OnLuckyDrawReturn += GetReward_LuckyDraw;
         Multiplayer_GameEvent.OnBattleReturn = null;
         Multiplayer_GameEvent.OnBattleReturn += ReturnData_CombatStart;
+        Multiplayer_GameEvent.OnCheckInteractedReturn = null;
+        Multiplayer_GameEvent.OnCheckInteractedReturn += OnCheckInteracted;
     }
 
     private void InitCombat()
@@ -166,6 +168,31 @@ public partial class LocalGameController : MonoBehaviour
     int rollNumber = 0;
     UserActionLocalManager currentPlayer;
     int currentPlayerId;
+
+    /// <summary>
+    /// Check the interacted Math
+    /// </summary>
+    /// <param name="interacted_MSG">false: Trigget Effect, true: Roll Dice</param>
+    void OnCheckInteracted(Interacted_MSG interacted_MSG)
+    {
+        if(interacted_MSG != null)
+        {
+            if(!interacted_MSG.isInteracted)
+            {
+                Debug.Log("[LocalGameController] OnStartTurn, then TriggerMathEffect");
+                OnTriggerMathEffect();
+            }
+            else
+            {
+                LocalGameView.SetState_RollDicePopup(true);
+            }
+        }
+        else
+        {
+            Debug.LogError("[OnCheckInteracted] ERROR: No DATA");
+        }
+    }
+
     void OnStartTurn(int userID)
     {
         //Get Current Player
@@ -196,14 +223,16 @@ public partial class LocalGameController : MonoBehaviour
         Debug.Log("CurrentPos: " + currentPos + " | Next Pos:" + nextPos);
 
         //If the current player is not yet interracted with the current node.
-        if (!currentRoom.players[currentPlayerId].isInteracted)
-        {
-            OnTriggerMathEffect();
-        }
-        else
-        {
-            LocalGameView.SetState_RollDicePopup(true);
-        }
+        //if (!currentRoom.players[currentPlayerId].isInteracted)
+        //{
+        //    Debug.Log("[LocalGameController] OnStartTurn, then TriggerMathEffect");
+        //    OnTriggerMathEffect();
+        //}
+        //else
+        //{
+        //    LocalGameView.SetState_RollDicePopup(true);
+        //}
+        Multiplayer_GameEvent.HandleCheckInteracted();
     }
 
     /// <summary>

@@ -23,21 +23,8 @@ public partial class LocalGameController
         if (battle_MSG != null && !battle_MSG.skip)
         {
             Debug.Log("[LocalGameController] Start Combat: " + JsonConvert.SerializeObject(battle_MSG));
-            fightController.OnBattleEnded = null;
-            fightController.OnBattleEnded += () =>
-            {
-                CombatEnd();
-                fightController.OnBattleEnded = null;
-            };
-
-            SwitchCamera(1);
-
-            LocalGameView.SetCanvasRootState(false);
-            fightController.localViewManager.SetViewState(true);
-            fightController.InitPlayers();
-            fightController.StartGame();
-            fightController.InsertBattleData(battle_MSG);
-            fightController.ProcessCharactersPosition();
+            StartCombatProcess(battle_MSG);
+            //TurnBaseController.EndAction();
         }
         else
         {
@@ -46,7 +33,26 @@ public partial class LocalGameController
         }
     }
 
-    private void CombatEnd()
+    private void StartCombatProcess(BattleData battle_MSG)
+    {
+        fightController.OnBattleEnded = null;
+        fightController.OnBattleEnded += () =>
+        {
+            EndCombat_Process();
+            fightController.OnBattleEnded = null;
+        };
+
+        SwitchCamera(1);
+
+        LocalGameView.SetCanvasRootState(false);
+        fightController.localViewManager.SetViewState(true);
+        fightController.InitPlayers();
+        fightController.StartGame();
+        fightController.InsertBattleData(battle_MSG);
+        fightController.ProcessCharactersPosition();
+    }
+
+    private void EndCombat_Process()
     {
         Debug.Log("[LocalGameController] CombatEnd...");
         SwitchCamera(0);

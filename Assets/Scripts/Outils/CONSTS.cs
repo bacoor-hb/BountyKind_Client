@@ -1,3 +1,4 @@
+using System;
 public class CONSTS
 {
     public const string SCENE_KEY = "SCENE_KEY";
@@ -105,7 +106,8 @@ public enum GAMEROOM_SENT_EVENTS
     BALANCE,
     GAME_EXIT,
     CHANCE,
-    DEFAULT
+    DEFAULT,
+    CHECK_INTERACTED,
 }
 
 public enum GAMEROOM_RECEIVE_EVENTS
@@ -116,6 +118,7 @@ public enum GAMEROOM_RECEIVE_EVENTS
     BALANCE_RESULT,
     CHANCE_RESULT,
     DEFAULT_RESULT,
+    CHECK_INTERACTED_RESULT,
 }
 
 public enum LOBBY_SENT_EVENTS
@@ -153,6 +156,12 @@ public enum STATUS_BATTLE
     WIN = 1,
     DRAW = 0,
     LOSS = -1,
+}
+
+[Serializable]
+public class Interacted_MSG
+{
+    public bool isInteracted;
 }
 #endregion
 

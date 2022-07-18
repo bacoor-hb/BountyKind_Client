@@ -87,7 +87,9 @@ public partial class LocalGameController
 
     private void EndMovingAllTarget()
     {
-        OnTriggerMathEffect();
+        Debug.Log("[LocalGameController] EndMovingAllTarget, then TriggerMathEffect");
+        //OnTriggerMathEffect();
+        Multiplayer_GameEvent.HandleCheckInteracted();
     }
 
     #endregion

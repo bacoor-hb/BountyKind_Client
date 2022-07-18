@@ -158,6 +158,10 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         {
             onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.CHANCE_RESULT, message);
         });
+        gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.CHECK_INTERACTED_RESULT.ToString(), (message) =>
+        {
+            onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.CHECK_INTERACTED_RESULT, message);
+        });
         gameRoom.OnMessage<string>(GAMEROOM_RECEIVE_EVENTS.DEFAULT_RESULT.ToString(), (message) =>
         {
             onGameReceiveMsg?.Invoke(GAMEROOM_RECEIVE_EVENTS.DEFAULT_RESULT, message);

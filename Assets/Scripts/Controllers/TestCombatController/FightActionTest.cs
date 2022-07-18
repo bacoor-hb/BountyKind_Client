@@ -60,13 +60,13 @@ public class BattleUnit
 public class FightActionTest : Action
 {
     public delegate void OnEndTurnFights();
-    public static event OnEndTurnFights onEndTurnFights;
+    public OnEndTurnFights onEndTurnFights;
     public delegate void InFight(BattleProgess battleData, int userId);
     public static event InFight inFight;
     public delegate void OnStartFight(string unitId, int turn);
-    public static event OnStartFight startFight;
+    public OnStartFight startFight;
     public delegate void EndFight(int userId);
-    public static event EndFight endFight;
+    public EndFight endFight;
     public BattleProgess[] battleData;
 
     public void Init()

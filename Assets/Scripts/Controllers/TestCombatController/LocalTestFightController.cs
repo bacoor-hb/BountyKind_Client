@@ -77,8 +77,6 @@ public class LocalTestFightController : MonoBehaviour
 
         localViewManager.buttonViewManager.FightButton.onClick.AddListener(() => { GetFakeData(); });
         QueueViewManager.OnRenderQueueCompleted += HandleOnRenderQueueCompleted;
-        FightActionTest.onEndTurnFights += HandleEndTurnFights;
-        FightActionTest.startFight += HandleStartFight;
         PlayerTestFightController.OnClearCharacter += HandleOnClearCharacter;
         UnitQueueController.OnEndQueue += HandleEndQueue;
         TurnBaseController.OnStartTurn += HandleStartTurn;
@@ -105,6 +103,8 @@ public class LocalTestFightController : MonoBehaviour
         turnBaseController.Init();
         GameObject player = Instantiate(playerPrefab, transform);
         player.GetComponent<FightActionTest>().Init();
+        player.GetComponent<FightActionTest>().onEndTurnFights += HandleEndTurnFights;
+        player.GetComponent<FightActionTest>().startFight += HandleStartFight;
         players.Add(player);
         for (int i = 0; i < players.Count; i++)
         {

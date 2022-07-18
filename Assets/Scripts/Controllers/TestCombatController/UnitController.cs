@@ -42,9 +42,9 @@ public class UnitController : MonoBehaviour
     {
         currentHealth = characterInfo.hp;
         timeToTarget = 1f;
-        Debug.Log("[UnitController]: Start (45)");
+        //Debug.Log("[UnitController]: Start (45)");
         animator = GetComponentInChildren<Animator>();
-        animator.SetInteger("MeleeType_int", 0);
+        //animator.SetInteger("MeleeType_int", 0);
         state = UnitState.STAND_STILL;
         rootPos = transform.position;
         movementController.SetObjectToMove(gameObject);
@@ -58,7 +58,7 @@ public class UnitController : MonoBehaviour
         OnBeingAttacked += HandleOnBeingAttacked;
         OnFinishBeingAttacked = null;
         OnFinishBeingAttacked += HandleFinishOnBeingAttacked;
-        Debug.Log("[UnitController]: Start (56)");
+        //Debug.Log("[UnitController]: Start (56)");
     }
 
     private void Update()

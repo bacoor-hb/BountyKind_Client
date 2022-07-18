@@ -12,6 +12,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
     public OnEventReturn<Reward_MSG> OnChanceReturn;
     public OnEventReturn<BattleData> OnBattleReturn;
     public OnEventReturn<TokenBalance> OnBalanceReturn;
+    public OnEventReturn<Interacted_MSG> OnCheckInteractedReturn;
 
     private UserDataManager UserDataManager;
     private NetworkManager NetworkManager;
@@ -60,6 +61,11 @@ public class Multiplayer_GameEventController : MonoBehaviour
                     Debug.Log("[GameEventController] CHANCE_RESULT: " + message.ToString());
                     Reward_MSG chance_msg = JsonUtility.FromJson<Reward_MSG>(message.ToString());
                     OnChanceEnd(chance_msg);
+                    break;
+                case GAMEROOM_RECEIVE_EVENTS.CHECK_INTERACTED_RESULT:
+                    Debug.Log("[GameEventController] CHECK_INTERACTED: " + message.ToString());
+                    Interacted_MSG interacted_MSG = JsonUtility.FromJson<Interacted_MSG>(message.ToString());
+                    OnCheckInteractiveReturn(interacted_MSG);
                     break;
                 default:
                     Debug.Log("[GameEventController] Default.");
@@ -158,6 +164,18 @@ public class Multiplayer_GameEventController : MonoBehaviour
     {
         Debug.Log("[Multiplayer_GameEventController] OnChanceEnd");
         OnChanceReturn?.Invoke(chance_MSG);
+    }
+
+    public void HandleCheckInteracted()
+    {
+        Debug.Log("[Multiplayer_GameEventController] Send HandleCheckInteracted...");
+        NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.CHECK_INTERACTED.ToString());
+    }
+
+    private void OnCheckInteractiveReturn(Interacted_MSG interacted_MSG)
+    {
+        Debug.Log("[Multiplayer_GameEventController] OnCheckInteractiveReturn");
+        OnCheckInteractedReturn?.Invoke(interacted_MSG);
     }
 
     public void Handle_Other_Default()

@@ -22,10 +22,12 @@ public class TurnBaseController : MonoBehaviour
 
     private CYCLE_TURN status;
     private bool isWaiting;
+    public int actionCount = 0;
 
     #region Unity Event
     public void Init()
     {
+        actionCount = 0;
         IsStarting = false;
         playerList = new List<IPlayer>();
         status = CYCLE_TURN.START_TURN;
@@ -70,6 +72,7 @@ public class TurnBaseController : MonoBehaviour
             if (queueActionList != null && player == playerList[CurrentPlayer])
             {
                 queueActionList.Enqueue(action);
+                actionCount = queueActionList.Count;
             }
         }
         else

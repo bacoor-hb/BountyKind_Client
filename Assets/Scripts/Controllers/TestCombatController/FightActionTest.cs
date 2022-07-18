@@ -69,7 +69,7 @@ public class FightActionTest : Action
     public static event EndFight endFight;
     public BattleProgess[] battleData;
 
-    private void Awake()
+    public void Init()
     {
         LocalTestFightController.OnReceiveBattleDatas += HandleReceiveBattleDatas;
         UnitController.onEndFight += HandleOnEndFight;
@@ -89,7 +89,7 @@ public class FightActionTest : Action
         base.OnEndAction();
     }
 
-    int currentAction = 0;
+    public int currentAction = 0;
     public override void OnStartAction()
     {
         base.OnStartAction();
@@ -117,6 +117,7 @@ public class FightActionTest : Action
 
     void HandleOnEndFight()
     {
+        Debug.Log("[HandleOnEndFight]");
         if (currentAction != battleData.Length - 1)
         {
             currentAction++;

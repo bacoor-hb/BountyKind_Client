@@ -22,10 +22,10 @@ public class UserData
     public void GenerateFakeData()
     {
         //address = "0x0Cf58ca29fd808Bf9559C07CC7D2A4cc83008229";
-        address = "0x64470e5f5dd38e497194bbcaf8daa7ca578926f6";
+        address = "0x0Cf58ca29fd808Bf9559C07CC7D2A4cc83008229";
         username = "Test Fake User";
         //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHgwY2Y1OGNhMjlmZDgwOGJmOTU1OWMwN2NjN2QyYTRjYzgzMDA4MjI5IiwidXNlcm5hbWUiOiJsYWxhIiwiaXNSZWNlaXZlZCI6dHJ1ZSwiaW1hZ2UiOiJRbVhnVFlreUdTRnhhV0pvdk5aalpnRzdiTWZaZEVmMlNmUFhQN3J2OXBKNFcxIiwiaXNOZXdVc2VyIjpmYWxzZSwiaWF0IjoxNjU2NDc2NzM5LCJleHAiOjE5NzIwNTI3Mzl9.OuMFJRylYlPS-I2OA57jSS8r3oSH-kddPxzUSW2pq3I";
-        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHg2NDQ3MGU1ZjVkZDM4ZTQ5NzE5NGJiY2FmOGRhYTdjYTU3ODkyNmY2IiwidXNlcm5hbWUiOiJuYW1lZSIsImltYWdlIjoiUW1XTTdrdkh5aHRuVEdkMk1lSDVmTFk3TWY0OWNLZ1hSd3NzTjFWdUxnSHVldiIsImlhdCI6MTY1NDg0NTgxOSwiZXhwIjoxOTcwNDIxODE5fQ.xvZ-3ZB-HEENh7s6scjDjsqcFVV524l3neCNirE67r4";
+        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmI5NGRiNzBjZWYwMzEwNmY1MWQ2MzgiLCJhZGRyZXNzIjoiMHgwY2Y1OGNhMjlmZDgwOGJmOTU1OWMwN2NjN2QyYTRjYzgzMDA4MjI5IiwidXNlcm5hbWUiOiJcYm5ndXllbiB0aGkgaG9uZyBsb2FuIiwiaXNSZWNlaXZlZCI6dHJ1ZSwiaW1hZ2UiOiJRbWJ0bTRqcnM0QkdCVEJmejRGQWVBWjhkZGs1OEo0N2tSeUR2WFlHUld4OGNrIiwiaXNOZXdVc2VyIjpmYWxzZSwiaWF0IjoxNjU4MDc0MjM0LCJleHAiOjE5NzM2NTAyMzR9.4rehUlg52qchqpvsHoJjR6aDAikZLXgX8AzCBA3243g";
         _id = "61ee1891d1949c6bc79425a8";
         BWP = 0;
         currentGameId = -1;

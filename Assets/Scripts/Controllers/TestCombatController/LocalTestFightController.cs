@@ -104,6 +104,7 @@ public class LocalTestFightController : MonoBehaviour
     {
         turnBaseController.Init();
         GameObject player = Instantiate(playerPrefab, transform);
+        player.GetComponent<FightActionTest>().Init();
         players.Add(player);
         for (int i = 0; i < players.Count; i++)
         {

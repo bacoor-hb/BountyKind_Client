@@ -8,8 +8,10 @@ public partial class LocalGameController
     public void Start_Combat(bool _skip)
     {
         Debug.Log("[LocalGameController] Start_Combat: " + _skip);
-        GameEventController.Handle_Combat(_skip);
+        
         LocalGameView.CombatGameView.ClosePopup();
+        LocalGameView.CombatGameView.OnClosePopupFinish = null;
+        LocalGameView.CombatGameView.OnClosePopupFinish += () => GameEventController.Handle_Combat(_skip);
     }
 
     private void CombatStart(BattleData battle_MSG)
@@ -19,8 +21,7 @@ public partial class LocalGameController
             Debug.Log("[LocalGameController] Start Combat...");
             fightController.OnBattleEnded = null;
             fightController.OnBattleEnded += CombatEnd;
-
-            Debug.Log("[LocalGameController] CombatStart");
+            
             SwitchCamera(1);
             LocalGameView.SetCanvasRootState(false);
 
@@ -31,8 +32,7 @@ public partial class LocalGameController
         else
         {
             Debug.Log("[LocalGameController] Deny Combat...");
-            LocalGameView.CombatGameView.OnClosePopupFinish = null;
-            LocalGameView.CombatGameView.OnClosePopupFinish += () => TurnBaseController.EndAction();
+            TurnBaseController.EndAction();
         }
     }
 

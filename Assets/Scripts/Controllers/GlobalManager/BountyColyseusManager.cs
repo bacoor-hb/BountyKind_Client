@@ -64,6 +64,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         catch (Exception ex)
         {
             Debug.LogError("[BountyColyseusManager] JoinLobby Error: " + ex.Message);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("JoinLobby Error: " + ex.Message);
         }
     }
 

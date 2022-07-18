@@ -87,7 +87,6 @@ public class APIManager : MonoBehaviour
                     UserData_MSG getUserData = JsonUtility.FromJson<UserData_MSG>(responseData);
                     Debug.Log("[APIManager] GetUserData Success: " + responseData);
                     OnGetUserDataFinished?.Invoke(getUserData.data);
-                    OnGetUserDataFinished = null;
                     break;
             }
         }

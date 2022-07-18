@@ -129,7 +129,7 @@ public partial class LocalGameController : MonoBehaviour
         Multiplayer_GameEvent.OnLuckyDrawReturn = null;
         Multiplayer_GameEvent.OnLuckyDrawReturn += GetReward_LuckyDraw;
         Multiplayer_GameEvent.OnBattleReturn = null;
-        Multiplayer_GameEvent.OnBattleReturn += CombatStart;
+        Multiplayer_GameEvent.OnBattleReturn += ReturnData_CombatStart;
     }
 
     private void InitCombat()
@@ -318,10 +318,10 @@ public partial class LocalGameController : MonoBehaviour
             players[i].OnEndChance += (x) => End_Chance();
 
             players[i].OnStartCombat = null;
-            players[i].OnStartCombat += Start_Combat;
+            players[i].OnStartCombat += StartTurnbase_Combat;
 
             players[i].OnEndCombat = null;
-            players[i].OnEndCombat += (x) => EndTurnCombat();
+            players[i].OnEndCombat += (x) => EndTurnBase_Combat();
         }
     }
 

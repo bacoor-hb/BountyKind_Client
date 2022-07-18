@@ -1,26 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Newtonsoft.Json;
 public partial class LocalGameController
 {
     #region Combat Control
-    public void Start_Combat(bool _skip)
+    public void StartTurnbase_Combat(bool _skip)
     {
         Debug.Log("[LocalGameController] Start_Combat: " + _skip);
         
         LocalGameView.CombatGameView.ClosePopup();
         LocalGameView.CombatGameView.OnClosePopupFinish = null;
-        LocalGameView.CombatGameView.OnClosePopupFinish += () => GameEventController.Handle_Combat(_skip);
+        LocalGameView.CombatGameView.OnClosePopupFinish += () =>
+        { 
+            GameEventController.Handle_Combat(_skip);
+            LocalGameView.CombatGameView.OnClosePopupFinish = null;
+        };
     }
 
-    private void CombatStart(BattleData battle_MSG)
+    private void ReturnData_CombatStart(BattleData battle_MSG)
     {
         if (battle_MSG != null && !battle_MSG.skip)
         {
-            Debug.Log("[LocalGameController] Start Combat...");
+            Debug.Log("[LocalGameController] Start Combat: " + JsonConvert.SerializeObject(battle_MSG));
             fightController.OnBattleEnded = null;
-            fightController.OnBattleEnded += CombatEnd;
+            fightController.OnBattleEnded += () =>
+            {
+                CombatEnd();
+                fightController.OnBattleEnded = null;
+            };
             
             SwitchCamera(1);
 
@@ -38,13 +46,14 @@ public partial class LocalGameController
 
     private void CombatEnd()
     {
+        Debug.Log("[LocalGameController] CombatEnd...");
         SwitchCamera(0);
         LocalGameView.SetCanvasRootState(true);
 
         TurnBaseController.EndAction();
     }
 
-    public void EndTurnCombat()
+    public void EndTurnBase_Combat()
     {
         Debug.Log("[LocalGameController] End Combat...");
         EndTurn_Action();

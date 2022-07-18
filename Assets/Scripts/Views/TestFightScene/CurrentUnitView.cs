@@ -37,4 +37,14 @@ public class CurrentUnitView : MonoBehaviour
         defText.text = "Defense: " + currentUnit.def.ToString();
         spdText.text = "Speed: " + currentUnit.speed.ToString();
     }
+
+    public void ResetCurrentUnitView()
+    {
+        gameObject.SetActive(false);
+        unitImage.GetComponent<Image>().sprite = null;
+        levelText.text = "";
+        atkText.text = "";
+        defText.text = "";
+        spdText.text = "";
+    }
 }

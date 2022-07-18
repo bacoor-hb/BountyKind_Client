@@ -23,8 +23,8 @@ public partial class LocalGameController
             fightController.OnBattleEnded += CombatEnd;
             
             SwitchCamera(1);
-            LocalGameView.SetCanvasRootState(false);
 
+            LocalGameView.SetCanvasRootState(false);
             fightController.localViewManager.SetViewState(true);
             fightController.InsertBattleData(battle_MSG);
             fightController.ProcessCharactersPosition();

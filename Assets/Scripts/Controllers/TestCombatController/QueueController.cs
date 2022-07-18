@@ -24,4 +24,19 @@ public class QueueController : MonoBehaviour
     {
         unitsInQueue = _unitsInQueue;
     }
+
+    public void ResetQueue()
+    {
+        unitsInQueue.ForEach(unitInQueue =>
+        {
+            Destroy(unitInQueue);
+        });
+        unitsOutQueue.ForEach(unitOutQueue =>
+        {
+            Destroy(unitOutQueue);
+        });
+        unitsInQueue = new List<GameObject>();
+        unitsOutQueue = new List<GameObject>();
+    }
+
 }

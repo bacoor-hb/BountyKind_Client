@@ -6,6 +6,7 @@ public class FightSceneBoardViewManager : MonoBehaviour
 {
     public List<GameObject> spawnPosPets;
     public List<GameObject> spawnPosEnemies;
+    public List<GameObject> characterObjs;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +32,7 @@ public class FightSceneBoardViewManager : MonoBehaviour
             GameObject targetSpawn = spawnPosEnemies[index];
             obj = Instantiate(_obj, targetSpawn.transform.position, Quaternion.identity, targetSpawn.transform);
         }
+        characterObjs.Add(obj);
         return obj;
     }
 
@@ -39,8 +41,16 @@ public class FightSceneBoardViewManager : MonoBehaviour
         Destroy(characterObj);
     }
 
-    public void DestroyAllCharacters()
+    public void DestroyAllCharacterObjs()
     {
-
+        Debug.Log("Destroy Objs");
+        if (characterObjs != null && characterObjs.Count > 0)
+        {
+            characterObjs.ForEach(characterObj =>
+            {
+                Destroy(characterObj);
+            });
+            characterObjs = new List<GameObject>();
+        }
     }
 }

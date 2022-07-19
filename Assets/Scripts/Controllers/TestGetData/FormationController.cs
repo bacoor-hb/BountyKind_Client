@@ -78,19 +78,19 @@ public class FormationController : LocalSingleton<FormationController>
 
     void GetUserCharacters()
     {
-        string uri = "https://dev-game-api.w3w.app/api/user-characters";
+        string uri = CONSTS.HOST_ENDPOINT_API + "api/user-characters";
         string address = userDataManager.UserData.address;
         StartCoroutine(apiManager.GetUserCharacters(uri, address));
     }
     void GetUserItems()
     {
-        string uri = "https://dev-game-api.w3w.app/api/user-items";
+        string uri = CONSTS.HOST_ENDPOINT_API + "api/user-items";
         string address = userDataManager.UserData.address;
         StartCoroutine(apiManager.GetUserItems(uri, address));
     }
     void GetUserFormation()
     {
-        string uri = "https://dev-game-api.w3w.app/api/users/formation";
+        string uri = CONSTS.HOST_ENDPOINT_API + "api/users/formation";
         string token = userDataManager.UserData.token;
         StartCoroutine(apiManager.GetFormation(uri, token));
     }
@@ -170,7 +170,7 @@ public class FormationController : LocalSingleton<FormationController>
     }
     void HandleSetFormation()
     {
-        string uri = "https://dev-game-api.w3w.app/api/users/formation";
+        string uri = CONSTS.HOST_ENDPOINT_API + "api/users/formation";
         string token = userDataManager.UserData.token;
         StartCoroutine(apiManager.SetFormation(uri, token, characterWithPositions));
     }

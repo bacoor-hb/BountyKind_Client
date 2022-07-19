@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SA_Character_FemalePyro 1
-  m_Shader: {fileID: 4800000, guid: 7f66ac18aeb561b40854bf2433973558, type: 3}
+  m_Shader: {fileID: 4800000, guid: b539806f39733f9468135cbd59afe51f, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _EMISSION
@@ -70,6 +70,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _Outline: 0.01
     - _OutlineWidth: 0.01
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0

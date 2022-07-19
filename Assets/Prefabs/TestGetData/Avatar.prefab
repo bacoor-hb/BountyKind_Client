@@ -132,21 +132,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userCharacter:
-    _id: 62bbbaf359aa4666f6d18c53
-    key: default_character_3_1656470259990
-    baseKey: default_character_3
-    name: Default Character 3
+    _id: 62baca42f51a1fc8fbe645b5
+    key: default_character_1_1656408642243
+    baseKey: default_character_1
+    name: Default Character 1
     status: active
     level: 1
-    race: God
-    element: Anima
+    race: Humanoid
+    element: Ignis
     type: 
-    contractAddress: 0xa31d181abb271bdff3b408b00e816e751398186f
-    nftId: 89
-    ownerAddress: 0x64470e5f5dd38e497194bbcaf8daa7ca578926f6
-    image: 'https://ipfs.pantograph.app/ipfs/QmRT2usKNLpDGjH5nGnEAJPCjh3mnnfieUM3ED2qrHRSnD?filename=PET_Male-Trench-Coach.png
-
-'
+    contractAddress: 
+    nftId: 
+    ownerAddress: 0x0cf58ca29fd808bf9559c07cc7d2a4cc83008229
+    image: https://ipfs.pantograph.app/ipfs/QmRMFah8xr93HFK1srn8JBnAT3fDN3ygUBU9eq1oYF1vJo?filename=PET_Female-Pyro.PNG
   avatarViewManager: {fileID: -8768861695246964215}
 --- !u!222 &-7673583667828096819
 CanvasRenderer:
@@ -170,8 +168,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   border: {fileID: 3015142387730852111}
   blockBG: {fileID: 7254293788613124292}
-  index: 49
-  id: 62bbbaf359aa4666f6d18c53
+  index: 4
+  id: 62baca42f51a1fc8fbe645b5
 --- !u!114 &-7346622561319942107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +249,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 42ec8803c2be426429a7b5c4d9bace45, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b9db2dcd7eb1c4f43920b1ea4eb215a3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

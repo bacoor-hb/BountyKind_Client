@@ -16,8 +16,8 @@ public class UnitController : MonoBehaviour
     private OnEventEnded onEndFightAnimation;
     public static OnEventEnded onEndFight;
     public delegate void OnBeingAttackedEvent(string characterId);
-    public static event OnBeingAttackedEvent OnBeingAttacked;
-    public static event OnBeingAttackedEvent OnFinishBeingAttacked;
+    public OnBeingAttackedEvent OnBeingAttacked;
+    public OnBeingAttackedEvent OnFinishBeingAttacked;
     [SerializeField]
     private FightSceneUnitView fightSceneUnitView;
 
@@ -38,8 +38,9 @@ public class UnitController : MonoBehaviour
     private Vector3 rootPos;
     private UnitState state;
     private Vector3 targetPos;
-    public void Start()
+    public void Init(FormationCharacters _characterInfo)
     {
+        characterInfo = _characterInfo;
         currentHealth = characterInfo.hp;
         timeToTarget = 1f;
         //Debug.Log("[UnitController]: Start (45)");
@@ -56,7 +57,6 @@ public class UnitController : MonoBehaviour
         onEndFightAnimation += HandleEndFightAnimation;
         OnBeingAttacked = null;
         OnBeingAttacked += HandleOnBeingAttacked;
-        OnFinishBeingAttacked = null;
         OnFinishBeingAttacked += HandleFinishOnBeingAttacked;
         //Debug.Log("[UnitController]: Start (56)");
     }
@@ -174,5 +174,14 @@ public class UnitController : MonoBehaviour
     public void PlayDeathAnimation()
     {
         animator.SetBool("Death_b", true);
+    }
+
+    private void OnDestroy()
+    {
+        movementController.OnStartMoving -= HandleStartMoving;
+        movementController.OnEndMoving -= HandEndMoving;
+        onEndFightAnimation -= HandleEndFightAnimation;
+        OnBeingAttacked -= HandleOnBeingAttacked;
+        OnFinishBeingAttacked -= HandleFinishOnBeingAttacked;
     }
 }

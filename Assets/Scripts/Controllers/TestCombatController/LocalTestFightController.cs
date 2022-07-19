@@ -62,13 +62,11 @@ public class LocalTestFightController : MonoBehaviour
     private List<FormationCharacters> yourCharacters;
     [SerializeField]
     private List<FormationCharacters> opponentCharacters;
-    [SerializeField]
-    private List<GameObject> charactersObjects;
 
     // Start is called before the first frame update
     public void Init()
     {
-        charactersObjects = new();
+        localViewManager.Init();
         localViewManager.SetViewState(false);
         apiManager = GlobalManager.Instance.NetworkManager.APIManager;
         yourCharacters = new List<FormationCharacters>();
@@ -177,6 +175,8 @@ public class LocalTestFightController : MonoBehaviour
 
     void ResetScene()
     {
+
+        turnBaseController.EndGame();
         Destroy(players[0]);
         players = new List<GameObject>();
         yourCharacters = new();
@@ -184,11 +184,7 @@ public class LocalTestFightController : MonoBehaviour
         queueController.ResetQueue();
         localViewManager.queueViewManager.ResetCurrentUnit();
         localViewManager.currentUnitViewManager.ResetCurrentUnitView();
-        charactersObjects.ForEach(charObj =>
-        {
-            Destroy(charObj);
-        });
-        charactersObjects = new List<GameObject>();
+        localViewManager.boardViewManager.DestroyAllCharacterObjs();
         localViewManager.turnViewManager.ClearTurnText();
         localViewManager.SetViewState(false);
         yourCharacters = new List<FormationCharacters>();
@@ -200,6 +196,7 @@ public class LocalTestFightController : MonoBehaviour
     {
         localViewManager.resultViewManager.HideResultPanel();
         ResetScene();
+        turnBaseController.EndGame();
         OnBattleEnded?.Invoke();
     }
 
@@ -243,9 +240,8 @@ public class LocalTestFightController : MonoBehaviour
             UnitController unitInstace = instantiateObj.GetComponent<UnitController>();
             if (unitInstace != null)
             {
-                unitInstace.characterInfo = yourCharacters[i];
+                unitInstace.Init(yourCharacters[i]);
                 playerController.AddUnit(instantiateObj, characterId);
-                charactersObjects.Add(instantiateObj);
             }
             else
             {
@@ -265,9 +261,8 @@ public class LocalTestFightController : MonoBehaviour
             UnitController unitInstace = instantiateObj.GetComponent<UnitController>();
             if (unitInstace != null)
             {
-                instantiateObj.GetComponent<UnitController>().characterInfo = opponentCharacters[z];
+                unitInstace.Init(opponentCharacters[z]);
                 playerController.AddUnit(instantiateObj, characterId);
-                charactersObjects.Add(instantiateObj);
             }
             else
             {
@@ -290,7 +285,6 @@ public class LocalTestFightController : MonoBehaviour
 
     void HandleEndTurnFights()
     {
-        turnBaseController.EndGame();
         int batteStatus = battleData.status;
         StartCoroutine(localViewManager.resultViewManager.DisplayResultPanel(batteStatus));
     }

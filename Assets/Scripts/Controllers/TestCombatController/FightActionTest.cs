@@ -117,9 +117,9 @@ public class FightActionTest : Action
 
     void HandleOnEndFight()
     {
-        Debug.Log("[HandleOnEndFight]");
         if (currentAction != battleData.Length - 1)
         {
+            Debug.Log("[HandleOnEndFight]");
             currentAction++;
             turnBaseController.EndAction();
         }
@@ -130,5 +130,13 @@ public class FightActionTest : Action
             turnBaseController.EndTurn();
             onEndTurnFights?.Invoke();
         }
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("[OnDestroyFightActionTest]");
+        LocalTestFightController.OnReceiveBattleDatas -= HandleReceiveBattleDatas;
+        UnitController.onEndFight -= HandleOnEndFight;
+        UnitQueueController.OnEndQueue -= OnFightAction;
     }
 }

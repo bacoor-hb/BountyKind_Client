@@ -13,9 +13,9 @@ public class LocalViewManager : MonoBehaviour
     [SerializeField]
     private GameObject canvasRoot;
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
-
+        boardViewManager.Init();
     }
 
     void Update()

@@ -77,4 +77,11 @@ public class PlayerTestFightController : IPlayer
     {
         characters[characterId].GetComponent<UnitController>().currentHealth = newHealth;
     }
+
+    private void OnDestroy()
+    {
+        Debug.Log("[OnDestroyPlayerTestFightController]");
+        FightAction.StartAction -= OnFightStart;
+        FightAction.EndAction -= OnFightEnd;
+    }
 }

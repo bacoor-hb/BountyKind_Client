@@ -91,7 +91,7 @@ public class LocalTestFightController : MonoBehaviour
     }
     public void ProcessCharactersPosition()
     {
-        string uri = "https://dev-game-api.w3w.app/api/users/formation";
+        string uri = CONSTS.HOST_ENDPOINT_API + "api/users/formation";
         string token = GlobalManager.Instance.UserDataManager.UserData.token;
         StartCoroutine(apiManager.GetFormation(uri, token));
     }

@@ -135,7 +135,7 @@ public class UserActionLocalManager : IPlayer
     public bool skipLuckyDraw { get; private set; }
     public void SetSkipLuckyDraw(bool _Skip)
     {
-        skipRollDice = _Skip;
+        skipLuckyDraw = _Skip;
     }
     private void StartLuckyDraw()
     {

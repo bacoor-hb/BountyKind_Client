@@ -271,7 +271,7 @@ public partial class LocalGameController : MonoBehaviour
     /// </summary>
     private void LuckyDraw_Action(bool _skip)
     {
-        Debug.Log("[LocalGameController] Accept Lucky Draw..." + _skip);
+        Debug.Log("[LocalGameController] Skip Lucky Draw..." + _skip);
         currentPlayer.SetSkipLuckyDraw(_skip);
         TurnBaseController.AddAction(currentPlayer, currentPlayer.GetAction(ACTION_TYPE.LUCKY_DRAW));
     }

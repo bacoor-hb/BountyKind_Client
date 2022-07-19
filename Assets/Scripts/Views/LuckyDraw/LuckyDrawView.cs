@@ -54,32 +54,36 @@ public class LuckyDrawView : MonoBehaviour
             {
                 OnLuckyDraw_Engage?.Invoke(engage);
                 //InvitationPopup.OnEngageBtnPressed = null;
-            };        
+            };
+
+        
     }
 
     /// <summary>
     /// Init the Lucky draw UI.
     /// 
     /// </summary>
-    public void Init_Phase2()
+    public void Init_Phase2(bool _skip)
     {
-        RollUI.Init(rollingSprite);
-        RollUI.RollBtn.onClick.AddListener(LuckyDraw_StartRolling);
-
-        RollUI.OnClosePopupFinish = null;
-        RollUI.OnClosePopupFinish += () =>
-        {
-            OnLuckyDraw_CloseRollPopupEnd?.Invoke(false);
-            RollUI.OnClosePopupFinish = null;
-        };
-        
-
         InvitationPopup.OnClosePopupFinish = null;
         InvitationPopup.OnClosePopupFinish += () =>
         {
             OnLuckyDraw_CloseInvPopupEnd?.Invoke(false);
             InvitationPopup.OnClosePopupFinish = null;
-        };                
+        };
+
+        if (!_skip)
+        {
+            RollUI.Init(rollingSprite);
+            RollUI.RollBtn.onClick.AddListener(LuckyDraw_StartRolling);
+
+            RollUI.OnClosePopupFinish = null;
+            RollUI.OnClosePopupFinish += () =>
+            {
+                OnLuckyDraw_CloseRollPopupEnd?.Invoke(false);
+                RollUI.OnClosePopupFinish = null;
+            };
+        }         
     }
 
     public void Init_Phase3()
@@ -107,20 +111,21 @@ public class LuckyDrawView : MonoBehaviour
     public void LuckyDraw_EndDraw(int result)
     {
         Debug.Log("[LuckyDrawView] End Draw:" + result);
+        StartCoroutine(WaitForEndDraw(result));
+    }
+
+    IEnumerator WaitForEndDraw(int result)
+    {
+        yield return new WaitForSeconds(CONSTS.ANIM_DRAW_TIME);
+
         RollUI.StopRolling(result);
 
         RollUI.OnRollFinish = null;
         RollUI.OnRollFinish += () =>
         {
-            StartCoroutine(WaitForEndDraw());
+            OnLuckyDraw_EndDraw?.Invoke();
             RollUI.OnRollFinish = null;
-        };        
-    }
-
-    IEnumerator WaitForEndDraw()
-    {
-        yield return new WaitForSeconds(CONSTS.ANIM_DRAW_TIME);
-        OnLuckyDraw_EndDraw?.Invoke();
+        };
     }
 
     public void OpenPopup(LUCKYDRAW_POPUP popup, bool _instant = false)

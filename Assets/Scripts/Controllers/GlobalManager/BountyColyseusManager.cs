@@ -64,7 +64,7 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         catch (Exception ex)
         {
             Debug.LogError("[BountyColyseusManager] JoinLobby Error: " + ex.Message);
-            ViewManager.Instance.GlobalErrorView.OpenPopup("JoinLobby Error: " + ex.Message);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("Join Lobby Error: " + ex.Message);
         }
     }
 
@@ -93,10 +93,17 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
             case ROOM_TYPE.GAME_ROOM:
                 Task<ColyseusRoom<GameRoomSchema>> task = client.JoinOrCreate<GameRoomSchema>(ROOM_TYPE.GAME_ROOM, options.option);
                 yield return new WaitUntil(() => task.IsCompleted);
-                Debug.Log("[BountyColyseusManager] CreateRoom success.");
-                gameRoom = task.Result;
-                //Attach all Multiplayer Event 
-                AssignRoomEvent();
+                try
+                {
+                    Debug.Log("[BountyColyseusManager] CreateRoom complete.");
+                    gameRoom = task.Result;
+                    //Attach all Multiplayer Event 
+                    AssignRoomEvent();
+                }
+                catch(Exception ex)
+                {
+                    ViewManager.Instance.GlobalErrorView.OpenPopup("Join Room Error: " + ex.Message);
+                }
                 break;
             default:
                 break;

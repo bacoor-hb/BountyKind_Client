@@ -12,15 +12,16 @@ public partial class LocalGameController
         //Initialize the Luckydraw Process----------------------------------------------------------------
         bool _skip = currentPlayer.skipLuckyDraw;
         LuckyDrawView luckyDrawView = LocalGameView.LuckyDrawPopup;
+        LocalGameView.LuckyDrawPopup.Init_Phase2(_skip);
 
         if (_skip)
         {
             //Skip Lucky draw
             luckyDrawView.ClosePopup(LUCKYDRAW_POPUP.INVITATION);
             luckyDrawView.OnLuckyDraw_CloseInvPopupEnd = null;
-            luckyDrawView.OnLuckyDraw_CloseInvPopupEnd += (x) =>
+            luckyDrawView.OnLuckyDraw_CloseInvPopupEnd += (skip) =>
             {
-                GameEventController.HandleLuckyDraw(true);
+                GameEventController.HandleLuckyDraw(skip);
                 TurnBaseController.EndAction();
                 luckyDrawView.OnLuckyDraw_CloseInvPopupEnd = null;
             };
@@ -34,11 +35,10 @@ public partial class LocalGameController
                 luckyDrawView.OpenPopup(LUCKYDRAW_POPUP.ROLL);
                 luckyDrawView.OnLuckyDraw_CloseInvPopupEnd = null;
             };
-
-            LocalGameView.LuckyDrawPopup.Init_Phase2();
+            
             //Handle Lucky draw while clicking the Roll Button
             luckyDrawView.OnLuckyDraw_StartDraw = null;
-            luckyDrawView.OnLuckyDraw_StartDraw += (x) =>
+            luckyDrawView.OnLuckyDraw_StartDraw += (skip) =>
             {
                 GameEventController.HandleLuckyDraw(false);
                 luckyDrawView.OnLuckyDraw_StartDraw = null;
@@ -60,7 +60,7 @@ public partial class LocalGameController
                 };                
                 
                 luckyDrawView.OnLuckyDraw_CloseRollPopupEnd = null;
-                luckyDrawView.OnLuckyDraw_CloseRollPopupEnd += (x) =>
+                luckyDrawView.OnLuckyDraw_CloseRollPopupEnd += (skip) =>
                 {                    
                     luckyDrawView.OpenPopup(LUCKYDRAW_POPUP.CONGRAT);
                     luckyDrawView.OnLuckyDraw_CloseRollPopupEnd = null;
@@ -69,7 +69,7 @@ public partial class LocalGameController
             };
 
             luckyDrawView.OnLuckyDraw_CloseCongratPopupEnd = null;
-            luckyDrawView.OnLuckyDraw_CloseCongratPopupEnd += (x) =>
+            luckyDrawView.OnLuckyDraw_CloseCongratPopupEnd += (skip) =>
             {
                 TurnBaseController.EndAction();
                 luckyDrawView.OnLuckyDraw_CloseCongratPopupEnd = null;

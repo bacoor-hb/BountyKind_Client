@@ -973,6 +973,7 @@ MonoBehaviour:
   - {fileID: 1127112378}
   - {fileID: 1345279463}
   - {fileID: 1704916658}
+  characterObjs: []
 --- !u!1 &406750915
 GameObject:
   m_ObjectHideFlags: 0
@@ -1280,7 +1281,7 @@ Transform:
   m_GameObject: {fileID: 499320315}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -283.7, y: -31.5, z: -48.4}
-  m_LocalScale: {x: 391.9945, y: 3.018864, z: 526.1916}
+  m_LocalScale: {x: 391.9945, y: 3.018864, z: 731.03796}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2101956696}
@@ -2047,7 +2048,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ddd72dd40870a84f9a2f7bcff8dcd37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiManager: {fileID: 816289146}
   playerPrefab: {fileID: 2757788438417063697, guid: 2ee91eee124c6294a88f3ccbb133458d, type: 3}
   characterPrefabs:
   - {fileID: 2456848683615008564, guid: 4a9493909e8b19e47846869d88d52204, type: 3}
@@ -2078,6 +2078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerList: []
+  actionCount: 0
 --- !u!4 &816289143
 Transform:
   m_ObjectHideFlags: 0
@@ -5705,6 +5706,7 @@ MonoBehaviour:
   currentUnitViewManager: {fileID: 1779033872}
   resultViewManager: {fileID: 1898146645}
   turnViewManager: {fileID: 421191051}
+  canvasRoot: {fileID: 0}
 --- !u!4 &2101956696
 Transform:
   m_ObjectHideFlags: 0

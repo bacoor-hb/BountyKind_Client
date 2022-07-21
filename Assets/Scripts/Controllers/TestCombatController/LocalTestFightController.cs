@@ -39,6 +39,7 @@ public class LocalTestFightController : LocalSingleton<LocalTestFightController>
     public OnEventTriggered OnSetAllCharactersPositionCompleted;
     public OnEventTriggered OnSetBattleDataCompleted;
     public OnEventTriggered OnBattleEnded;
+    public OnEventTriggered OnEndQueueParent;
     public delegate void OnRenderQueue(List<UnitQueue> arr);
     public OnRenderQueue onRenderQueue;
     public delegate void OnReceiveBattleDatasEvent(BattleProgess[] battleData, int playerId);
@@ -75,7 +76,6 @@ public class LocalTestFightController : LocalSingleton<LocalTestFightController>
 
         localViewManager.buttonViewManager.FightButton.onClick.AddListener(() => { GetFakeData(); });
         localViewManager.queueViewManager.OnRenderQueueCompleted += HandleOnRenderQueueCompleted;
-        UnitQueueController.Instance.OnEndQueue += HandleEndQueue;
         turnBaseController.OnStartTurn += HandleStartTurn;
         OnSetUserInfomationCompleted = null;
         OnSetUserInfomationCompleted += GetOpponentsFormation;
@@ -274,6 +274,10 @@ public class LocalTestFightController : LocalSingleton<LocalTestFightController>
     public void HandleOnRenderQueueCompleted(List<GameObject> _unitsInQueue)
     {
         queueController.SetUnitsInQueue(_unitsInQueue);
+        queueController.unitsInQueue.ForEach(unitInQueue =>
+        {
+            unitInQueue.GetComponent<UnitQueueController>().OnEndQueue += HandleEndQueue;
+        });
     }
 
     // Update is called once per frame
@@ -316,6 +320,7 @@ public class LocalTestFightController : LocalSingleton<LocalTestFightController>
 
     void HandleEndQueue()
     {
+        OnEndQueueParent?.Invoke();
         List<GameObject> unitsOutQueue = queueController.unitsOutQueue;
         GameObject _currentUnitObj = unitsOutQueue[unitsOutQueue.Count - 1];
         string currentUnitId = _currentUnitObj.GetComponent<UnitQueueController>().id;

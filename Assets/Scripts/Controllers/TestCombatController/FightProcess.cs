@@ -7,8 +7,6 @@ public class FightProcess : MonoBehaviour
     public delegate void OnAnimTrigger<T>(T data);
     public OnAnimTrigger<int> OnStartFightTrigger;
     public OnAnimTrigger<int> OnEndFightTrigger;
-    [SerializeField]
-    private LocalTestFightController localTestFightController;
     void Start()
     {
         FightActionTest.inFight += AnimateFight;
@@ -22,7 +20,8 @@ public class FightProcess : MonoBehaviour
     {
         GameObject currentGameObj;
         GameObject targetGameObj;
-        PlayerTestFightController playerController = localTestFightController.players[userId].GetComponent<PlayerTestFightController>();
+        Debug.Log("[AnimateFight]:" + userId);
+        PlayerTestFightController playerController = LocalTestFightController.Instance.players[userId].GetComponent<PlayerTestFightController>();
         currentGameObj = playerController.characters[battleData.attacker._id];
         targetGameObj = playerController.characters[battleData.target._id];
         UnitController prefabController = currentGameObj.GetComponent<UnitController>();

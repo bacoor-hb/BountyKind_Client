@@ -8,7 +8,7 @@ public class TurnBaseController : MonoBehaviour
     public delegate void Event<T>(T data);
     public Event<int> OnStartGame;
     public Event<int> OnEndGame;
-    public static Event<int> OnStartTurn;
+    public Event<int> OnStartTurn;
     public Event<int> OnEndTurn;
     public Event<int> OnChangePlayer;
 

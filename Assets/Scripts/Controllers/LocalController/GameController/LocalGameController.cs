@@ -183,6 +183,7 @@ public partial class LocalGameController : MonoBehaviour
             }
             else
             {
+                Debug.Log("[LocalGameController] OnStartTurn, Open Roll dice Popup.");
                 LocalGameView.SetState_RollDicePopup(true);
             }
         }

@@ -6,7 +6,7 @@ using BountyKind;
 public class PlayerTestFightController : IPlayer
 {
     public delegate void OnClearCharacterEvent(GameObject characterObj);
-    public static event OnClearCharacterEvent OnClearCharacter;
+    public OnClearCharacterEvent OnClearCharacter;
     [SerializeField]
     private FightActionTest FightAction;
     [SerializeField]

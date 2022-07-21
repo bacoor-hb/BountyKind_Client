@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class QueueViewManager : MonoBehaviour
 {
     public delegate void OnEventTriggered<T>(T data);
-    public static OnEventTriggered<List<GameObject>> OnRenderQueueCompleted;
+    public OnEventTriggered<List<GameObject>> OnRenderQueueCompleted;
     public GameObject endObj;
     [SerializeField]
     private GameObject unitInQueuePrefab;
@@ -21,7 +21,7 @@ public class QueueViewManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LocalTestFightController.onRenderQueue += RenderQueue;
+        LocalTestFightController.Instance.onRenderQueue += RenderQueue;
     }
 
     // Update is called once per frame

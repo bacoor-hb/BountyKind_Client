@@ -71,9 +71,9 @@ public class FightActionTest : Action
 
     public void Init()
     {
-        LocalTestFightController.OnReceiveBattleDatas += HandleReceiveBattleDatas;
+        LocalTestFightController.Instance.OnReceiveBattleDatas += HandleReceiveBattleDatas;
         UnitController.onEndFight += HandleOnEndFight;
-        UnitQueueController.OnEndQueue += OnFightAction;
+        UnitQueueController.Instance.OnEndQueue += OnFightAction;
     }
     public void Start()
     {
@@ -135,8 +135,8 @@ public class FightActionTest : Action
     private void OnDestroy()
     {
         Debug.Log("[OnDestroyFightActionTest]");
-        LocalTestFightController.OnReceiveBattleDatas -= HandleReceiveBattleDatas;
+        LocalTestFightController.Instance.OnReceiveBattleDatas -= HandleReceiveBattleDatas;
         UnitController.onEndFight -= HandleOnEndFight;
-        UnitQueueController.OnEndQueue -= OnFightAction;
+        UnitQueueController.Instance.OnEndQueue -= OnFightAction;
     }
 }

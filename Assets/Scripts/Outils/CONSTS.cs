@@ -11,7 +11,7 @@ public class CONSTS
 
     public const string ANIM_POPUP_APPEAR_TR = "Popup_Appear_Tr";
     public const string ANIM_POPUP_DISAPPEAR_TR = "Popup_Disappear_Tr";
-    public const float ANIM_POPUP_SPEED = 1f;
+    public const float ANIM_POPUP_SPEED = 0.5f;
     public const float ANIM_DRAW_TIME = 5f;
     #endregion
 

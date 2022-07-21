@@ -6,7 +6,7 @@ public class UnitQueueController : MonoBehaviour
 {
     // Start is called before the first frame update
     public delegate void OnEnqueueEvent();
-    public static OnEnqueueEvent OnEndQueue;
+    public OnEnqueueEvent OnEndQueue;
     [SerializeField]
     private Vector3 unitInitPosition;
     public float speed = 5f;

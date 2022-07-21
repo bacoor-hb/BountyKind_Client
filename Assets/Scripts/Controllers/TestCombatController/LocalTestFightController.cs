@@ -30,19 +30,19 @@ class CharacterPosition
     }
 }
 
-public class LocalTestFightController : MonoBehaviour
+public class LocalTestFightController : LocalSingleton<LocalTestFightController>
 {
     private APIManager apiManager;
     public delegate void OnEventTriggered();
-    public static event OnEventTriggered OnSetUserInfomationCompleted;
-    public static event OnEventTriggered OnSetOpponentInfomationCompleted;
-    public static event OnEventTriggered OnSetAllCharactersPositionCompleted;
-    public static event OnEventTriggered OnSetBattleDataCompleted;
+    public OnEventTriggered OnSetUserInfomationCompleted;
+    public OnEventTriggered OnSetOpponentInfomationCompleted;
+    public OnEventTriggered OnSetAllCharactersPositionCompleted;
+    public OnEventTriggered OnSetBattleDataCompleted;
     public OnEventTriggered OnBattleEnded;
     public delegate void OnRenderQueue(List<UnitQueue> arr);
-    public static event OnRenderQueue onRenderQueue;
+    public OnRenderQueue onRenderQueue;
     public delegate void OnReceiveBattleDatasEvent(BattleProgess[] battleData, int playerId);
-    public static event OnReceiveBattleDatasEvent OnReceiveBattleDatas;
+    public OnReceiveBattleDatasEvent OnReceiveBattleDatas;
     [SerializeField]
     private GameObject playerPrefab;
     [SerializeField]
@@ -74,10 +74,9 @@ public class LocalTestFightController : MonoBehaviour
         battleData = new BattleData();
 
         localViewManager.buttonViewManager.FightButton.onClick.AddListener(() => { GetFakeData(); });
-        QueueViewManager.OnRenderQueueCompleted += HandleOnRenderQueueCompleted;
-        PlayerTestFightController.OnClearCharacter += HandleOnClearCharacter;
-        UnitQueueController.OnEndQueue += HandleEndQueue;
-        TurnBaseController.OnStartTurn += HandleStartTurn;
+        localViewManager.queueViewManager.OnRenderQueueCompleted += HandleOnRenderQueueCompleted;
+        UnitQueueController.Instance.OnEndQueue += HandleEndQueue;
+        turnBaseController.OnStartTurn += HandleStartTurn;
         OnSetUserInfomationCompleted = null;
         OnSetUserInfomationCompleted += GetOpponentsFormation;
         OnSetOpponentInfomationCompleted = null;

@@ -165,7 +165,6 @@ public partial class LocalGameController : MonoBehaviour
     //-------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------
     #region Turn Base Controller
-    int rollNumber = 0;
     UserActionLocalManager currentPlayer;
     int currentPlayerId;
 
@@ -198,9 +197,6 @@ public partial class LocalGameController : MonoBehaviour
         //Get Current Player
         currentPlayerId = TurnBaseController.CurrentPlayer;
         currentPlayer = players[currentPlayerId];
-
-        //User has 1 roll Number and 1 move number at each turn
-        rollNumber = 1;
 
         //Reset Dice
         DicesController.ResetDicesPosition();

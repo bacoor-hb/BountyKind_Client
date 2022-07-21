@@ -64,7 +64,8 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         catch (Exception ex)
         {
             Debug.LogError("[BountyColyseusManager] JoinLobby Error: " + ex.Message);
-            ViewManager.Instance.GlobalErrorView.OpenPopup("Join Lobby Error: " + ex.Message);
+            //ViewManager.Instance.GlobalErrorView.OpenPopup("Join Lobby ERROR: " + ex.Message);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("Join Lobby failed...");
         }
     }
 
@@ -102,7 +103,9 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
                 }
                 catch(Exception ex)
                 {
-                    ViewManager.Instance.GlobalErrorView.OpenPopup("Join Room Error: " + ex.Message);
+                    //ViewManager.Instance.GlobalErrorView.OpenPopup("Join Room Error: " + ex.Message);
+                    Debug.LogError("[CreateRoom] Join Room Error: " + ex.Message);
+                    ViewManager.Instance.GlobalErrorView.OpenPopup("Join Room Failed... ");
                 }
                 break;
             default:
@@ -127,13 +130,19 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         });
 
         #region Game ERROR
-        lobbyRoom.OnError += (code, message) => ViewManager.Instance.GlobalErrorView.OpenPopup("LOBBY ERROR.\nCode =>" + code + ", message => " + message);
+        //lobbyRoom.OnError += (code, message) => ViewManager.Instance.GlobalErrorView.OpenPopup("LOBBY ERROR.\nCode =>" + code + ", message => " + message);
+        lobbyRoom.OnError += (code, message) =>
+        {
+            Debug.LogError("[AssignLobbyEvent] LOBBY ERROR.\nCode =>" + code + ", message => " + message);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("LOBBY EVENT.\n" + message);
+        };
         #endregion
 
         lobbyRoom.OnLeave += (code) =>
         {
             Debug.Log("[BountyColyseusManager] Leave lobby: " + code);
-            ViewManager.Instance.GlobalErrorView.OpenPopup("Lobby Close, Code " + code);
+            //ViewManager.Instance.GlobalErrorView.OpenPopup("Lobby Close, Code " + code);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("Lobby Close...");
         };
         OnJoinLobbySuccess?.Invoke();
         Debug.Log("[BountyColyseusManager] AssignLobbyEvent success.");
@@ -176,13 +185,19 @@ public class BountyColyseusManager : ColyseusManager<BountyColyseusManager>
         #endregion
 
         #region Game ERROR
-        gameRoom.OnError += (code, message) => ViewManager.Instance.GlobalErrorView.OpenPopup("Room ERROR.\nCode =>" + code + ", message => " + message);
+        //gameRoom.OnError += (code, message) => ViewManager.Instance.GlobalErrorView.OpenPopup("Room ERROR.\nCode =>" + code + ", message => " + message);
+        gameRoom.OnError += (code, message) =>
+        {
+            Debug.LogError("[AssignRoomEvent] Room ERROR.\nCode =>" + code + ", message => " + message);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("Room Info:\n" + message);
+        };
         #endregion
 
         gameRoom.OnLeave += (code) =>
         {
-            Debug.Log("[BountyColyseusManager] Leave game: " + code);
-            ViewManager.Instance.GlobalErrorView.OpenPopup("Room Close, Code " + code);
+            Debug.LogError("[BountyColyseusManager] Leave game: " + code);
+            //ViewManager.Instance.GlobalErrorView.OpenPopup("Room Close, Code " + code);
+            ViewManager.Instance.GlobalErrorView.OpenPopup("Room Close...");
         };
 
         OnJoinRoomSuccess?.Invoke();

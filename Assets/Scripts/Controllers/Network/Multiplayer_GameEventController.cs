@@ -194,6 +194,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
         string jsonMsg = JsonUtility.ToJson(tokenBalance);
         Debug.Log("[Multiplayer_GameEventController] On Balance Update: " + jsonMsg);
         TokenBalance balance = new TokenBalance(tokenBalance);
+        UserDataManager.UserData.UpdateBalance(balance);
         OnBalanceReturn?.Invoke(balance);
     }
 

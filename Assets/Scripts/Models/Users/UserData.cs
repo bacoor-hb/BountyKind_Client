@@ -56,7 +56,7 @@ public class UserData
         tokenBalance = new TokenBalance()
         {
             yuPoint = userData.yuPoint,
-            energy = userData.energy
+            energy = userData.energy,
         };
         _id = userData._id;
     }
@@ -67,6 +67,11 @@ public class UserData
         username = webLogin.userName;
         img = webLogin.img;
         token = webLogin.token;
+    }
+
+    public void UpdateBalance(TokenBalance _balance)
+    {
+        tokenBalance = _balance;
     }
 }
 

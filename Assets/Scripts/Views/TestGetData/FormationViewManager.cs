@@ -20,4 +20,27 @@ public class FormationViewManager : MonoBehaviour
     {
 
     }
+
+    /// <summary>
+    /// Set formation view state
+    /// </summary>
+    /// <param name="type">
+    /// type 0: main menu screen formation
+    /// type 1: game screen formation
+    /// </param>
+    public void SetFormationViewState(int type)
+    {
+        if (type == 0)
+        {
+            buttonViewManager.ResetFormationButton.interactable = true;
+            buttonViewManager.RemoveCharacterButton.interactable = true;
+            scrollViewManager.gameObject.SetActive(true);
+        }
+        else
+        {
+            buttonViewManager.ResetFormationButton.interactable = false;
+            buttonViewManager.RemoveCharacterButton.interactable = false;
+            scrollViewManager.gameObject.SetActive(false);
+        }
+    }
 }

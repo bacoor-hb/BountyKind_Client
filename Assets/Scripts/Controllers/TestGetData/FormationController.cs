@@ -309,9 +309,21 @@ public class FormationController : LocalSingleton<FormationController>
             }
             if (existedPositionIndex == -1 && result.Length == 0)
             {
-                viewManager.boardViewManager.RenderCharacterModelToSquare(characterPrefab, position, selectedCharacter._id);
-                characterWithPositions.Add(new CharacterWithPosition(selectedCharacter._id, position));
-                OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                if (characterWithPositions.Count < 3)
+                {
+                    viewManager.boardViewManager.RenderCharacterModelToSquare(characterPrefab, position, selectedCharacter._id);
+                    characterWithPositions.Add(new CharacterWithPosition(selectedCharacter._id, position));
+                    OnSelectedSquare?.Invoke(boardSquare.GetComponent<SquareController>().position);
+                }
+                else
+                {
+                    canRemove = false;
+                    selectedCharacter = new UserCharacter();
+                    selectedSquare = null;
+                    OnSelectedSquare?.Invoke(-1);
+                    OnAvatarSelected?.Invoke(-1);
+                    selectedAvatarIndex = -1;
+                }
             }
             if (existedPositionIndex != -1 && result.Length > 0)
             {

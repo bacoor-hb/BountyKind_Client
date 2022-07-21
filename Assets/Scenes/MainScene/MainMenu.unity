@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1300,7 +1300,6 @@ GameObject:
   - component: {fileID: 482854897}
   - component: {fileID: 482854896}
   - component: {fileID: 482854895}
-  - component: {fileID: 482854898}
   m_Layer: 0
   m_Name: FormationBG
   m_TagString: Untagged
@@ -1317,7 +1316,7 @@ Transform:
   m_GameObject: {fileID: 482854893}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -12, y: -93, z: 399}
-  m_LocalScale: {x: 961.63763, y: 18.339954, z: 870.39716}
+  m_LocalScale: {x: 1000, y: 18.339954, z: 950}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1210042688}
@@ -1386,20 +1385,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482854893}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &482854898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 482854893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 093f969a05593734ea93e4be6c3302b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3.5
-  board: {fileID: 305770216}
 --- !u!1 &493683685
 GameObject:
   m_ObjectHideFlags: 0

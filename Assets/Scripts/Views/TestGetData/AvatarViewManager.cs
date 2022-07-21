@@ -21,6 +21,7 @@ public class AvatarViewManager : MonoBehaviour
         id = _id;
         FormationController.Instance.OnAvatarSelected = null;
         FormationController.Instance.OnAvatarSelected += HandleOnAvatarSelected;
+        FormationController.Instance.OnFormationCharatecterReceived = null;
         FormationController.Instance.OnFormationCharatecterReceived += HandleOnFormationCharatecterReceived;
     }
 

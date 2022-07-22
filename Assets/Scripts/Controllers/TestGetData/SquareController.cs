@@ -11,8 +11,7 @@ public class SquareController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        selectPlane.SetActive(false);
-        FormationController.Instance.OnSelectedSquare = null;
+        selectPlane.SetActive(false); ;
         FormationController.Instance.OnSelectedSquare += HandleOnSelectedSquare;
     }
 
@@ -36,6 +35,7 @@ public class SquareController : MonoBehaviour
 
     private void OnDestroy()
     {
+        Debug.Log("Detroy Square Controller");
         FormationController.Instance.OnSelectedSquare = null;
     }
 }

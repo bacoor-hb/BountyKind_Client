@@ -5,22 +5,40 @@ using UnityEngine;
 
 public class FormationViewManager : MonoBehaviour
 {
-    // Start is called before the first frame update\
+    [Header ("View Manager")]
     public ButtonViewManager buttonViewManager;
     public ScrollViewManager scrollViewManager;
     public BoardViewManager boardViewManager;
+
+    [Header ("Popup Element")]
     public GameObject notifyPopup;
+    [SerializeField]
+    public GameObject canvasRoot;
+    TextMeshProUGUI notifyTxt;
     public void Init()
     {
         buttonViewManager.Init();
         scrollViewManager.Init();
         boardViewManager.Init();
+
+        notifyTxt = notifyPopup.GetComponentInChildren<TextMeshProUGUI>();
+        SetFormationCanvasState(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Open/Close formation Canvas.
+    /// </summary>
+    /// <param name="state">true: Open Canvas/ false: Close Canvas</param>
+    public void SetFormationCanvasState(bool state)
     {
-
+        if (canvasRoot != null)
+        {
+            canvasRoot.SetActive(state);
+        }
+        else
+        {
+            Debug.LogError("[FormationViewManager] SetFormationCanvasState ERROR: Canvas is null.");
+        }
     }
 
     /// <summary>
@@ -46,23 +64,35 @@ public class FormationViewManager : MonoBehaviour
         }
     }
 
-    public IEnumerator SetPopupViewState(int state)
+    /// <summary>
+    /// Open Notify popup, then fade out after several time
+    /// </summary>
+    /// <param name="state"></param>
+    /// <returns></returns>
+    public IEnumerator SetPopupViewState(FormationViewState state, float fadeTime = 1.0f)
     {
-        if (state == 1)
+        notifyPopup.SetActive(true);
+
+        switch (state)
         {
-            notifyPopup.SetActive(true);
-            notifyPopup.GetComponentInChildren<TextMeshProUGUI>().text = "Set formation success";
-            yield return new WaitForSeconds(1f);
-            notifyPopup.GetComponentInChildren<TextMeshProUGUI>().text = "";
-            notifyPopup.SetActive(false);
+            case FormationViewState.SET_FORMATION_SUCCESS:
+                notifyTxt.text = "Set formation success";
+                break;
+            case FormationViewState.SET_FORMATION_FAILED:
+                notifyTxt.text = "Set formation failed";
+                break;
+            default:
+                break;
         }
-        else
-        {
-            notifyPopup.SetActive(true);
-            notifyPopup.GetComponentInChildren<TextMeshProUGUI>().text = "Set formation failed";
-            yield return new WaitForSeconds(1f);
-            notifyPopup.GetComponentInChildren<TextMeshProUGUI>().text = "";
-            notifyPopup.SetActive(false);
-        }
+
+        yield return new WaitForSeconds(fadeTime);
+        notifyTxt.text = "";
+        notifyPopup.SetActive(false);
     }
+}
+
+public enum FormationViewState
+{
+    SET_FORMATION_SUCCESS,
+    SET_FORMATION_FAILED,
 }

@@ -10,7 +10,7 @@ public class APIManager : MonoBehaviour
     public OnEventFinished<UserData_API> OnGetUserDataFinished;
     public OnEventFinished<UserCharacters_API> OnGetUserCharactersFinished;
     public OnEventFinished<FormationCharacters[]> OnGetFormationFinished;
-    public OnEventFinished<string> OnSetFormationFinished;
+    public OnEventFinished<FORMATION_FINISH_RESULT> OnSetFormationFinished;
     public OnEventFinished<UserItems_API> OnGetUserItemsFinished;
 
     public void Init()
@@ -196,17 +196,17 @@ public class APIManager : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError("[APIManager] " + pages[page] + ": SetFormation Error: " + webRequest.error);
-                    OnSetFormationFinished?.Invoke(null);
+                    OnSetFormationFinished?.Invoke(FORMATION_FINISH_RESULT.FAILED);
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError("[APIManager] " + pages[page] + ": SetFormation HTTP Error: " + webRequest.error);
-                    OnSetFormationFinished?.Invoke(null);
+                    OnSetFormationFinished?.Invoke(FORMATION_FINISH_RESULT.FAILED);
                     break;
                 case UnityWebRequest.Result.Success:
                     string responseData = webRequest.downloadHandler.text;
                     SetFormationResponse setUserFormation = JsonUtility.FromJson<SetFormationResponse>(responseData);
                     Debug.Log("[APIManager] SetFormation Success: " + responseData);
-                    OnSetFormationFinished?.Invoke(setUserFormation.message);
+                    OnSetFormationFinished?.Invoke(FORMATION_FINISH_RESULT.LOBBY);
                     break;
             }
         }

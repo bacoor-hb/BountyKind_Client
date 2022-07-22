@@ -15,12 +15,11 @@ public class AvatarViewManager : MonoBehaviour
     // Start is called before the first frame update
     public void Init(int _index, string _id)
     {
+        Debug.Log("InitAvatar");
         blockBG.SetActive(false);
         border.SetActive(false);
         index = _index;
         id = _id;
-        FormationController.Instance.OnAvatarSelected = null;
-        FormationController.Instance.OnAvatarSelected += HandleOnAvatarSelected;
         FormationController.Instance.OnFormationCharatecterReceived = null;
         FormationController.Instance.OnFormationCharatecterReceived += HandleOnFormationCharatecterReceived;
     }
@@ -46,19 +45,6 @@ public class AvatarViewManager : MonoBehaviour
         transform.Find("Background").GetComponent<Image>().sprite = avatarSprite;
     }
 
-    public void HandleOnAvatarSelected(int selectedIndex)
-    {
-        Debug.Log("OnAvatarSelected: " + index);
-        if (index == selectedIndex)
-        {
-            border.SetActive(true);
-        }
-        else
-        {
-            border.SetActive(false);
-        }
-    }
-
     public void HandleOnFormationCharatecterReceived(string _id)
     {
         if (id == _id)
@@ -67,8 +53,18 @@ public class AvatarViewManager : MonoBehaviour
         }
     }
 
+    public void Toggle(bool state)
+    {
+        border.SetActive(state);
+    }
+
     public void ActiveBlockBG()
     {
         blockBG.SetActive(true);
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("DestroyAvatarView");
     }
 }

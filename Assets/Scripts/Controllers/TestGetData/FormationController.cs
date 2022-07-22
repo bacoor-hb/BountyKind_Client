@@ -61,6 +61,8 @@ public class FormationController : LocalSingleton<FormationController>
         viewManager.buttonViewManager.RotateCamRightButton.onClick.AddListener(() => HandleRotateCamera(true));
         viewManager.buttonViewManager.RotateCamLeftButton.onClick.AddListener(() => HandleRotateCamera(false));
         ScrollViewManager.OnInstantiate += HandleOnInstantiate;
+        OnAvatarSelected = null;
+        OnAvatarSelected += HandleAvatarSelected;
         SetEventToSquare();
     }
 
@@ -181,6 +183,11 @@ public class FormationController : LocalSingleton<FormationController>
 
     void HandleSetFormationFinished(string result)
     {
+        selectedCharacter = new UserCharacter();
+        selectedSquare = null;
+        selectedAvatarIndex = -1;
+        OnSelectedSquare?.Invoke(-1);
+        OnAvatarSelected?.Invoke(-1);
         if (result != null)
         {
             StartCoroutine(viewManager.SetPopupViewState(1));
@@ -209,6 +216,7 @@ public class FormationController : LocalSingleton<FormationController>
     void OnClickAvatar(UserCharacter userCharacter, int index)
     {
         Debug.Log("OnClickAvatar: " + index);
+
         int[] result = CheckIfCharacterExisted(userCharacter);
         if (result.Length > 0)
         {
@@ -226,15 +234,15 @@ public class FormationController : LocalSingleton<FormationController>
         if (selectedAvatarIndex != index)
         {
             selectedAvatarIndex = index;
-            OnAvatarSelected(index);
+            OnAvatarSelected?.Invoke(index);
         }
         else
         {
             selectedAvatarIndex = -1;
             selectedCharacter = new UserCharacter();
             selectedSquare = null;
-            OnAvatarSelected(-1);
-            OnSelectedSquare(-1);
+            OnAvatarSelected?.Invoke(-1);
+            OnSelectedSquare?.Invoke(-1);
             canRemove = false;
         }
     }
@@ -358,8 +366,8 @@ public class FormationController : LocalSingleton<FormationController>
                     selectedAvatarIndex = -1;
                     selectedCharacter = new UserCharacter();
                     selectedSquare = null;
-                    OnAvatarSelected(-1);
-                    OnSelectedSquare(-1);
+                    OnAvatarSelected?.Invoke(-1);
+                    OnSelectedSquare?.Invoke(-1);
                     canRemove = false;
                 }
             }
@@ -388,6 +396,15 @@ public class FormationController : LocalSingleton<FormationController>
 
     void HandleGoBack()
     {
+        OnAvatarSelected(-1);
+        OnSelectedSquare(-1);
+        viewManager.boardViewManager.DestroyAllCharactersObjs();
+        characterWithPositions = new List<CharacterWithPosition>();
+        selectedAvatarIndex = -1;
+        selectedCharacter = new UserCharacter();
+        selectedSquare = null;
+        formationCharacters = null;
+        userCharacters = null;
         OnBackLobbyView?.Invoke();
     }
 
@@ -396,8 +413,34 @@ public class FormationController : LocalSingleton<FormationController>
         viewManager.boardViewManager.RotateCamera(isClockWise);
     }
 
+    void HandleAvatarSelected(int index)
+    {
+        if (index != -1)
+        {
+            for (int i = 0; i < avatars.Count; i++)
+            {
+                if (i != selectedAvatarIndex)
+                {
+                    avatars[i].GetComponent<AvatarViewManager>().Toggle(false);
+                }
+                else
+                {
+                    avatars[i].GetComponent<AvatarViewManager>().Toggle(true);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < avatars.Count; i++)
+            {
+                avatars[i].GetComponent<AvatarViewManager>().Toggle(false);
+            }
+        }
+    }
+
     private void OnDestroy()
     {
         Debug.Log("Destroyed");
+        OnAvatarSelected = null;
     }
 }

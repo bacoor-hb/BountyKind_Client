@@ -31,6 +31,18 @@ public class BoardViewManager : MonoBehaviour
         cloneCharacters.Remove(characterId);
     }
 
+    public void DestroyAllCharactersObjs()
+    {
+        if (cloneCharacters != null && cloneCharacters.Count > 0)
+        {
+            foreach (var item in cloneCharacters)
+            {
+                Destroy(item.Value);
+            }
+            cloneCharacters = new Dictionary<string, GameObject>();
+        }
+    }
+
     public void Move(string characterId, Transform parentTransform)
     {
         cloneCharacters[characterId].GetComponent<Transform>().SetParent(parentTransform, false);

@@ -46,10 +46,14 @@ public class FormationController : LocalSingleton<FormationController>
         avatars = new List<GameObject>();
         userDataManager = GlobalManager.Instance.UserDataManager;
         apiManager = GlobalManager.Instance.NetworkManager.APIManager;
+        apiManager.OnGetUserCharactersFinished = null;
         apiManager.OnGetUserCharactersFinished += HandleGetUserCharactersFinished;
         apiManager.OnGetFormationFinished = null;
         apiManager.OnGetFormationFinished += HandleGetFormationFinished;
+        apiManager.OnGetUserItemsFinished = null;
         apiManager.OnGetUserItemsFinished += HandleGetUserItemsFinished;
+        apiManager.OnSetFormationFinished = null;
+        apiManager.OnSetFormationFinished += HandleSetFormationFinished;
         viewManager.buttonViewManager.SetFormationButton.onClick.AddListener(HandleSetFormation);
         viewManager.buttonViewManager.ResetFormationButton.onClick.AddListener(ResetFormation);
         viewManager.buttonViewManager.RemoveCharacterButton.onClick.AddListener(RemoveCharacter);
@@ -173,6 +177,18 @@ public class FormationController : LocalSingleton<FormationController>
         string uri = CONSTS.HOST_ENDPOINT_API + "api/users/formation";
         string token = userDataManager.UserData.token;
         StartCoroutine(apiManager.SetFormation(uri, token, characterWithPositions));
+    }
+
+    void HandleSetFormationFinished(string result)
+    {
+        if (result != null)
+        {
+            StartCoroutine(viewManager.SetPopupViewState(1));
+        }
+        else
+        {
+            StartCoroutine(viewManager.SetPopupViewState(0));
+        }
     }
 
     void HandleOnInstantiate(GameObject obj, int index)

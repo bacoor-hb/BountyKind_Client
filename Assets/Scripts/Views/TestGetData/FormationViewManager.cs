@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class FormationViewManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class FormationViewManager : MonoBehaviour
     public ButtonViewManager buttonViewManager;
     public ScrollViewManager scrollViewManager;
     public BoardViewManager boardViewManager;
+    public GameObject notifyPopup;
     public void Init()
     {
         buttonViewManager.Init();
@@ -41,6 +43,26 @@ public class FormationViewManager : MonoBehaviour
             buttonViewManager.ResetFormationButton.interactable = false;
             buttonViewManager.RemoveCharacterButton.interactable = false;
             scrollViewManager.gameObject.SetActive(false);
+        }
+    }
+
+    public IEnumerator SetPopupViewState(int state)
+    {
+        if (state == 1)
+        {
+            notifyPopup.SetActive(true);
+            notifyPopup.GetComponentInChildren<TextMeshProUGUI>().text = "Set formation success";
+            yield return new WaitForSeconds(1f);
+            notifyPopup.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            notifyPopup.SetActive(false);
+        }
+        else
+        {
+            notifyPopup.SetActive(true);
+            notifyPopup.GetComponentInChildren<TextMeshProUGUI>().text = "Set formation failed";
+            yield return new WaitForSeconds(1f);
+            notifyPopup.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            notifyPopup.SetActive(false);
         }
     }
 }

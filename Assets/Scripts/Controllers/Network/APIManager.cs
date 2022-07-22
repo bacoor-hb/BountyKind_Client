@@ -207,7 +207,6 @@ public class APIManager : MonoBehaviour
                     SetFormationResponse setUserFormation = JsonUtility.FromJson<SetFormationResponse>(responseData);
                     Debug.Log("[APIManager] SetFormation Success: " + responseData);
                     OnSetFormationFinished?.Invoke(setUserFormation.message);
-                    OnSetFormationFinished = null;
                     break;
             }
         }

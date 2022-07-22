@@ -12,6 +12,7 @@ public class SquareController : MonoBehaviour
     void Start()
     {
         selectPlane.SetActive(false);
+        FormationController.Instance.OnSelectedSquare = null;
         FormationController.Instance.OnSelectedSquare += HandleOnSelectedSquare;
     }
 
@@ -31,5 +32,10 @@ public class SquareController : MonoBehaviour
         {
             selectPlane.SetActive(false);
         }
+    }
+
+    private void OnDestroy()
+    {
+        FormationController.Instance.OnSelectedSquare = null;
     }
 }

@@ -12,7 +12,7 @@ public class UserGameStatus
     public int totalRoll;
 
     public List<Character> Characters;
-    public List<FormationCharacters> FormationList;
+    public FormationCharacters[] FormationList;
 
     public UserGameStatus()
     {
@@ -21,7 +21,7 @@ public class UserGameStatus
         totalRoll = -1;
 
         Characters = new List<Character>();
-        FormationList = new List<FormationCharacters>();
+        FormationList = null;
     }
 
     /// <summary>
@@ -53,6 +53,11 @@ public class UserGameStatus
         {
             Debug.LogError("[UserGameStatus] UpdateMap ERROR: map not exists.");
         }
+    }
+
+    public void UpdateFormationData(FormationCharacters[] _formationList)
+    {
+        FormationList = _formationList;
     }
 
     public ACTION_TYPE Get_MapActionType()

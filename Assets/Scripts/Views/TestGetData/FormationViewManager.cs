@@ -48,19 +48,22 @@ public class FormationViewManager : MonoBehaviour
     /// type 0: main menu screen formation
     /// type 1: game screen formation
     /// </param>
-    public void SetFormationViewState(int type)
+    public void SetFormationViewState(FORMATION_VIEW_STYLE type)
     {
-        if (type == 0)
+        switch (type)
         {
-            buttonViewManager.ResetFormationButton.interactable = true;
-            buttonViewManager.RemoveCharacterButton.interactable = true;
-            scrollViewManager.gameObject.SetActive(true);
-        }
-        else
-        {
-            buttonViewManager.ResetFormationButton.interactable = false;
-            buttonViewManager.RemoveCharacterButton.interactable = false;
-            scrollViewManager.gameObject.SetActive(false);
+            case FORMATION_VIEW_STYLE.LOBBY:
+                buttonViewManager.BackButton.interactable = true;
+                buttonViewManager.ResetFormationButton.interactable = true;
+                buttonViewManager.RemoveCharacterButton.interactable = true;
+                scrollViewManager.gameObject.SetActive(true);
+                break;
+            case FORMATION_VIEW_STYLE.BOARD:
+                buttonViewManager.BackButton.interactable = false;
+                buttonViewManager.ResetFormationButton.interactable = false;
+                buttonViewManager.RemoveCharacterButton.interactable = false;
+                scrollViewManager.gameObject.SetActive(false);
+                break;
         }
     }
 
@@ -95,4 +98,10 @@ public enum FormationViewState
 {
     SET_FORMATION_SUCCESS,
     SET_FORMATION_FAILED,
+}
+
+public enum FORMATION_VIEW_STYLE
+{
+    LOBBY,
+    BOARD
 }

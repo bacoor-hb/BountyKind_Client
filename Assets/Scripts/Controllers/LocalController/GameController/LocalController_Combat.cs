@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine.UI;
+
 public partial class LocalGameController
 {
     #region Combat Control
@@ -13,8 +15,25 @@ public partial class LocalGameController
         LocalGameView.CombatGameView.OnClosePopupFinish = null;
         LocalGameView.CombatGameView.OnClosePopupFinish += () =>
         {
-            GameEventController.Handle_Combat(_skip);
+            Open_Formation();
             LocalGameView.CombatGameView.OnClosePopupFinish = null;
+        };
+    }
+
+    private void Open_Formation()
+    {
+        SwitchCamera(CAMERA_PARENT.FORMATION);
+        LocalGameView.SetCanvasRootState(false);
+
+        FormationController.Instance.ResetFormationScene();
+
+        FormationViewManager.SetFormationCanvasState(true);
+        FormationController.Instance.GetUserFormationData();
+        FormationController.Instance.OnSetFormationFinished += () =>
+        {
+            bool _skip = currentPlayer.skipCombat;
+            GameEventController.Handle_Combat(_skip);
+            FormationController.Instance.OnSetFormationFinished = null;            
         };
     }
 
@@ -35,27 +54,27 @@ public partial class LocalGameController
 
     private void StartCombatProcess(BattleData battle_MSG)
     {
-        fightController.OnBattleEnded = null;
-        fightController.OnBattleEnded += () =>
+        LocalFightController.OnBattleEnded = null;
+        LocalFightController.OnBattleEnded += () =>
         {
             EndCombat_Process();
-            fightController.OnBattleEnded = null;
+            LocalFightController.OnBattleEnded = null;
         };
 
-        SwitchCamera(1);
+        SwitchCamera(CAMERA_PARENT.COMBAT);
+        FormationViewManager.SetFormationCanvasState(false);
 
-        LocalGameView.SetCanvasRootState(false);
-        fightController.localViewManager.SetViewState(true);
-        fightController.InitPlayers();
-        fightController.StartGame();
-        fightController.InsertBattleData(battle_MSG);
-        fightController.ProcessCharactersPosition();
+        LocalFightController.localViewManager.SetViewState(true);
+        LocalFightController.InitPlayers();
+        LocalFightController.StartGame();
+        LocalFightController.InsertBattleData(battle_MSG);
+        LocalFightController.SetUserInfomation();
     }
 
     private void EndCombat_Process()
     {
         Debug.Log("[LocalGameController] CombatEnd...");
-        SwitchCamera(0);
+        SwitchCamera(CAMERA_PARENT.BOARD);
         LocalGameView.SetCanvasRootState(true);
 
         TurnBaseController.EndAction();

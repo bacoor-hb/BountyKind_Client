@@ -21,7 +21,7 @@ public class FightProcess : MonoBehaviour
         GameObject currentGameObj;
         GameObject targetGameObj;
         Debug.Log("[AnimateFight]:" + userId);
-        PlayerTestFightController playerController = LocalTestFightController.Instance.players[userId].GetComponent<PlayerTestFightController>();
+        PlayerTestFightController playerController = LocalFightController.Instance.players[userId].GetComponent<PlayerTestFightController>();
         currentGameObj = playerController.characters[battleData.attacker._id];
         targetGameObj = playerController.characters[battleData.target._id];
         UnitController prefabController = currentGameObj.GetComponent<UnitController>();

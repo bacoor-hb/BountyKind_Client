@@ -15,7 +15,7 @@ public class AvatarViewManager : MonoBehaviour
     // Start is called before the first frame update
     public void Init(int _index, string _id)
     {
-        Debug.Log("InitAvatar");
+        //Debug.Log("InitAvatar");
         blockBG.SetActive(false);
         border.SetActive(false);
         index = _index;
@@ -65,6 +65,6 @@ public class AvatarViewManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log("DestroyAvatarView");
+        //Debug.Log("DestroyAvatarView");
     }
 }

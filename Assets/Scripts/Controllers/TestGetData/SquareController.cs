@@ -35,7 +35,7 @@ public class SquareController : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log("Detroy Square Controller");
+        //Debug.Log("Detroy Square Controller");
         FormationController.Instance.OnSelectedSquare = null;
     }
 }

@@ -7,12 +7,7 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
 {
     [SerializeField]
     private LobbyView LobbyView;
-    [SerializeField]
-    private FormationViewManager formationViewManager;
-    [SerializeField]
-    private FormationController formationController;
-    [SerializeField]
-    private GameObject formationRoot;
+    private FormationViewManager FormationViewManager;
 
     private List<MapShort_MSG> bountyMaps;
 
@@ -45,11 +40,14 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
         InitLobbyView();
 
         //Formation init
-        formationController.Init();
-        formationViewManager.Init();
-        formationRoot.SetActive(false);
-        formationController.OnBackLobbyView = null;
-        formationController.OnBackLobbyView += HandleBackLobbyView;
+        FormationController.Instance.Init();
+        FormationViewManager = FormationController.Instance.viewManager;
+        FormationViewManager.Init();
+        FormationViewManager.SetFormationCanvasState(false);
+        FormationViewManager.SetFormationViewState(FORMATION_VIEW_STYLE.LOBBY);
+
+        FormationController.Instance.OnBackButtonTrigger = null;
+        FormationController.Instance.OnBackButtonTrigger += HandleBackLobbyView;
     }
 
     /// <summary>
@@ -222,14 +220,14 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     void HandleOpenFormation()
     {
         Debug.Log("HandleOpenFormation");
-        formationRoot.SetActive(true);
-        formationController.GetUserFormationData();
+        FormationController.Instance.viewManager.SetFormationCanvasState(true);
+        FormationController.Instance.GetUserFormationData();
         LobbyView.SetLobbyViewState(false);
     }
 
     void HandleBackLobbyView()
     {
-        formationRoot.SetActive(false);
+        FormationController.Instance.viewManager.SetFormationCanvasState(false);
         LobbyView.SetLobbyViewState(true);
     }
 }

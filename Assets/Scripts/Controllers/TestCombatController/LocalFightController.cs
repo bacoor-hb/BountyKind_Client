@@ -30,9 +30,8 @@ class CharacterPosition
     }
 }
 
-public class LocalTestFightController : LocalSingleton<LocalTestFightController>
+public class LocalFightController : LocalSingleton<LocalFightController>
 {
-    private APIManager apiManager;
     public delegate void OnEventTriggered();
     public OnEventTriggered OnSetUserInfomationCompleted;
     public OnEventTriggered OnSetOpponentInfomationCompleted;
@@ -64,12 +63,12 @@ public class LocalTestFightController : LocalSingleton<LocalTestFightController>
     [SerializeField]
     private List<FormationCharacters> opponentCharacters;
 
+    private UserDataManager UserDataManager;
     // Start is called before the first frame update
     public void Init()
     {
         localViewManager.Init();
         localViewManager.SetViewState(false);
-        apiManager = GlobalManager.Instance.NetworkManager.APIManager;
         yourCharacters = new List<FormationCharacters>();
         opponentCharacters = new List<FormationCharacters>();
         battleData = new BattleData();
@@ -85,14 +84,8 @@ public class LocalTestFightController : LocalSingleton<LocalTestFightController>
         OnSetAllCharactersPositionCompleted += HandleOnSetAllCharactersPositionCompleted;
         OnSetBattleDataCompleted += HandleOnSetBattleDataCompleted;
         localViewManager.resultViewManager.continueButton.onClick.AddListener(() => { HandleContinue(); });
-        apiManager.OnGetFormationFinished = null;
-        apiManager.OnGetFormationFinished += HandleGetFormationFinished;
-    }
-    public void ProcessCharactersPosition()
-    {
-        string uri = CONSTS.HOST_ENDPOINT_API + "api/users/formation";
-        string token = GlobalManager.Instance.UserDataManager.UserData.token;
-        StartCoroutine(apiManager.GetFormation(uri, token));
+
+        UserDataManager = GlobalManager.Instance.UserDataManager;
     }
 
     public void InitPlayers()
@@ -199,9 +192,12 @@ public class LocalTestFightController : LocalSingleton<LocalTestFightController>
         OnBattleEnded?.Invoke();
     }
 
-    void HandleGetFormationFinished(FormationCharacters[] userCharacters)
+    /// <summary>
+    /// Add Character base on the formation in the cache
+    /// </summary>
+    public void SetUserInfomation()
     {
-        Debug.Log("TestData:HandleGetFormationFinished");
+        FormationCharacters[] userCharacters = UserDataManager.UserGameStatus.FormationList;
         for (int i = 0; i < userCharacters.Length; i++)
         {
             yourCharacters.Add(userCharacters[i]);

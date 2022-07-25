@@ -21,7 +21,7 @@ public class QueueViewManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LocalTestFightController.Instance.onRenderQueue += RenderQueue;
+        LocalFightController.Instance.onRenderQueue += RenderQueue;
     }
 
     // Update is called once per frame

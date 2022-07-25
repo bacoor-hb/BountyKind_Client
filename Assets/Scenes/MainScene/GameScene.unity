@@ -4369,8 +4369,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userCharacters: []
-  formationCharacters: []
-  userItems: []
   avatarPrefab: {fileID: 3816890380819702099, guid: bda38d362c3024a40bf919bcd23df7f2, type: 3}
   characterPrefabs:
   - {fileID: 2456848683615008564, guid: 23422318ac9e99243825cd8aafab4737, type: 3}
@@ -5813,7 +5811,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 816289140}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ddd72dd40870a84f9a2f7bcff8dcd37, type: 3}
+  m_Script: {fileID: 11500000, guid: d6bdc3b6ee0a3804b8ae830b0bd3f27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 2757788438417063697, guid: 2ee91eee124c6294a88f3ccbb133458d, type: 3}
@@ -7375,10 +7373,11 @@ MonoBehaviour:
   board: {fileID: 701843000}
   LocalGameView: {fileID: 795895966}
   Multiplayer_GameEvent: {fileID: 995314728}
-  fightController: {fileID: 816289141}
+  LocalFightController: {fileID: 816289141}
   currentCamera: {fileID: 1986604808}
   boardCameraPosition: {fileID: 899576958}
   combatCameraPosition: {fileID: 1424113979}
+  formationCameraPosition: {fileID: 574811247}
 --- !u!114 &995314728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11980,6 +11979,7 @@ MonoBehaviour:
   scrollViewManager: {fileID: 1714763184}
   boardViewManager: {fileID: 1168524288}
   notifyPopup: {fileID: 1194353692}
+  canvasRoot: {fileID: 1938542025}
 --- !u!114 &1519309936
 MonoBehaviour:
   m_ObjectHideFlags: 0

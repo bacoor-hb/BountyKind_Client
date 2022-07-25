@@ -33,9 +33,10 @@ public partial class LocalGameController : MonoBehaviour
     [SerializeField]
     private Multiplayer_GameEventController Multiplayer_GameEvent;
 
-    [Header("Combat component")]
+    [Header("Other components")]
     [SerializeField]
-    private LocalTestFightController fightController;
+    private LocalFightController LocalFightController;
+    private FormationViewManager FormationViewManager;
 
     [Header("Camera controller")]
     [SerializeField]
@@ -44,6 +45,8 @@ public partial class LocalGameController : MonoBehaviour
     private Transform boardCameraPosition;
     [SerializeField]
     private Transform combatCameraPosition;
+    [SerializeField]
+    private Transform formationCameraPosition;
 
     private UserDataManager UserDataManager;
     private NetworkManager NetworkManager;
@@ -86,6 +89,9 @@ public partial class LocalGameController : MonoBehaviour
 
         //Init combat
         InitCombat();
+
+        //Init Formation
+        InitFormation();
     }
 
     /// <summary>
@@ -136,8 +142,18 @@ public partial class LocalGameController : MonoBehaviour
 
     private void InitCombat()
     {
-        fightController.Init();
+        LocalFightController.Init();
     }
+
+    private void InitFormation()
+    {
+        FormationController.Instance.Init();
+        FormationViewManager = FormationController.Instance.viewManager;
+        FormationViewManager.Init();
+        FormationViewManager.SetFormationCanvasState(false);
+        FormationViewManager.SetFormationViewState(FORMATION_VIEW_STYLE.BOARD);
+    }
+
     /// <summary>
     /// Update the User Data View
     /// </summary>
@@ -388,20 +404,36 @@ public partial class LocalGameController : MonoBehaviour
     #region camera controller
 
     /// <summary>
-    /// switch camera view
+    /// Switch camera view.
     /// </summary>
-    /// <param name="type">0: board, 1: combat</param>
-    private void SwitchCamera(int type)
+    /// <param name="type">
+    /// BOARD: Show the main board game.
+    /// COMBAT: Show the Combat Scene.
+    /// FORMATION: Show the Formation Scene
+    /// </param>
+    private void SwitchCamera(CAMERA_PARENT type)
     {
         switch (type)
         {
-            case 0:
+            case CAMERA_PARENT.BOARD:
                 currentCamera.transform.SetParent(boardCameraPosition, false);
                 break;
-            case 1:
+            case CAMERA_PARENT.COMBAT:
                 currentCamera.transform.SetParent(combatCameraPosition, false);
                 break;
-        }
+            case CAMERA_PARENT.FORMATION:
+                currentCamera.transform.SetParent(formationCameraPosition, false);
+                break;
+            default:
+                break;
+        };
     }
     #endregion
+}
+
+public enum CAMERA_PARENT
+{
+    BOARD,
+    COMBAT,
+    FORMATION
 }

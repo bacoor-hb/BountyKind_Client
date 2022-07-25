@@ -24,7 +24,7 @@ public class ScrollViewManager : MonoBehaviour
 
     public void RenderAvatar(GameObject avatarPrefab, int index, string id)
     {
-        Debug.Log("RenderAvatar: " + index);
+        //Debug.Log("RenderAvatar: " + index);
         avatarPrefab.GetComponent<AvatarController>().Init(index, id);
         GameObject obj = Instantiate(avatarPrefab, new Vector3(0, 0, 0), Quaternion.identity, charactersHolder.transform);
         OnInstantiate?.Invoke(obj, index);

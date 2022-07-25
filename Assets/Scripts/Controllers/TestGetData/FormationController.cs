@@ -11,8 +11,8 @@ public class FormationController : LocalSingleton<FormationController>
     public OnEventTriggered<int> OnAvatarSelected;
     public OnEventTriggered<string> OnFormationCharatecterReceived;
     public OnEventTriggered<int> OnSelectedSquare;
-    public OnEventTriggered<FORMATION_FINISH_RESULT> OnSetFormationFinished;
-    public OnEventTriggered OnBackLobbyView;
+    public OnEventTriggered OnSetFormationFinished;
+    public OnEventTriggered OnBackButtonTrigger;
 
     private APIManager apiManager;
     [SerializeField]
@@ -28,7 +28,7 @@ public class FormationController : LocalSingleton<FormationController>
     [SerializeField]
     private List<CharacterWithPosition> characterWithPositions;
     [SerializeField]
-    private FormationViewManager viewManager;
+    public FormationViewManager viewManager;
     [SerializeField]
     private int selectedAvatarIndex = -1;
     private UserDataManager userDataManager;
@@ -50,18 +50,13 @@ public class FormationController : LocalSingleton<FormationController>
         apiManager.OnGetFormationFinished = null;
         apiManager.OnGetFormationFinished += HandleGetFormationFinished;
         apiManager.OnSetFormationFinished = null;
-        apiManager.OnSetFormationFinished += (result) =>
-        {
-            HandleSetFormationFinished(result);
-        };
-
+        apiManager.OnSetFormationFinished += HandleSetFormationFinished;
         OnSetFormationFinished = null;
-        OnSetFormationFinished += HandleSetFormationFinished;
 
         viewManager.buttonViewManager.SetFormationButton.onClick.AddListener(HandleSetFormation);
         viewManager.buttonViewManager.ResetFormationButton.onClick.AddListener(ResetFormation);
         viewManager.buttonViewManager.RemoveCharacterButton.onClick.AddListener(RemoveCharacter);
-        viewManager.buttonViewManager.BackButton.onClick.AddListener(HandleGoBack);
+        viewManager.buttonViewManager.BackButton.onClick.AddListener(ResetFormationScene);
         viewManager.buttonViewManager.RotateCamRightButton.onClick.AddListener(() => HandleRotateCamera(true));
         viewManager.buttonViewManager.RotateCamLeftButton.onClick.AddListener(() => HandleRotateCamera(false));
         ScrollViewManager.OnInstantiate += HandleOnInstantiate;
@@ -105,7 +100,7 @@ public class FormationController : LocalSingleton<FormationController>
         for (int i = 0; i < userCharacters.Length; i++)
         {
             int index = i;
-            Debug.Log("HandleGetUserCharactersFinished: " + index);
+            //Debug.Log("HandleGetUserCharactersFinished: " + index);
             avatarPrefab.GetComponent<AvatarController>().SetUserCharacter(userCharacters[index]);
             viewManager.scrollViewManager.RenderAvatar(avatarPrefab, index, userCharacters[index]._id);
         }
@@ -127,8 +122,14 @@ public class FormationController : LocalSingleton<FormationController>
         }
     }
 
+    /// <summary>
+    /// Update Formation Cache and Instantiate Character Prefab
+    /// </summary>
+    /// <param name="_formationCharacters"></param>
     void HandleGetFormationFinished(FormationCharacters[] _formationCharacters)
     {
+        userDataManager.UserGameStatus.UpdateFormationData(_formationCharacters);
+
         if (_formationCharacters.Length > 0)
         {
             for (var i = 0; i < _formationCharacters.Length; i++)
@@ -173,7 +174,7 @@ public class FormationController : LocalSingleton<FormationController>
         StartCoroutine(apiManager.SetFormation(uri, token, characterWithPositions));
     }
 
-    void HandleSetFormationFinished(FORMATION_FINISH_RESULT result)
+    void HandleSetFormationFinished(string result)
     {
         selectedCharacter = new UserCharacter();
         selectedSquare = null;
@@ -181,31 +182,27 @@ public class FormationController : LocalSingleton<FormationController>
         OnSelectedSquare?.Invoke(-1);
         OnAvatarSelected?.Invoke(-1);
 
-        switch (result)
+        if(string.IsNullOrEmpty(result))
         {
-            case FORMATION_FINISH_RESULT.COMBAT:
-                break;
-            case FORMATION_FINISH_RESULT.LOBBY:
-                StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_SUCCESS));
-                break;
-            case FORMATION_FINISH_RESULT.FAILED:
-                StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_FAILED));
-                break;
-            default:
-                break;
+            StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_FAILED));
         }
+        else
+        {
+            StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_SUCCESS));
+            OnSetFormationFinished?.Invoke();
+        }        
     }
 
     void HandleOnInstantiate(GameObject obj, int index)
     {
-        Debug.Log("HandleOnInstantiate: " + index);
+        //Debug.Log("HandleOnInstantiate: " + index);
         avatars.Add(obj);
         EventTrigger trigger = obj.GetComponent<EventTrigger>();
         EventTrigger.Entry entry = new EventTrigger.Entry();
         entry.eventID = EventTriggerType.PointerDown;
         entry.callback.AddListener((data) =>
         {
-            Debug.Log("HandleOnInstantiate callback: " + index);
+            //Debug.Log("HandleOnInstantiate callback: " + index);
             OnClickAvatar(obj.GetComponent<AvatarController>().GetUserCharacter(), index);
         });
         trigger.triggers.Add(entry);
@@ -392,7 +389,7 @@ public class FormationController : LocalSingleton<FormationController>
         }
     }
 
-    void HandleGoBack()
+    public void ResetFormationScene()
     {
         OnAvatarSelected(-1);
         OnSelectedSquare(-1);
@@ -402,7 +399,7 @@ public class FormationController : LocalSingleton<FormationController>
         selectedCharacter = new UserCharacter();
         selectedSquare = null;
         userCharacters = null;
-        OnBackLobbyView?.Invoke();
+        OnBackButtonTrigger?.Invoke();
     }
 
     void HandleRotateCamera(bool isClockWise)
@@ -442,9 +439,8 @@ public class FormationController : LocalSingleton<FormationController>
     }
 }
 
-public enum FORMATION_FINISH_RESULT
+public enum FORMATION_SCENE
 {
-    COMBAT,
-    LOBBY,
-    FAILED
+    GAME,
+    LOBBY
 }

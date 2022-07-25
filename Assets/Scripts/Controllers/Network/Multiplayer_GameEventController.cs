@@ -135,6 +135,7 @@ public class Multiplayer_GameEventController : MonoBehaviour
     /// </summary>
     public void Handle_Combat(bool _skip = true)
     {
+        FormationController.Instance.ResetFormationScene();
         Debug.Log("[Multiplayer_GameEventController] Send Combat...");
         NetworkManager.Send(SEND_TYPE.GAMEROOM_SEND, GAMEROOM_SENT_EVENTS.FIGHT.ToString(), _skip);
     }

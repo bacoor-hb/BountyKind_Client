@@ -5,13 +5,17 @@ using UnityEngine.EventSystems;
 
 public class SquareController : MonoBehaviour
 {
+    public delegate void OnEventMouse(int position);
+    public OnEventMouse OnMouseDownEvent;
     [SerializeField]
     private GameObject selectPlane;
     public int position;
+    public Color rootColor;
     // Start is called before the first frame update
     void Start()
     {
-        selectPlane.SetActive(false); ;
+        rootColor = gameObject.GetComponent<Renderer>().material.color;
+        selectPlane.SetActive(false);
         FormationController.Instance.OnSelectedSquare += HandleOnSelectedSquare;
     }
 
@@ -21,15 +25,26 @@ public class SquareController : MonoBehaviour
 
     }
 
+    private void OnMouseDown()
+    {
+        Debug.Log("Asdasd");
+        OnMouseDownEvent?.Invoke(position);
+    }
+
+    private void OnMouseUp()
+    {
+        Debug.Log("up");
+    }
+
     public void HandleOnSelectedSquare(int _position)
     {
         if (position == _position)
         {
-            selectPlane.SetActive(true);
+            gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
         }
         else
         {
-            selectPlane.SetActive(false);
+            gameObject.GetComponent<Renderer>().material.SetColor("_Color", rootColor);
         }
     }
 

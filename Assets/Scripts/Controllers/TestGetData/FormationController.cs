@@ -35,6 +35,7 @@ public class FormationController : LocalSingleton<FormationController>
     [SerializeField]
     private List<GameObject> avatars;
     private bool canRemove;
+    public EventTrigger myEventTrigger;
     public void Init()
     {
         selectedAvatarIndex = -1;
@@ -182,7 +183,7 @@ public class FormationController : LocalSingleton<FormationController>
         OnSelectedSquare?.Invoke(-1);
         OnAvatarSelected?.Invoke(-1);
 
-        if(string.IsNullOrEmpty(result))
+        if (string.IsNullOrEmpty(result))
         {
             StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_FAILED));
         }
@@ -190,19 +191,19 @@ public class FormationController : LocalSingleton<FormationController>
         {
             StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_SUCCESS));
             OnSetFormationFinished?.Invoke();
-        }        
+        }
     }
 
     void HandleOnInstantiate(GameObject obj, int index)
     {
-        //Debug.Log("HandleOnInstantiate: " + index);
+        Debug.Log("HandleOnInstantiate: " + index);
         avatars.Add(obj);
         EventTrigger trigger = obj.GetComponent<EventTrigger>();
         EventTrigger.Entry entry = new EventTrigger.Entry();
         entry.eventID = EventTriggerType.PointerDown;
         entry.callback.AddListener((data) =>
         {
-            //Debug.Log("HandleOnInstantiate callback: " + index);
+            Debug.Log("HandleOnInstantiate callback: " + index);
             OnClickAvatar(obj.GetComponent<AvatarController>().GetUserCharacter(), index);
         });
         trigger.triggers.Add(entry);
@@ -244,21 +245,19 @@ public class FormationController : LocalSingleton<FormationController>
 
     void SetEventToSquare()
     {
-        Debug.Log("Set events to square");
         List<GameObject> boardSquares = viewManager.boardViewManager.boardSquares;
         for (int i = 0; i < boardSquares.Count; i++)
         {
-            EventTrigger trigger = boardSquares[i].GetComponent<EventTrigger>();
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            int index = i;
-            entry.eventID = EventTriggerType.PointerDown;
-            entry.callback.AddListener((data) =>
-            {
-                OnClickSquare((PointerEventData)data, boardSquares[index]);
-            });
-            trigger.triggers.Add(entry);
+            Debug.Log("SetEventToSquare: " + i);
+            boardSquares[i].GetComponent<SquareController>().OnMouseDownEvent += OnClickSquare;
         }
     }
+
+    public void PointerDown_Test(int index)
+    {
+        Debug.Log("Pointer down: " + index);
+    }
+
     int CheckIfPositionExisted(int position)
     {
         int existedPositionIndex = -1;
@@ -288,13 +287,14 @@ public class FormationController : LocalSingleton<FormationController>
         return result;
     }
 
-    void OnClickSquare(PointerEventData eventData, GameObject boardSquare)
+    void OnClickSquare(int position)
     {
+        Debug.Log("OnClickSquare");
+        GameObject boardSquare = viewManager.boardViewManager.boardSquares[position];
         selectedSquare = boardSquare;
         if (selectedCharacter.baseKey != null)
         {
             GameObject characterPrefab = GetCharacterPrefabByName(selectedCharacter.baseKey);
-            int position = selectedSquare.GetComponent<SquareController>().position;
             int existedPositionIndex = CheckIfPositionExisted(position);
             int[] result = CheckIfCharacterExisted(selectedCharacter);
             if (existedPositionIndex != -1 && result.Length == 0)
@@ -369,7 +369,7 @@ public class FormationController : LocalSingleton<FormationController>
         }
         else
         {
-            int position = selectedSquare.GetComponent<SquareController>().position;
+            Debug.Log("372----:" + avatars.Count);
             int existedPositionIndex = CheckIfPositionExisted(position);
             if (existedPositionIndex != -1)
             {
@@ -399,6 +399,11 @@ public class FormationController : LocalSingleton<FormationController>
         selectedCharacter = new UserCharacter();
         selectedSquare = null;
         userCharacters = null;
+        avatars.ForEach(gameObj =>
+        {
+            Destroy(gameObj);
+        });
+        avatars = new List<GameObject>();
         OnBackButtonTrigger?.Invoke();
     }
 
@@ -434,8 +439,15 @@ public class FormationController : LocalSingleton<FormationController>
 
     private void OnDestroy()
     {
-        Debug.Log("Destroyed");
+        Debug.Log("DestroyedFormationController");
+        for (int i = 0; i < viewManager.boardViewManager.boardSquares.Count; i++)
+        {
+            viewManager.boardViewManager.boardSquares[i].GetComponent<SquareController>().OnMouseDownEvent = null;
+        }
+        viewManager.boardViewManager.boardSquares = new List<GameObject>();
         OnAvatarSelected = null;
+        ScrollViewManager.OnInstantiate -= HandleOnInstantiate;
+        myEventTrigger.triggers.RemoveRange(0, myEventTrigger.triggers.Count);
     }
 }
 

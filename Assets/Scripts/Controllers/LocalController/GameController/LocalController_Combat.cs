@@ -18,22 +18,22 @@ public partial class LocalGameController
             Open_Formation();
             LocalGameView.CombatGameView.OnClosePopupFinish = null;
         };
+
+        LocalFightController.InitPlayers();
+        LocalFightController.StartGame();
     }
 
     private void Open_Formation()
     {
         SwitchCamera(CAMERA_PARENT.FORMATION);
         LocalGameView.SetCanvasRootState(false);
-
-        FormationController.Instance.ResetFormationScene();
-
         FormationViewManager.SetFormationCanvasState(true);
         FormationController.Instance.GetUserFormationData();
         FormationController.Instance.OnSetFormationFinished += () =>
         {
             bool _skip = currentPlayer.skipCombat;
             GameEventController.Handle_Combat(_skip);
-            FormationController.Instance.OnSetFormationFinished = null;            
+            FormationController.Instance.OnSetFormationFinished = null;
         };
     }
 
@@ -65,8 +65,6 @@ public partial class LocalGameController
         FormationViewManager.SetFormationCanvasState(false);
 
         LocalFightController.localViewManager.SetViewState(true);
-        LocalFightController.InitPlayers();
-        LocalFightController.StartGame();
         LocalFightController.InsertBattleData(battle_MSG);
         LocalFightController.SetUserInfomation();
     }

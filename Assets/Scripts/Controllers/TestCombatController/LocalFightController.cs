@@ -162,7 +162,7 @@ public class LocalFightController : LocalSingleton<LocalFightController>
 
     void HandleStartTurn(int currentPlayer)
     {
-
+        Debug.Log("startTurn");
     }
 
     void ResetScene()

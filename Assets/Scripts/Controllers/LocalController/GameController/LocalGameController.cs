@@ -190,9 +190,9 @@ public partial class LocalGameController : MonoBehaviour
     /// <param name="interacted_MSG">false: Trigget Effect, true: Roll Dice</param>
     void OnCheckInteracted(Interacted_MSG interacted_MSG)
     {
-        if(interacted_MSG != null)
+        if (interacted_MSG != null)
         {
-            if(!interacted_MSG.isInteracted)
+            if (!interacted_MSG.isInteracted)
             {
                 Debug.Log("[LocalGameController] OnStartTurn, then TriggerMathEffect");
                 OnTriggerMathEffect();

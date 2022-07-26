@@ -17,6 +17,7 @@ public class CONSTS
 
     #region DICE CONST
     public const float DICE_ANIM_TIME_MAX = 3;
+    public const float DICE_POPUP_CLOSE = 1.5f;
     public const int DICE_VALUE_MIN = 1;
     public const int DICE_VALUE_MAX = 6;
     public const int DICE_ANIM_TYPE_MIN = 0;

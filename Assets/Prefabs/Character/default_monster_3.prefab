@@ -101,6 +101,7 @@ MonoBehaviour:
     contractAddress: 
     nftId: 
     position: 0
+  currentHealth: 0
   animator: {fileID: 0}
 --- !u!114 &5481379113425556005
 MonoBehaviour:
@@ -115,6 +116,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 5844119057138936627}
+  healthTextView: {fileID: 0}
+  unitOutline: {fileID: 0}
 --- !u!1001 &2721118509124627276
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -327,6 +330,10 @@ PrefabInstance:
     - target: {fileID: 8112320617370013789, guid: c6c8fabad193ed946a131ba15f2242ea, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8324902123577108684, guid: c6c8fabad193ed946a131ba15f2242ea, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6c8fabad193ed946a131ba15f2242ea, type: 3}

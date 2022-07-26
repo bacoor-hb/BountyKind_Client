@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -35,7 +36,6 @@ public class FormationController : LocalSingleton<FormationController>
     [SerializeField]
     private List<GameObject> avatars;
     private bool canRemove;
-    public EventTrigger myEventTrigger;
     public void Init()
     {
         selectedAvatarIndex = -1;
@@ -175,7 +175,7 @@ public class FormationController : LocalSingleton<FormationController>
         StartCoroutine(apiManager.SetFormation(uri, token, characterWithPositions));
     }
 
-    void HandleSetFormationFinished(string result)
+    void HandleSetFormationFinished(UserFormationResponse result)
     {
         selectedCharacter = new UserCharacter();
         selectedSquare = null;
@@ -183,12 +183,13 @@ public class FormationController : LocalSingleton<FormationController>
         OnSelectedSquare?.Invoke(-1);
         OnAvatarSelected?.Invoke(-1);
 
-        if (string.IsNullOrEmpty(result))
+        if (string.IsNullOrEmpty(result.message))
         {
             StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_FAILED));
         }
         else
         {
+            userDataManager.UserGameStatus.UpdateFormationData(result.data);
             StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_SUCCESS));
             OnSetFormationFinished?.Invoke();
         }
@@ -447,7 +448,6 @@ public class FormationController : LocalSingleton<FormationController>
         viewManager.boardViewManager.boardSquares = new List<GameObject>();
         OnAvatarSelected = null;
         ScrollViewManager.OnInstantiate -= HandleOnInstantiate;
-        myEventTrigger.triggers.RemoveRange(0, myEventTrigger.triggers.Count);
     }
 }
 

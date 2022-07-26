@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectToMove: {fileID: 0}
-  timeToTarget: 0
+  timeToTarget: 15
 --- !u!114 &7246275713286348071
 MonoBehaviour:
   m_ObjectHideFlags: 0

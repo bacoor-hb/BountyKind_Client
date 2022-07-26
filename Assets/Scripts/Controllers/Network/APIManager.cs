@@ -10,7 +10,7 @@ public class APIManager : MonoBehaviour
     public OnEventFinished<UserData_API> OnGetUserDataFinished;
     public OnEventFinished<UserCharacters_API> OnGetUserCharactersFinished;
     public OnEventFinished<FormationCharacters[]> OnGetFormationFinished;
-    public OnEventFinished<string> OnSetFormationFinished;
+    public OnEventFinished<UserFormationResponse> OnSetFormationFinished;
     public OnEventFinished<UserItems_API> OnGetUserItemsFinished;
 
     public void Init()
@@ -204,9 +204,9 @@ public class APIManager : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     string responseData = webRequest.downloadHandler.text;
-                    SetFormationResponse setUserFormation = JsonUtility.FromJson<SetFormationResponse>(responseData);
+                    UserFormationResponse setUserFormationResponse = JsonUtility.FromJson<UserFormationResponse>(responseData);
                     Debug.Log("[APIManager] SetFormation Success: " + responseData);
-                    OnSetFormationFinished?.Invoke(setUserFormation.message);
+                    OnSetFormationFinished?.Invoke(setUserFormationResponse);
                     break;
             }
         }

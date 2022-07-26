@@ -10,6 +10,7 @@ public class SquareController : MonoBehaviour
     [SerializeField]
     private GameObject selectPlane;
     public int position;
+    public string side;
     public Color rootColor;
     // Start is called before the first frame update
     void Start()
@@ -38,7 +39,7 @@ public class SquareController : MonoBehaviour
 
     public void HandleOnSelectedSquare(int _position)
     {
-        if (position == _position)
+        if (position == _position && side == "user")
         {
             gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
         }

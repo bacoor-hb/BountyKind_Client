@@ -5,9 +5,9 @@ using UnityEngine;
 public enum CharacterStatus
 {
     active,
-    on_sale, 
-    on_rent, 
-    destroyed, 
+    on_sale,
+    on_rent,
+    destroyed,
     collected,
     in_game,
 };
@@ -196,5 +196,9 @@ public class UserCharacter
     public string rarity;
     public bool isSelling;
     public bool isRenting;
+    public int atk;
+    public int def;
+    public int speed;
+    public bool hp;
 }
 #endregion

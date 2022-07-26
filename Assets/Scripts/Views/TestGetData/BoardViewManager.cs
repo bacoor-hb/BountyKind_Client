@@ -7,6 +7,7 @@ public class BoardViewManager : MonoBehaviour
     [SerializeField]
     private GameObject board;
     public List<GameObject> boardSquares;
+    public List<GameObject> opponentBoardSquares;
     [SerializeField]
     private Dictionary<string, GameObject> cloneCharacters;
     // Start is called before the first frame update
@@ -23,6 +24,11 @@ public class BoardViewManager : MonoBehaviour
     public void RenderCharacterModelToSquare(GameObject characterPrefab, int position, string characterId)
     {
         Transform targetSquare = boardSquares[position].transform;
+        cloneCharacters.Add(characterId, Instantiate(characterPrefab, targetSquare));
+    }
+    public void RenderCharacterModelToOpponentSquare(GameObject characterPrefab, int position, string characterId)
+    {
+        Transform targetSquare = opponentBoardSquares[position].transform;
         cloneCharacters.Add(characterId, Instantiate(characterPrefab, targetSquare));
     }
     public void Clear(string characterId)

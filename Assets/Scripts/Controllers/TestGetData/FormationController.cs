@@ -36,6 +36,8 @@ public class FormationController : LocalSingleton<FormationController>
     [SerializeField]
     private List<GameObject> avatars;
     private bool canRemove;
+    [SerializeField]
+    private string rootScene;
     public void Init()
     {
         selectedAvatarIndex = -1;
@@ -74,6 +76,10 @@ public class FormationController : LocalSingleton<FormationController>
         GetUserCharacters();
         GetUserFormation();
         GetUserItems();
+        if (rootScene == "GAME_SCENE")
+        {
+            GetOpponentData();
+        }
     }
 
     void GetUserCharacters()
@@ -87,6 +93,21 @@ public class FormationController : LocalSingleton<FormationController>
         string uri = CONSTS.HOST_ENDPOINT_API + "api/user-items";
         string address = userDataManager.UserData.address;
         StartCoroutine(apiManager.GetUserItems(uri, address));
+    }
+
+    void GetOpponentData()
+    {
+        BountyMap currentMap = GlobalManager.Instance.UserDataManager.GetCurrentMap();
+        int currentNodeIndex = GlobalManager.Instance.UserDataManager.UserGameStatus.currentNode;
+        MapNode currentNode = currentMap.nodes[currentNodeIndex];
+        List<Enemy> enemies = currentNode.enemies;
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            int position = enemies[i].position;
+            string _id = enemies[i]._id;
+            GameObject characterPrefab = GetCharacterPrefabByName("default_character_3");
+            viewManager.boardViewManager.RenderCharacterModelToOpponentSquare(characterPrefab, position, _id);
+        }
     }
     void GetUserFormation()
     {
@@ -213,7 +234,6 @@ public class FormationController : LocalSingleton<FormationController>
     void OnClickAvatar(UserCharacter userCharacter, int index)
     {
         Debug.Log("OnClickAvatar: " + index);
-
         int[] result = CheckIfCharacterExisted(userCharacter);
         if (result.Length > 0)
         {
@@ -417,6 +437,14 @@ public class FormationController : LocalSingleton<FormationController>
     {
         if (index != -1)
         {
+            UserCharacter userCharacter = userCharacters[index];
+            FormationCharacters selectedChar = new FormationCharacters();
+            selectedChar.level = userCharacter.level;
+            selectedChar.baseKey = userCharacter.baseKey;
+            selectedChar.speed = userCharacter.speed;
+            selectedChar.def = userCharacter.def;
+            selectedChar.atk = userCharacter.atk;
+            viewManager.currentUnitViewManager.SetCurretUnitView(selectedChar);
             for (int i = 0; i < avatars.Count; i++)
             {
                 if (i != selectedAvatarIndex)
@@ -431,6 +459,7 @@ public class FormationController : LocalSingleton<FormationController>
         }
         else
         {
+            viewManager.currentUnitViewManager.ResetCurrentUnitView();
             for (int i = 0; i < avatars.Count; i++)
             {
                 avatars[i].GetComponent<AvatarViewManager>().Toggle(false);

@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class FormationViewManager : MonoBehaviour
 {
-    [Header ("View Manager")]
+    [Header("View Manager")]
     public ButtonViewManager buttonViewManager;
     public ScrollViewManager scrollViewManager;
     public BoardViewManager boardViewManager;
+    public CurrentUnitView currentUnitViewManager;
 
-    [Header ("Popup Element")]
+    [Header("Popup Element")]
     public GameObject notifyPopup;
     [SerializeField]
     public GameObject canvasRoot;

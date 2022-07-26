@@ -189,10 +189,12 @@ public class UserCharacter
     public int level;
     public string race;
     public string element;
-    public string type;
     public string contractAddress;
     public string nftId;
     public string ownerAddress;
     public string image;
+    public string rarity;
+    public bool isSelling;
+    public bool isRenting;
 }
 #endregion

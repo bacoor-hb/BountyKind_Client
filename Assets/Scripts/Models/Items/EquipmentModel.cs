@@ -57,6 +57,12 @@ public class UserItem
     public string name;
     public string image;
     public string status;
+    public bool isSelling;
+    public string rarity;
+    public float atk;
+    public float def;
+    public float speed;
+    public float hp;
     public string type;
     public string contractAddress;
     public string nftId;

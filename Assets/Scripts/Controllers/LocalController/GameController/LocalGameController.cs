@@ -149,9 +149,8 @@ public partial class LocalGameController : MonoBehaviour
     {
         FormationController.Instance.Init();
         FormationViewManager = FormationController.Instance.viewManager;
-        FormationViewManager.Init();
+        FormationViewManager.Init(FORMATION_VIEW_STYLE.BOARD);
         FormationViewManager.SetFormationCanvasState(false);
-        FormationViewManager.SetFormationViewState(FORMATION_VIEW_STYLE.BOARD);
     }
 
     /// <summary>

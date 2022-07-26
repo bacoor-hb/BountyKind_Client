@@ -29,11 +29,11 @@ public partial class LocalGameController
         LocalGameView.SetCanvasRootState(false);
         FormationViewManager.SetFormationCanvasState(true);
         FormationController.Instance.GetUserFormationData();
-        FormationController.Instance.OnSetFormationFinished += () =>
+        FormationController.Instance.OnSetFormationSuccess += () =>
         {
             bool _skip = currentPlayer.skipCombat;
             GameEventController.Handle_Combat(_skip);
-            FormationController.Instance.OnSetFormationFinished = null;
+            FormationController.Instance.OnSetFormationSuccess = null;
         };
     }
 

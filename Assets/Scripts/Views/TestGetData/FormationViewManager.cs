@@ -16,7 +16,9 @@ public class FormationViewManager : MonoBehaviour
     [SerializeField]
     public GameObject canvasRoot;
     TextMeshProUGUI notifyTxt;
-    public void Init()
+
+    public FORMATION_VIEW_STYLE Type { get; private set; }
+    public void Init(FORMATION_VIEW_STYLE type)
     {
         buttonViewManager.Init();
         scrollViewManager.Init();
@@ -24,6 +26,9 @@ public class FormationViewManager : MonoBehaviour
 
         notifyTxt = notifyPopup.GetComponentInChildren<TextMeshProUGUI>();
         SetFormationCanvasState(false);
+
+        Type = type;
+        SetFormationViewState(type);
     }
 
     /// <summary>
@@ -49,7 +54,7 @@ public class FormationViewManager : MonoBehaviour
     /// type 0: main menu screen formation
     /// type 1: game screen formation
     /// </param>
-    public void SetFormationViewState(FORMATION_VIEW_STYLE type)
+    void SetFormationViewState(FORMATION_VIEW_STYLE type)
     {
         switch (type)
         {

@@ -12,7 +12,7 @@ public class FormationController : LocalSingleton<FormationController>
     public OnEventTriggered<int> OnAvatarSelected;
     public OnEventTriggered<string> OnFormationCharatecterReceived;
     public OnEventTriggered<int> OnSelectedSquare;
-    public OnEventTriggered OnSetFormationFinished;
+    public OnEventTriggered OnSetFormationSuccess;
     public OnEventTriggered OnBackButtonTrigger;
 
     private APIManager apiManager;
@@ -38,6 +38,8 @@ public class FormationController : LocalSingleton<FormationController>
     private bool canRemove;
     [SerializeField]
     private string rootScene;
+
+    ButtonViewManager buttonViewManager;
     public void Init()
     {
         selectedAvatarIndex = -1;
@@ -54,14 +56,18 @@ public class FormationController : LocalSingleton<FormationController>
         apiManager.OnGetFormationFinished += HandleGetFormationFinished;
         apiManager.OnSetFormationFinished = null;
         apiManager.OnSetFormationFinished += HandleSetFormationFinished;
-        OnSetFormationFinished = null;
+        OnSetFormationSuccess = null;
 
-        viewManager.buttonViewManager.SetFormationButton.onClick.AddListener(HandleSetFormation);
-        viewManager.buttonViewManager.ResetFormationButton.onClick.AddListener(ResetFormation);
-        viewManager.buttonViewManager.RemoveCharacterButton.onClick.AddListener(RemoveCharacter);
-        viewManager.buttonViewManager.BackButton.onClick.AddListener(ResetFormationScene);
-        viewManager.buttonViewManager.RotateCamRightButton.onClick.AddListener(() => HandleRotateCamera(true));
-        viewManager.buttonViewManager.RotateCamLeftButton.onClick.AddListener(() => HandleRotateCamera(false));
+        buttonViewManager = viewManager.buttonViewManager;
+        buttonViewManager.SetFormationButton.onClick.RemoveAllListeners();
+        buttonViewManager.SetFormationButton.onClick.AddListener(HandleSetFormation);
+
+        buttonViewManager.ResetFormationButton.onClick.AddListener(ResetFormation);
+        buttonViewManager.RemoveCharacterButton.onClick.AddListener(RemoveCharacter);
+        buttonViewManager.BackButton.onClick.AddListener(ResetFormationScene);
+        buttonViewManager.RotateCamRightButton.onClick.AddListener(() => HandleRotateCamera(true));
+        buttonViewManager.RotateCamLeftButton.onClick.AddListener(() => HandleRotateCamera(false));
+
         ScrollViewManager.OnInstantiate += HandleOnInstantiate;
         OnAvatarSelected = null;
         OnAvatarSelected += HandleAvatarSelected;
@@ -212,7 +218,7 @@ public class FormationController : LocalSingleton<FormationController>
         {
             userDataManager.UserGameStatus.UpdateFormationData(result.data);
             StartCoroutine(viewManager.SetPopupViewState(FormationViewState.SET_FORMATION_SUCCESS));
-            OnSetFormationFinished?.Invoke();
+            OnSetFormationSuccess?.Invoke();
         }
     }
 

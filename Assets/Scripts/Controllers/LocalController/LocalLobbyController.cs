@@ -42,12 +42,13 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
         //Formation init
         FormationController.Instance.Init();
         FormationViewManager = FormationController.Instance.viewManager;
-        FormationViewManager.Init();
+        FormationViewManager.Init(FORMATION_VIEW_STYLE.LOBBY);
         FormationViewManager.SetFormationCanvasState(false);
-        FormationViewManager.SetFormationViewState(FORMATION_VIEW_STYLE.LOBBY);
 
         FormationController.Instance.OnBackButtonTrigger = null;
         FormationController.Instance.OnBackButtonTrigger += HandleBackLobbyView;
+        FormationController.Instance.OnSetFormationSuccess = null;
+        FormationController.Instance.OnSetFormationSuccess += CreateRoom;
     }
 
     /// <summary>
@@ -59,7 +60,8 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
 
         LobbyView.CreateRoom_Btn.enabled = false;
         LobbyView.CreateRoom_Btn.onClick.RemoveAllListeners();
-        LobbyView.CreateRoom_Btn.onClick.AddListener(CreateRoom);
+        //LobbyView.CreateRoom_Btn.onClick.AddListener(CreateRoom);
+        LobbyView.CreateRoom_Btn.onClick.AddListener(HandleOpenFormation);
 
         LobbyView.Login_Btn.onClick.AddListener(() => { HandleLogin(); });
         LobbyView.Logout_Btn.onClick.AddListener(() => { HandleLogout(); });
@@ -127,7 +129,6 @@ public class LocalLobbyController : LocalSingleton<LocalLobbyController>
     {
         if (bountyMaps != null && bountyMaps.Count > 0)
         {
-
             NetworkManager.CreateRoom(ROOM_TYPE.GAME_ROOM, UserDataManager.GetCurrentMapId());
         }
         else

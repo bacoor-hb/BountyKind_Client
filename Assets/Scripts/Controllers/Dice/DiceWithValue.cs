@@ -45,6 +45,10 @@ public class DiceWithValue : MonoBehaviour
         else
         {
             Debug.Log("Ground not found...");
+
+            //Set a tmp target position when no ground was found -> avoid infinite falling. 
+            target = transform.position;
+            target.y = 0.3f;
         }
 
         isThrowing = false;
@@ -79,7 +83,7 @@ public class DiceWithValue : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        while(Vector3.Distance(transform.position, target) > 0.1f)
+        while(Vector3.Distance(transform.position, target) > 0.3f)
         {
             transform.Translate(Vector3.down * Time.deltaTime * fallSpd);
             yield return new WaitForEndOfFrame();

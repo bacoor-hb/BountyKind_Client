@@ -7,6 +7,7 @@ public class FightSceneButtonViewManager : MonoBehaviour
 {
     public Button FightButton;
     public Button EndTurnBTN;
+    public Button SkipButton;
     void Start()
     {
 

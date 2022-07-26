@@ -84,7 +84,7 @@ public class LocalFightController : LocalSingleton<LocalFightController>
         OnSetAllCharactersPositionCompleted += HandleOnSetAllCharactersPositionCompleted;
         OnSetBattleDataCompleted += HandleOnSetBattleDataCompleted;
         localViewManager.resultViewManager.continueButton.onClick.AddListener(() => { HandleContinue(); });
-
+        localViewManager.buttonViewManager.SkipButton.onClick.AddListener(() => { HandleSkip(); });
         UserDataManager = GlobalManager.Instance.UserDataManager;
     }
 
@@ -412,5 +412,12 @@ public class LocalFightController : LocalSingleton<LocalFightController>
         {
             Debug.Log(ex);
         }
+    }
+
+    void HandleSkip()
+    {
+        players[0].GetComponent<FightActionTest>().ForceEndTurnFight();
+        turnBaseController.EndTurn();
+        turnBaseController.EndGame();
     }
 }

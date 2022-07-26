@@ -139,4 +139,9 @@ public class FightActionTest : Action
         UnitController.onEndFight -= HandleOnEndFight;
         LocalFightController.Instance.OnEndQueueParent -= OnFightAction;
     }
+
+    public void ForceEndTurnFight()
+    {
+        onEndTurnFights?.Invoke();
+    }
 }

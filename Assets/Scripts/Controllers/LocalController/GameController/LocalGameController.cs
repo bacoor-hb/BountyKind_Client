@@ -201,6 +201,7 @@ public partial class LocalGameController : MonoBehaviour
             {
                 Debug.Log("[LocalGameController] OnStartTurn, Open Roll dice Popup.");
                 LocalGameView.SetState_RollDicePopup(true);
+                StartCoroutine(Auto_RollDiceAction());
             }
         }
         else
@@ -246,6 +247,16 @@ public partial class LocalGameController : MonoBehaviour
         //    LocalGameView.SetState_RollDicePopup(true);
         //}
         Multiplayer_GameEvent.HandleCheckInteracted();
+    }
+
+    /// <summary>
+    /// Auto close the Popup Roll dice after a brief delay.
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator Auto_RollDiceAction()
+    {
+        yield return new WaitForSeconds(CONSTS.DICE_POPUP_CLOSE);
+        RollDice_Action(false);
     }
 
     /// <summary>

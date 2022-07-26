@@ -160,7 +160,7 @@ public class UnitController : MonoBehaviour
     public void HandleMove(Vector3 _targetPos, BattleProgess battleData)
     {
         float distance = Vector3.Distance(transform.position, _targetPos);
-        timeToTarget = distance / 40f;
+        timeToTarget = distance / 100f;
         targetPos = _targetPos;
         fightSceneUnitView.SetOutlineWidth(5f);
         this.target = battleData.target;

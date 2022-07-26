@@ -8,7 +8,7 @@ public class MovementController : MonoBehaviour
     public OnEventCalled OnStartMoving;
     public OnEventCalled OnEndMoving;
 
-    [Tooltip ("The Object to Move by this Script")]
+    [Tooltip("The Object to Move by this Script")]
     [SerializeField] private GameObject ObjectToMove;
     private Vector3 startPos;
     private Vector3 target;
@@ -17,7 +17,7 @@ public class MovementController : MonoBehaviour
     [SerializeField]
     private float timeToTarget;
     private bool inTarget = true;
-    private bool isMoving = false;  
+    private bool isMoving = false;
 
     private void Update()
     {
@@ -29,7 +29,7 @@ public class MovementController : MonoBehaviour
         }
 
         if (!inTarget && Vector3.Distance(ObjectToMove.transform.position, target) < 0.01f)
-        {            
+        {
             TargetReaching();
         }
     }

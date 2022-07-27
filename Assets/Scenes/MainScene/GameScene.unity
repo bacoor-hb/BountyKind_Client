@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6791,7 +6791,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerList: []
-  actionCount: 0
+  TurnbaseId: 0
+  PrintLog: 0
 --- !u!4 &816289143
 Transform:
   m_ObjectHideFlags: 0
@@ -15056,7 +15057,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerList: []
-  actionCount: 0
+  TurnbaseId: 0
+  PrintLog: 0
 --- !u!1 &1619023759
 GameObject:
   m_ObjectHideFlags: 0
@@ -18586,6 +18588,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2797159391576366510, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_text
+      value: Engage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159391656115674, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2797159392366281896, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
       propertyPath: m_Name
       value: Battle_Invitation
@@ -18685,6 +18695,38 @@ PrefabInstance:
     - target: {fileID: 2797159393020049798, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
       propertyPath: m_text
       value: Engage Combat?
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159393487137644, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5758236
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159393487137644, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.282
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159393487137644, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.4243529
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159393487137644, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.16320924
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159393487137644, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159393487137644, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159393487137644, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797159393487137644, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2797159393487137645, guid: 15e5e01fe266d504d8433a2462887d49, type: 3}
       propertyPath: m_Interactable

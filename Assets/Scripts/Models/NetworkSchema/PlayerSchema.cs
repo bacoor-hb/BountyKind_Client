@@ -1,4 +1,4 @@
-// 
+	// 
 // THIS FILE HAS BEEN GENERATED AUTOMATICALLY
 // DO NOT CHANGE IT MANUALLY UNLESS YOU KNOW WHAT YOU'RE DOING
 // 
@@ -41,10 +41,14 @@ public partial class PlayerSchema : Schema {
 	[Type(10, "array", typeof(ArraySchema<ItemSchema>))]
 	public ArraySchema<ItemSchema> itemListEarned = new ArraySchema<ItemSchema>();
 
-	[Type(11, "number")]
-	public float yuEarned = default(float);
+
+	[Type(11, "array", typeof(ArraySchema<string>), "string")]
+	public ArraySchema<string> characters = new ArraySchema<string>();
 
 	[Type(12, "number")]
+	public float yuEarned = default(float);
+
+	[Type(13, "number")]
 	public float energyEarned = default(float);
 }
 

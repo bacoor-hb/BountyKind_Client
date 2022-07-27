@@ -16,6 +16,7 @@ public class LocalViewManager : MonoBehaviour
     public void Init()
     {
         boardViewManager.Init();
+        queueViewManager.Init();
     }
 
     void Update()

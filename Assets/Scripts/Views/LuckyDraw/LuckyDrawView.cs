@@ -56,7 +56,7 @@ public class LuckyDrawView : MonoBehaviour
                 //InvitationPopup.OnEngageBtnPressed = null;
             };
 
-        
+
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public class LuckyDrawView : MonoBehaviour
         InvitationPopup.OnClosePopupFinish = null;
         InvitationPopup.OnClosePopupFinish += () =>
         {
-            OnLuckyDraw_CloseInvPopupEnd?.Invoke(false);
+            OnLuckyDraw_CloseInvPopupEnd?.Invoke(_skip);
             InvitationPopup.OnClosePopupFinish = null;
         };
 
@@ -83,7 +83,7 @@ public class LuckyDrawView : MonoBehaviour
                 OnLuckyDraw_CloseRollPopupEnd?.Invoke(false);
                 RollUI.OnClosePopupFinish = null;
             };
-        }         
+        }
     }
 
     public void Init_Phase3()

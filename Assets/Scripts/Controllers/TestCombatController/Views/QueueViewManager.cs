@@ -19,8 +19,9 @@ public class QueueViewManager : MonoBehaviour
     [SerializeField]
     private GameObject currentUnit;
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
+        LocalFightController.Instance.onRenderQueue = null;
         LocalFightController.Instance.onRenderQueue += RenderQueue;
     }
 

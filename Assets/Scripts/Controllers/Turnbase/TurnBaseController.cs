@@ -21,12 +21,17 @@ public class TurnBaseController : MonoBehaviour
 
     private CYCLE_TURN status;
     private bool isWaiting;
-    public int actionCount = 0;
+
+    [Header ("Setting")]
+    [SerializeField]
+    private int TurnbaseId;
+    [SerializeField]
+    private bool PrintLog = false;
 
     #region Unity Event
     public void Init()
     {
-        actionCount = 0;
+        TurnbaseId = GetHashCode();
         IsStarting = false;
         playerList = new List<IPlayer>();
         status = CYCLE_TURN.START_TURN;
@@ -41,18 +46,23 @@ public class TurnBaseController : MonoBehaviour
             switch (status)
             {
                 case CYCLE_TURN.START_TURN:
+                    Log("START_TURN");
                     StartTurn();
                     break;
                 case CYCLE_TURN.WAITING_ACTION:
+                    Log(" WAITING_ACTION | " + queueActionList.Count);
                     CheckActionInQueue();
                     break;
                 case CYCLE_TURN.START_ACTION:
+                    Log("START_ACTION | " + queueActionList.Count );
                     OnAction();
                     break;
                 case CYCLE_TURN.END_ACTION:
+                    Log("END_ACTION | " + queueActionList.Count);
                     NextStep();
                     break;
                 case CYCLE_TURN.END_TURN:
+                    Log("END_TURN | " + queueActionList.Count);
                     EndTurn();
                     break;
             }
@@ -68,16 +78,15 @@ public class TurnBaseController : MonoBehaviour
     {
         if (IsStarting)
         {
-
             if (queueActionList != null && player == playerList[CurrentPlayer])
             {
                 queueActionList.Enqueue(action);
-                actionCount = queueActionList.Count;
-            }
+                Log(" Add Action: " + queueActionList.Count + "| ID: " + GetHashCode());
+            }            
         }
         else
         {
-            Debug.LogError("[AddAction] ERROR: Game is not start.");
+            Log("[AddAction] ERROR: Game is not start.");
         }
     }
 
@@ -98,7 +107,7 @@ public class TurnBaseController : MonoBehaviour
         {
             currentAction = queueActionList.Dequeue();
 
-            Debug.Log("[TurnbaseController][CheckActionInQueue] Start Action: " + currentAction.GetAction().ToString());
+            Log("[CheckActionInQueue] Id:"+ TurnbaseId + " | Start Action: " + currentAction.GetAction().ToString());
 
             currentAction.OnStartAction();
 
@@ -111,7 +120,7 @@ public class TurnBaseController : MonoBehaviour
     /// </summary>
     public void EndAction()
     {
-        Debug.Log("[TurnbaseController][EndAction] Current State: " + status.ToString());
+        Log("[EndAction] Current State: " + status.ToString());
         currentAction.OnEndAction();
         NextStep();
     }
@@ -151,7 +160,7 @@ public class TurnBaseController : MonoBehaviour
                 status = CYCLE_TURN.START_TURN;
                 break;
         }
-        Debug.Log("[TurnBaseController][NextStep] Last step: " + lastStep + " | Next step: " + status.ToString());
+        Log("[NextStep] Last step: " + lastStep + " | Next step: " + status.ToString());
     }
 
     /// <summary>
@@ -252,7 +261,7 @@ public class TurnBaseController : MonoBehaviour
     {
         if (IsStarting)
         {
-            Debug.LogError("[Register]: ERROR: Game started.");
+            Log("[Register]: ERROR: Game started.");
         }
         else
         {
@@ -261,4 +270,12 @@ public class TurnBaseController : MonoBehaviour
     }
     #endregion
 
+
+    private void Log(string _log)
+    {
+        if(PrintLog)
+        {
+            Debug.Log("<color=yellow>[TurnBaseController] [ID:"+ TurnbaseId + "] </color>" + _log);
+        }
+    }
 }

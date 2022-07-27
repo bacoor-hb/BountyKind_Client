@@ -255,6 +255,7 @@ public partial class LocalGameController : MonoBehaviour
     IEnumerator Auto_RollDiceAction()
     {
         yield return new WaitForSeconds(CONSTS.DICE_POPUP_CLOSE);
+        Debug.Log("[LocalGameController] Auto Roll Dice Action...");
         RollDice_Action(false);
     }
 
@@ -263,7 +264,7 @@ public partial class LocalGameController : MonoBehaviour
     /// </summary>
     void RollDice_Action(bool _skip)
     {
-        Debug.Log("[LocalGameController][RollDice_Action] RollDice_Action: " + _skip);
+        Debug.Log("[LocalGameController][RollDice_Action] RollDice_Action: " + _skip + "| Turnbase Id: " + TurnBaseController.GetHashCode());
         finishRollPopupAnim = false;
 
         currentPlayer.SetSkipRollDice(_skip);

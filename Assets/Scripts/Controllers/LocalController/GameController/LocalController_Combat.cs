@@ -15,12 +15,23 @@ public partial class LocalGameController
         LocalGameView.CombatGameView.OnClosePopupFinish = null;
         LocalGameView.CombatGameView.OnClosePopupFinish += () =>
         {
-            Open_Formation();
+            if(!_skip)
+            {
+                Open_Formation();                
+            }
+            else
+            {
+                GameEventController.Handle_Combat(_skip);
+                TurnBaseController.EndAction();
+            }
             LocalGameView.CombatGameView.OnClosePopupFinish = null;
         };
 
-        LocalFightController.InitPlayers();
-        LocalFightController.StartGame();
+        if(!_skip)
+        {
+            LocalFightController.InitPlayers();
+            LocalFightController.StartGame();
+        }        
     }
 
     private void Open_Formation()

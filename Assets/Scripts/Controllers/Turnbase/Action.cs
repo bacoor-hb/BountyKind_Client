@@ -46,11 +46,13 @@ namespace BountyKind
 
         public virtual void OnStartAction()
         {
+            Debug.Log("[Action] OnStartAction");
             StartAction?.Invoke();
         }
 
         public virtual void OnEndAction()
         {
+            Debug.Log("[Action] OnEndAction");
             EndAction?.Invoke();
         }
     }

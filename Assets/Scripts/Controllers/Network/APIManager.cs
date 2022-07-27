@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Linq;
 
 public class APIManager : MonoBehaviour
 {
@@ -91,11 +92,13 @@ public class APIManager : MonoBehaviour
             }
         }
     }
-    public IEnumerator GetUserCharacters(string uri, string address)
+    public IEnumerator GetUserCharacters(string uri, string _token)
     {
         Debug.Log("[APIManager][GetUserCharacters] URI: " + (uri));
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + "?owner=" + address))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
+            string Bearer = "Bearer " + _token;
+            webRequest.SetRequestHeader("Authorization", Bearer);
             yield return webRequest.SendWebRequest();
             string[] pages = uri.Split('/');
             int page = pages.Length - 1;

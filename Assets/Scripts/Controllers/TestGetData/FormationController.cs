@@ -90,9 +90,9 @@ public class FormationController : LocalSingleton<FormationController>
 
     void GetUserCharacters()
     {
-        string uri = CONSTS.HOST_ENDPOINT_API + "api/user-characters";
-        string address = userDataManager.UserData.address;
-        StartCoroutine(apiManager.GetUserCharacters(uri, address));
+        string uri = CONSTS.HOST_ENDPOINT_API + "api/user-characters/game";
+        string token = userDataManager.UserData.token;
+        StartCoroutine(apiManager.GetUserCharacters(uri, token));
     }
     void GetUserItems()
     {

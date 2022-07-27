@@ -35,7 +35,7 @@ public partial class LocalGameController
                 luckyDrawView.OpenPopup(LUCKYDRAW_POPUP.ROLL);
                 luckyDrawView.OnLuckyDraw_CloseInvPopupEnd = null;
             };
-            
+
             //Handle Lucky draw while clicking the Roll Button
             luckyDrawView.OnLuckyDraw_StartDraw = null;
             luckyDrawView.OnLuckyDraw_StartDraw += (skip) =>
@@ -57,11 +57,11 @@ public partial class LocalGameController
                     LocalGameView.LuckyDrawPopup.Init_Phase3();
                     luckyDrawView.ClosePopup(LUCKYDRAW_POPUP.ROLL);
                     luckyDrawView.OnLuckyDraw_EndDraw = null;
-                };                
-                
+                };
+
                 luckyDrawView.OnLuckyDraw_CloseRollPopupEnd = null;
                 luckyDrawView.OnLuckyDraw_CloseRollPopupEnd += (skip) =>
-                {                    
+                {
                     luckyDrawView.OpenPopup(LUCKYDRAW_POPUP.CONGRAT);
                     luckyDrawView.OnLuckyDraw_CloseRollPopupEnd = null;
                 };
@@ -74,7 +74,7 @@ public partial class LocalGameController
                 TurnBaseController.EndAction();
                 luckyDrawView.OnLuckyDraw_CloseCongratPopupEnd = null;
             };
-        }        
+        }
     }
 
     public void End_LuckyDraw()

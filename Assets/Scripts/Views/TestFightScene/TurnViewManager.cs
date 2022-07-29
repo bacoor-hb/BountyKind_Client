@@ -20,7 +20,7 @@ public class TurnViewManager : MonoBehaviour
 
     public void SetTurnText(int turn)
     {
-        turnText.GetComponent<TextMeshProUGUI>().text = "Turn: " + turn;
+        turnText.GetComponent<TextMeshProUGUI>().text = turn.ToString();
     }
 
     public void ClearTurnText()

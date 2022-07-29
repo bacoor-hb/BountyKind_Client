@@ -25,12 +25,12 @@ public class FightSceneBoardViewManager : MonoBehaviour
         if (type == "pet")
         {
             GameObject targetSpawn = spawnPosPets[index];
-            obj = Instantiate(_obj, targetSpawn.transform.position, Quaternion.identity, targetSpawn.transform);
+            obj = Instantiate(_obj, targetSpawn.transform.position, targetSpawn.transform.rotation, targetSpawn.transform);
         }
         else if (type == "enemy")
         {
             GameObject targetSpawn = spawnPosEnemies[index];
-            obj = Instantiate(_obj, targetSpawn.transform.position, Quaternion.identity, targetSpawn.transform);
+            obj = Instantiate(_obj, targetSpawn.transform.position, targetSpawn.transform.rotation, targetSpawn.transform);
         }
         characterObjs.Add(obj);
         return obj;

@@ -284,8 +284,7 @@ public class LocalFightController : LocalSingleton<LocalFightController>
 
     void HandleEndTurnFights()
     {
-        int batteStatus = battleData.status;
-        StartCoroutine(localViewManager.resultViewManager.DisplayResultPanel(batteStatus));
+        StartCoroutine(localViewManager.resultViewManager.DisplayResultPanel(battleData));
     }
 
     void InitTurn(List<UnitQueue> unitQueues)
